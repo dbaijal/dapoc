@@ -106,26 +106,33 @@ async function tryEditSelection() {
         showScreen(inputScreen);
         return true;
       }
+      // Debug: show what we got
+      const debugEl = document.getElementById('debug-output');
+      if (debugEl) debugEl.textContent = `Got selection but couldn't parse: ${selection.substring(0, 200)}`;
+    } else {
+      const debugEl = document.getElementById('debug-output');
+      if (debugEl) debugEl.textContent = 'No selection returned (empty)';
     }
   } catch (err) {
-    // No selection or error — proceed with add mode
+    const debugEl = document.getElementById('debug-output');
+    if (debugEl) debugEl.textContent = `Error: ${err.message}`;
   }
   return false;
 }
 
 async function checkForEditMode() {
   const editBtn = document.getElementById('edit-selected-btn');
-  const hasSelection = await tryEditSelection();
-  if (!hasSelection) {
-    editBtn.style.display = 'block';
-    editBtn.addEventListener('click', async () => {
-      const edited = await tryEditSelection();
-      if (!edited) {
-        editBtn.textContent = 'Select a block table first, then click here';
-        setTimeout(() => { editBtn.textContent = 'Edit Selected Block'; }, 2000);
+  editBtn.style.display = 'block';
+  editBtn.addEventListener('click', async () => {
+    const edited = await tryEditSelection();
+    if (!edited) {
+      const debugEl = document.getElementById('debug-output');
+      if (!debugEl.textContent) {
+        debugEl.textContent = 'Select a block table in the editor, then click here again';
       }
-    });
-  }
+      setTimeout(() => { debugEl.textContent = ''; }, 3000);
+    }
+  });
 }
 
 // Tab switching

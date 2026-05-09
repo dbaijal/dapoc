@@ -57,6 +57,14 @@ h3 {
   background: #dbeaff;
 }
 
+.debug-text {
+  font-size: 11px;
+  color: #888;
+  margin-top: 8px;
+  word-break: break-all;
+  min-height: 16px;
+}
+
 /* Picker Screen */
 .field-types {
   display: grid;
