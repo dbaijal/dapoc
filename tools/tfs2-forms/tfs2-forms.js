@@ -13,6 +13,8 @@ const inputName = document.getElementById('input-name');
 const qparamToggle = document.getElementById('input-qparam-toggle');
 const qparamGroup = document.getElementById('qparam-name-group');
 
+let editMode = false;
+
 function showScreen(screen) {
   document.querySelectorAll('.screen').forEach((s) => s.classList.remove('active'));
   screen.classList.add('active');
@@ -36,13 +38,79 @@ function buildBlockTable(blockName, fields) {
 function resetInputForm() {
   inputForm.reset();
   inputName.dataset.manual = '';
+  editMode = false;
   qparamGroup.style.display = 'none';
+  document.getElementById('submit-btn').textContent = 'Add to Page';
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', i === 0);
   });
   document.querySelectorAll('.tab-panel').forEach((p, i) => {
     p.classList.toggle('active', i === 0);
   });
+}
+
+function parseSelectionHTML(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const table = doc.querySelector('table');
+  if (!table) return null;
+
+  const header = table.querySelector('th');
+  if (!header || !header.textContent.includes('tfs2-form-input')) return null;
+
+  const config = {};
+  table.querySelectorAll('tr').forEach((row) => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length === 2) {
+      config[cells[0].textContent.trim()] = cells[1].textContent.trim();
+    }
+  });
+  return config;
+}
+
+function populateInputForm(config) {
+  if (config.label) inputLabel.value = config.label;
+  if (config.type) document.getElementById('input-constraint').value = config.type;
+  if (config.name) {
+    inputName.value = config.name;
+    inputName.dataset.manual = 'true';
+  }
+  if (config.placeholder) document.getElementById('input-placeholder').value = config.placeholder;
+  if (config.value) document.getElementById('input-value').value = config.value;
+  if (config.required === 'true') document.getElementById('input-required').checked = true;
+  if (config.readonly === 'true') document.getElementById('input-readonly').checked = true;
+  if (config['hide-title'] === 'true') document.getElementById('input-hide-title').checked = true;
+  if (config['constraint-message']) document.getElementById('input-constraint-msg').value = config['constraint-message'];
+  if (config.minlength) document.getElementById('input-minlength').value = config.minlength;
+  if (config.maxlength) document.getElementById('input-maxlength').value = config.maxlength;
+  if (config['multi-value'] === 'true') document.getElementById('input-multivalue').checked = true;
+  if (config['confirmation-field'] === 'true') document.getElementById('input-confirmation').checked = true;
+  if (config['query-param']) {
+    qparamToggle.checked = true;
+    qparamGroup.style.display = 'flex';
+    document.getElementById('input-qparam').value = config['query-param'];
+  }
+  if (config['help-message']) document.getElementById('input-help').value = config['help-message'];
+  if (config.id) document.getElementById('input-id').value = config.id;
+}
+
+async function checkForEditMode() {
+  try {
+    const selection = await actions.getSelection();
+    if (selection) {
+      const config = parseSelectionHTML(selection);
+      if (config) {
+        editMode = true;
+        populateInputForm(config);
+        document.getElementById('submit-btn').textContent = 'Update';
+        showScreen(inputScreen);
+        return true;
+      }
+    }
+  } catch (err) {
+    // No selection or error — proceed with add mode
+  }
+  return false;
 }
 
 // Tab switching
@@ -135,3 +203,6 @@ inputForm.addEventListener('submit', (e) => {
   resetInputForm();
   showScreen(pickerScreen);
 });
+
+// On plugin load — check if there's a selection to edit
+checkForEditMode();
