@@ -108,7 +108,7 @@ async function tryEditSelection() {
       }
       // Debug: show what we got
       const debugEl = document.getElementById('debug-output');
-      if (debugEl) debugEl.textContent = `Got selection but couldn't parse: ${selection.substring(0, 200)}`;
+      if (debugEl) debugEl.textContent = `Got selection but couldn't parse: ${selection.substring(0, 500)}`;
     } else {
       const debugEl = document.getElementById('debug-output');
       if (debugEl) debugEl.textContent = 'No selection returned (empty)';
@@ -130,7 +130,6 @@ async function checkForEditMode() {
       if (!debugEl.textContent) {
         debugEl.textContent = 'Select a block table in the editor, then click here again';
       }
-      setTimeout(() => { debugEl.textContent = ''; }, 3000);
     }
   });
 }
