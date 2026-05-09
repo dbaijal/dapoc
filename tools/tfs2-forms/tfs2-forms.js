@@ -26,9 +26,9 @@ function autoGenerateName() {
 function buildBlockTable(blockName, fields) {
   const rows = fields
     .filter(([, value]) => value)
-    .map(([key, value]) => `<tr><td><p>${key}</p></td><td><p>${value}</p></td></tr>`)
+    .map(([key, value]) => `<div><div>${key}</div><div>${value}</div></div>`)
     .join('');
-  return `<table><tr><th colspan="2"><p>${blockName}</p></th></tr>${rows}</table><p></p>`;
+  return `<div class="${blockName}">${rows}</div>`;
 }
 
 function resetInputForm() {
