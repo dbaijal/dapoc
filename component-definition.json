@@ -208,6 +208,61 @@
               "columns": 1
             }
           }
+        },
+        {
+          "title": "TFS Form",
+          "id": "tfs-form",
+          "plugins": {
+            "da": {
+              "name": "tfs-form",
+              "rows": 2,
+              "columns": 2
+            }
+          }
+        },
+        {
+          "title": "TFS Form Input",
+          "id": "tfs-form-input",
+          "plugins": {
+            "da": {
+              "name": "tfs-form-input",
+              "rows": 5,
+              "columns": 2
+            }
+          }
+        },
+        {
+          "title": "TFS Form Options",
+          "id": "tfs-form-options",
+          "plugins": {
+            "da": {
+              "name": "tfs-form-options",
+              "rows": 6,
+              "columns": 2
+            }
+          }
+        },
+        {
+          "title": "TFS Form Label",
+          "id": "tfs-form-label",
+          "plugins": {
+            "da": {
+              "name": "tfs-form-label",
+              "rows": 2,
+              "columns": 2
+            }
+          }
+        },
+        {
+          "title": "TFS Form Button",
+          "id": "tfs-form-button",
+          "plugins": {
+            "da": {
+              "name": "tfs-form-button",
+              "rows": 2,
+              "columns": 2
+            }
+          }
         }
       ]
     }
