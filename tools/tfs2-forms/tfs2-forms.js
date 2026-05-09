@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import DA_SDK from 'https://da.live/nx/utils/sdk.js';
 
 const { actions } = await DA_SDK;
@@ -38,7 +39,7 @@ function resetInputForm() {
 // Field type picker
 document.querySelectorAll('.field-type-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const type = btn.dataset.type;
+    const { type } = btn.dataset;
     if (type === 'input') {
       showScreen(inputScreen);
     }
