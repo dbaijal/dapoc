@@ -55,14 +55,22 @@ function parseSelectionHTML(html) {
   const table = doc.querySelector('table');
   if (!table) return null;
 
-  const header = table.querySelector('th');
-  if (!header || !header.textContent.includes('tfs2-form-input')) return null;
+  const firstRow = table.querySelector('tr');
+  if (!firstRow) return null;
+
+  const headerCell = firstRow.querySelector('td[colspan], th');
+  const headerText = headerCell ? headerCell.textContent.trim() : '';
+  if (!headerText.includes('tfs2-form-input')) return null;
 
   const config = {};
-  table.querySelectorAll('tr').forEach((row) => {
+  const rows = table.querySelectorAll('tr');
+  rows.forEach((row, index) => {
+    if (index === 0) return;
     const cells = row.querySelectorAll('td');
     if (cells.length === 2) {
-      config[cells[0].textContent.trim()] = cells[1].textContent.trim();
+      const key = cells[0].textContent.trim();
+      const value = cells[1].textContent.trim();
+      if (key) config[key] = value;
     }
   });
   return config;
