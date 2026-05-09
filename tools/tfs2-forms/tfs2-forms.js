@@ -94,7 +94,7 @@ function populateInputForm(config) {
   if (config.id) document.getElementById('input-id').value = config.id;
 }
 
-async function checkForEditMode() {
+async function tryEditSelection() {
   try {
     const selection = await actions.getSelection();
     if (selection) {
@@ -111,6 +111,21 @@ async function checkForEditMode() {
     // No selection or error — proceed with add mode
   }
   return false;
+}
+
+async function checkForEditMode() {
+  const editBtn = document.getElementById('edit-selected-btn');
+  const hasSelection = await tryEditSelection();
+  if (!hasSelection) {
+    editBtn.style.display = 'block';
+    editBtn.addEventListener('click', async () => {
+      const edited = await tryEditSelection();
+      if (!edited) {
+        editBtn.textContent = 'Select a block table first, then click here';
+        setTimeout(() => { editBtn.textContent = 'Edit Selected Block'; }, 2000);
+      }
+    });
+  }
 }
 
 // Tab switching
