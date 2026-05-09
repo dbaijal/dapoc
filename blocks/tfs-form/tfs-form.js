@@ -8,6 +8,32 @@ function getBlockConfig(block) {
   return config;
 }
 
+function getBlockType(block) {
+  if (block.classList.contains('tfs-form-input')) return 'input';
+  if (block.classList.contains('tfs-form-options')) return 'options';
+  if (block.classList.contains('tfs-form-label')) return 'label';
+  if (block.classList.contains('tfs-form-button')) return 'button';
+  return null;
+}
+
+async function fetchFragmentFields(path) {
+  const resp = await fetch(`${path}.plain.html`);
+  if (!resp.ok) return [];
+
+  const html = await resp.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const blocks = doc.querySelectorAll(
+    '.tfs-form-input, .tfs-form-options, .tfs-form-label, .tfs-form-button',
+  );
+
+  return [...blocks].map((b) => ({
+    type: getBlockType(b),
+    config: getBlockConfig(b),
+  }));
+}
+
 function buildInput(config) {
   const wrapper = document.createElement('div');
   wrapper.className = 'tfs-form-field';
@@ -130,6 +156,16 @@ function buildButton(config) {
   return wrapper;
 }
 
+function buildField(type, config) {
+  switch (type) {
+    case 'input': return buildInput(config);
+    case 'options': return buildOptions(config);
+    case 'label': return buildLabel(config);
+    case 'button': return buildButton(config);
+    default: return null;
+  }
+}
+
 export default async function decorate(block) {
   const config = getBlockConfig(block);
   const section = block.closest('.section');
@@ -141,23 +177,35 @@ export default async function decorate(block) {
   if (config.thankyou) form.dataset.thankyou = config.thankyou;
 
   const fieldBlocks = section.querySelectorAll(
-    '.tfs-form-input, .tfs-form-options, .tfs-form-label, .tfs-form-button',
+    '.tfs-form-input, .tfs-form-options, .tfs-form-label, .tfs-form-button, .tfs-form-fragment',
   );
 
-  fieldBlocks.forEach((fieldBlock) => {
-    const fieldConfig = getBlockConfig(fieldBlock);
-
-    if (fieldBlock.classList.contains('tfs-form-input')) {
-      form.append(buildInput(fieldConfig));
-    } else if (fieldBlock.classList.contains('tfs-form-options')) {
-      form.append(buildOptions(fieldConfig));
-    } else if (fieldBlock.classList.contains('tfs-form-label')) {
-      form.append(buildLabel(fieldConfig));
-    } else if (fieldBlock.classList.contains('tfs-form-button')) {
-      form.append(buildButton(fieldConfig));
+  const processingPromises = [...fieldBlocks].map(async (fieldBlock) => {
+    if (fieldBlock.classList.contains('tfs-form-fragment')) {
+      const fragmentConfig = getBlockConfig(fieldBlock);
+      const path = fragmentConfig.path || '';
+      if (path) {
+        const fragmentFields = await fetchFragmentFields(path);
+        return fragmentFields.map((f) => buildField(f.type, f.config)).filter(Boolean);
+      }
+      return [];
     }
 
-    fieldBlock.closest('.tfs-form-input-wrapper, .tfs-form-options-wrapper, .tfs-form-label-wrapper, .tfs-form-button-wrapper')?.remove();
+    const fieldConfig = getBlockConfig(fieldBlock);
+    const type = getBlockType(fieldBlock);
+    const element = buildField(type, fieldConfig);
+    return element ? [element] : [];
+  });
+
+  const results = await Promise.all(processingPromises);
+  results.forEach((elements) => {
+    elements.forEach((el) => form.append(el));
+  });
+
+  fieldBlocks.forEach((fieldBlock) => {
+    fieldBlock.closest(
+      '.tfs-form-input-wrapper, .tfs-form-options-wrapper, .tfs-form-label-wrapper, .tfs-form-button-wrapper, .tfs-form-fragment-wrapper',
+    )?.remove();
   });
 
   form.addEventListener('submit', (e) => {

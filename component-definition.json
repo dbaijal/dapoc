@@ -263,6 +263,17 @@
               "columns": 2
             }
           }
+        },
+        {
+          "title": "TFS Form Fragment",
+          "id": "tfs-form-fragment",
+          "plugins": {
+            "da": {
+              "name": "tfs-form-fragment",
+              "rows": 1,
+              "columns": 2
+            }
+          }
         }
       ]
     }
