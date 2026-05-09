@@ -83,7 +83,7 @@ inputForm.addEventListener('submit', (e) => {
   ];
 
   const tableHTML = buildBlockTable('tfs2-form-input', fields);
-  actions.sendText(tableHTML);
+  actions.sendHTML(tableHTML);
 
   resetInputForm();
   showScreen(pickerScreen);
