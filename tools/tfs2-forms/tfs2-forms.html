@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TFS2 Forms</title>
+  <link rel="stylesheet" href="tfs2-forms.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Screen 1: Field Type Picker -->
+    <div id="picker-screen" class="screen active">
+      <h2>Add Form Field</h2>
+      <div class="field-types">
+        <button class="field-type-btn" data-type="input">
+          <span class="field-type-icon">✏️</span>
+          <span class="field-type-label">Input</span>
+        </button>
+        <button class="field-type-btn" data-type="options" disabled>
+          <span class="field-type-icon">☰</span>
+          <span class="field-type-label">Options</span>
+          <span class="coming-soon">Soon</span>
+        </button>
+        <button class="field-type-btn" data-type="button" disabled>
+          <span class="field-type-icon">⬜</span>
+          <span class="field-type-label">Button</span>
+          <span class="coming-soon">Soon</span>
+        </button>
+        <button class="field-type-btn" data-type="form" disabled>
+          <span class="field-type-icon">📋</span>
+          <span class="field-type-label">Form</span>
+          <span class="coming-soon">Soon</span>
+        </button>
+        <button class="field-type-btn" data-type="fragment" disabled>
+          <span class="field-type-icon">🔗</span>
+          <span class="field-type-label">Fragment</span>
+          <span class="coming-soon">Soon</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Input Dialog -->
+    <div id="input-screen" class="screen">
+      <div class="screen-header">
+        <button id="back-btn" class="back-btn">&larr; Back</button>
+        <h2>Input Field</h2>
+      </div>
+      <form id="input-form" class="field-form">
+        <div class="form-group">
+          <label for="input-label">Label <span class="req">*</span></label>
+          <input type="text" id="input-label" required placeholder="e.g. First Name">
+        </div>
+        <div class="form-group">
+          <label for="input-type">Type</label>
+          <select id="input-type">
+            <option value="text">Text</option>
+            <option value="email">Email</option>
+            <option value="tel">Phone</option>
+            <option value="number">Number</option>
+            <option value="date">Date</option>
+            <option value="password">Password</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="input-name">Name <span class="req">*</span></label>
+          <input type="text" id="input-name" required placeholder="e.g. firstname">
+          <span class="hint">Used as the field identifier in form submission</span>
+        </div>
+        <div class="form-group">
+          <label for="input-placeholder">Placeholder</label>
+          <input type="text" id="input-placeholder" placeholder="e.g. Enter your first name">
+        </div>
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="input-required">
+            Required field
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Add to Page</button>
+          <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script type="module" src="tfs2-forms.js"></script>
+</body>
+</html>

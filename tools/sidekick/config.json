@@ -4,6 +4,13 @@
   "editUrlPattern": "https://da.live/edit#/{{org}}/{{site}}{{pathname}}",
   "plugins": [
     {
+      "id": "tfs2-forms",
+      "title": "TFS2 Forms",
+      "environments": ["edit"],
+      "daLibrary": true,
+      "url": "https://main--dapoc--dbaijal.aem.live/tools/tfs2-forms/tfs2-forms.html"
+    },
+    {
       "id": "da-plugin-demo",
       "title": "Plugin demo",
       "environments": ["edit"],

@@ -1,0 +1,100 @@
+.tfs2-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 600px;
+}
+
+.tfs2-form .tfs2-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tfs2-form label {
+  font-size: var(--body-font-size-s, 14px);
+  font-weight: 600;
+}
+
+.tfs2-form .tfs2-form-required {
+  color: #d32f2f;
+  margin-inline-start: 4px;
+}
+
+.tfs2-form input[type="text"],
+.tfs2-form input[type="email"],
+.tfs2-form input[type="tel"],
+.tfs2-form input[type="number"],
+.tfs2-form input[type="date"],
+.tfs2-form input[type="password"],
+.tfs2-form select,
+.tfs2-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--dark-color, #ccc);
+  border-radius: 4px;
+  font-size: var(--body-font-size-s, 14px);
+  background: var(--background-color, #fff);
+  color: var(--text-color, #333);
+  transition: border-color 0.2s;
+}
+
+.tfs2-form input:focus,
+.tfs2-form select:focus,
+.tfs2-form textarea:focus {
+  outline: 2px solid var(--link-color, #06c);
+  outline-offset: 2px;
+}
+
+.tfs2-form .tfs2-form-radio-group,
+.tfs2-form .tfs2-form-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tfs2-form .tfs2-form-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tfs2-form .tfs2-form-option input {
+  width: auto;
+}
+
+.tfs2-form .tfs2-form-option label {
+  font-weight: normal;
+}
+
+.tfs2-form .tfs2-form-label h2,
+.tfs2-form .tfs2-form-label h3 {
+  margin: 0;
+}
+
+.tfs2-form .tfs2-form-actions {
+  padding-top: 8px;
+}
+
+.tfs2-form .tfs2-form-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: var(--body-font-size-s, 14px);
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--link-color, #06c);
+  color: #fff;
+  transition: background-color 0.2s;
+}
+
+.tfs2-form .tfs2-form-btn:hover {
+  opacity: 0.9;
+}
+
+.tfs2-form .tfs2-form-btn-secondary {
+  background: transparent;
+  border: 2px solid var(--link-color, #06c);
+  color: var(--link-color, #06c);
+}
