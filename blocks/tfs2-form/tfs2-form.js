@@ -38,10 +38,12 @@ function buildInput(config) {
   const wrapper = document.createElement('div');
   wrapper.className = 'tfs2-form-field';
 
-  if (config.label) {
+  const fieldId = config.id || config.name || '';
+
+  if (config.label && config['hide-title'] !== 'true') {
     const label = document.createElement('label');
     label.textContent = config.label;
-    label.setAttribute('for', config.name || '');
+    label.setAttribute('for', fieldId);
     if (config.required === 'true') {
       const req = document.createElement('span');
       req.className = 'tfs2-form-required';
@@ -51,13 +53,36 @@ function buildInput(config) {
     wrapper.append(label);
   }
 
+  if (config['help-message']) {
+    const help = document.createElement('p');
+    help.className = 'tfs2-form-help';
+    help.textContent = config['help-message'];
+    wrapper.append(help);
+  }
+
   const input = document.createElement('input');
   input.type = config.type || 'text';
   input.name = config.name || '';
-  input.id = config.name || '';
+  input.id = fieldId;
   if (config.placeholder) input.placeholder = config.placeholder;
+  if (config.value) input.value = config.value;
   if (config.required === 'true') input.required = true;
+  if (config.readonly === 'true') input.readOnly = true;
+  if (config.minlength) input.minLength = parseInt(config.minlength, 10);
+  if (config.maxlength) input.maxLength = parseInt(config.maxlength, 10);
+  if (config['constraint-message']) input.title = config['constraint-message'];
+  if (config['query-param']) input.dataset.qparam = config['query-param'];
   wrapper.append(input);
+
+  if (config['confirmation-field'] === 'true') {
+    const confirmInput = document.createElement('input');
+    confirmInput.type = config.type || 'text';
+    confirmInput.name = `${config.name}-confirm`;
+    confirmInput.id = `${fieldId}-confirm`;
+    confirmInput.placeholder = `Confirm ${config.label || ''}`;
+    if (config.required === 'true') confirmInput.required = true;
+    wrapper.append(confirmInput);
+  }
 
   return wrapper;
 }

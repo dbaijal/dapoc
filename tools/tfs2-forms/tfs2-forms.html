@@ -39,43 +39,121 @@
       </div>
     </div>
 
-    <!-- Screen 2: Input Dialog -->
+    <!-- Screen 2: Input Dialog with Tabs -->
     <div id="input-screen" class="screen">
       <div class="screen-header">
         <button id="back-btn" class="back-btn">&larr; Back</button>
-        <h2>Input Field</h2>
+        <h2>Form Input Field</h2>
       </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-tab="properties">Properties</button>
+        <button class="tab" data-tab="constraints">Constraints</button>
+        <button class="tab" data-tab="about">About</button>
+      </div>
+
       <form id="input-form" class="field-form">
-        <div class="form-group">
-          <label for="input-label">Label <span class="req">*</span></label>
-          <input type="text" id="input-label" required placeholder="e.g. First Name">
+        <!-- Properties Tab -->
+        <div class="tab-panel active" data-panel="properties">
+          <div class="form-group">
+            <label for="input-constraint">Constraint</label>
+            <select id="input-constraint">
+              <option value="text">Text</option>
+              <option value="email">Email</option>
+              <option value="tel">Phone</option>
+              <option value="number">Number</option>
+              <option value="date">Date</option>
+              <option value="password">Password</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="input-label">Label <span class="req">*</span></label>
+            <input type="text" id="input-label" required placeholder="e.g. First Name">
+          </div>
+          <div class="form-group">
+            <label for="input-name">Name <span class="req">*</span></label>
+            <input type="text" id="input-name" required placeholder="e.g. firstname">
+            <span class="hint">Used as the field identifier in form submission</span>
+          </div>
+          <div class="form-group">
+            <label for="input-placeholder">Placeholder</label>
+            <input type="text" id="input-placeholder" placeholder="e.g. Enter your first name">
+          </div>
+          <div class="form-group">
+            <label for="input-value">Value</label>
+            <input type="text" id="input-value" placeholder="Default value">
+          </div>
+
+          <div class="form-section">
+            <h3>Multi-value configurations</h3>
+            <div class="form-row">
+              <div class="form-group checkbox-group">
+                <label><input type="checkbox" id="input-multivalue"> Turn on multi-value</label>
+              </div>
+              <div class="form-group checkbox-group">
+                <label><input type="checkbox" id="input-confirmation"> Display confirmation input field</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Query parameter configurations</h3>
+            <div class="form-group checkbox-group">
+              <label><input type="checkbox" id="input-qparam-toggle"> Pre-populate value from URL query parameter</label>
+            </div>
+            <div class="form-group" id="qparam-name-group" style="display:none;">
+              <label for="input-qparam">Parameter name</label>
+              <input type="text" id="input-qparam" placeholder="e.g. email">
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="input-type">Type</label>
-          <select id="input-type">
-            <option value="text">Text</option>
-            <option value="email">Email</option>
-            <option value="tel">Phone</option>
-            <option value="number">Number</option>
-            <option value="date">Date</option>
-            <option value="password">Password</option>
-          </select>
+
+        <!-- Constraints Tab -->
+        <div class="tab-panel" data-panel="constraints">
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="input-hide-title"> Hide the title from being displayed</label>
+          </div>
+          <div class="form-group">
+            <label for="input-constraint-msg">Constraint Message</label>
+            <textarea id="input-constraint-msg" rows="3" placeholder="Error message shown when validation fails"></textarea>
+          </div>
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="input-required"> Required</label>
+          </div>
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="input-readonly"> Make read only</label>
+          </div>
+
+          <div class="form-section">
+            <h3>Allowed Size</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="input-minlength">Minimum character/number length</label>
+                <input type="number" id="input-minlength" min="0" placeholder="0">
+              </div>
+              <div class="form-group">
+                <label for="input-maxlength">Maximum character/number length</label>
+                <input type="number" id="input-maxlength" min="0" placeholder="No limit">
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="input-name">Name <span class="req">*</span></label>
-          <input type="text" id="input-name" required placeholder="e.g. firstname">
-          <span class="hint">Used as the field identifier in form submission</span>
+
+        <!-- About Tab -->
+        <div class="tab-panel" data-panel="about">
+          <div class="form-group">
+            <label for="input-help">Help Message</label>
+            <input type="text" id="input-help" placeholder="Displayed below the label">
+          </div>
+          <div class="form-group">
+            <label for="input-id">ID</label>
+            <input type="text" id="input-id" placeholder="Auto-generated if empty">
+            <span class="hint">Leave empty for auto-generated ID</span>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="input-placeholder">Placeholder</label>
-          <input type="text" id="input-placeholder" placeholder="e.g. Enter your first name">
-        </div>
-        <div class="form-group checkbox-group">
-          <label>
-            <input type="checkbox" id="input-required">
-            Required field
-          </label>
-        </div>
+
+        <!-- Actions -->
         <div class="form-actions">
           <button type="submit" class="btn-primary">Add to Page</button>
           <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>

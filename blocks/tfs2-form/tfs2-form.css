@@ -21,6 +21,12 @@
   margin-inline-start: 4px;
 }
 
+.tfs2-form .tfs2-form-help {
+  font-size: var(--body-font-size-xs, 12px);
+  color: #666;
+  margin: 0;
+}
+
 .tfs2-form input[type="text"],
 .tfs2-form input[type="email"],
 .tfs2-form input[type="tel"],
