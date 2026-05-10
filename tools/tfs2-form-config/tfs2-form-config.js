@@ -83,30 +83,6 @@ function createRepeatableRow(type) {
   return row;
 }
 
-function addActionType(code) {
-  if (selectedActions.has(code)) return;
-  selectedActions.add(code);
-
-  const tag = document.createElement('span');
-  tag.className = 'action-tag';
-  tag.dataset.code = code;
-  tag.innerHTML = `Form: Send form data to ${ACTION_LABELS[code]} <button type="button" class="tag-remove">&times;</button>`;
-  tag.querySelector('.tag-remove').addEventListener('click', () => removeActionType(code));
-  selectedActionsEl.appendChild(tag);
-
-  const templateId = ACTION_TEMPLATES[code];
-  if (templateId) {
-    const template = document.getElementById(templateId);
-    if (template) {
-      const panel = template.content.cloneNode(true);
-      configSections.appendChild(panel);
-      initConfigPanel(code);
-    }
-  }
-
-  actionSelect.value = '';
-}
-
 function removeActionType(code) {
   selectedActions.delete(code);
   const tag = selectedActionsEl.querySelector(`[data-code="${code}"]`);
@@ -138,6 +114,30 @@ function initConfigPanel(code) {
       panel.querySelector('.regional-email-config').style.display = e.target.checked ? 'block' : 'none';
     });
   }
+}
+
+function addActionType(code) {
+  if (selectedActions.has(code)) return;
+  selectedActions.add(code);
+
+  const tag = document.createElement('span');
+  tag.className = 'action-tag';
+  tag.dataset.code = code;
+  tag.innerHTML = `Form: Send form data to ${ACTION_LABELS[code]} <button type="button" class="tag-remove">&times;</button>`;
+  tag.querySelector('.tag-remove').addEventListener('click', () => removeActionType(code));
+  selectedActionsEl.appendChild(tag);
+
+  const templateId = ACTION_TEMPLATES[code];
+  if (templateId) {
+    const template = document.getElementById(templateId);
+    if (template) {
+      const panel = template.content.cloneNode(true);
+      configSections.appendChild(panel);
+      initConfigPanel(code);
+    }
+  }
+
+  actionSelect.value = '';
 }
 
 function collectFormData() {
