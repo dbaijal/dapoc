@@ -22,10 +22,9 @@
           <span class="field-type-icon">☰</span>
           <span class="field-type-label">Options</span>
         </button>
-        <button class="field-type-btn" data-type="button" disabled>
+        <button class="field-type-btn" data-type="button">
           <span class="field-type-icon">⬜</span>
           <span class="field-type-label">Button</span>
-          <span class="coming-soon">Soon</span>
         </button>
         <button class="field-type-btn" data-type="form" disabled>
           <span class="field-type-icon">📋</span>
@@ -162,6 +161,68 @@
       </form>
     </div>
   </div>
+    <!-- Screen 4: Button Dialog with Tabs -->
+    <div id="button-screen" class="screen">
+      <div class="screen-header">
+        <button id="button-back-btn" class="back-btn">&larr; Back</button>
+        <h2>Form Button</h2>
+      </div>
+
+      <div class="tabs button-tabs">
+        <button class="tab active" data-tab="button-properties">Properties</button>
+        <button class="tab" data-tab="button-constraints">Constraints</button>
+      </div>
+
+      <form id="button-form" class="field-form">
+        <!-- Properties Tab -->
+        <div class="tab-panel active" data-panel="button-properties">
+          <div class="form-group">
+            <label for="button-type">Type</label>
+            <select id="button-type">
+              <option value="submit">Submit</option>
+              <option value="button">Button</option>
+              <option value="reset">Reset</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="button-title">Title <span class="req">*</span></label>
+            <input type="text" id="button-title" required placeholder="e.g. Submit">
+          </div>
+          <div class="form-group">
+            <label for="button-name">Name</label>
+            <input type="text" id="button-name" placeholder="e.g. submit-btn">
+          </div>
+          <div class="form-group">
+            <label for="button-value">Value</label>
+            <input type="text" id="button-value" placeholder="Button value">
+          </div>
+          <div class="form-group">
+            <label for="button-id">ID</label>
+            <input type="text" id="button-id" placeholder="Auto-generated if empty">
+            <span class="hint">Leave empty for auto-generated ID</span>
+          </div>
+        </div>
+
+        <!-- Constraints Tab -->
+        <div class="tab-panel" data-panel="button-constraints">
+          <div class="form-group">
+            <label for="button-error-msg">Form Error Constraint Message</label>
+            <textarea id="button-error-msg" rows="3" placeholder="e.g. Error: Please correct the errors above and submit your information again."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="button-server-error-msg">Form Server Error Constraint Message</label>
+            <textarea id="button-server-error-msg" rows="3" placeholder="e.g. Error: There was an error sending your information. Please try submitting again."></textarea>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="submit" id="button-submit-btn" class="btn-primary">Add to Page</button>
+          <button type="button" id="button-cancel-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+
     <!-- Screen 3: Options Dialog with Tabs -->
     <div id="options-screen" class="screen">
       <div class="screen-header">

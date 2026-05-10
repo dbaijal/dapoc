@@ -6,6 +6,8 @@ const { actions } = await DA_SDK;
 const pickerScreen = document.getElementById('picker-screen');
 const inputScreen = document.getElementById('input-screen');
 const optionsScreen = document.getElementById('options-screen');
+const buttonScreen = document.getElementById('button-screen');
+const buttonForm = document.getElementById('button-form');
 const inputForm = document.getElementById('input-form');
 const optionsForm = document.getElementById('options-form');
 const backBtn = document.getElementById('back-btn');
@@ -78,6 +80,7 @@ function parseSelectionHTML(html) {
   let blockType = null;
   if (headerText.includes('tfs2-form-input')) blockType = 'input';
   else if (headerText.includes('tfs2-form-options')) blockType = 'options';
+  else if (headerText.includes('tfs2-form-button')) blockType = 'button';
   if (!blockType) return null;
 
   const config = { blockType };
@@ -213,6 +216,10 @@ async function tryEditSelection() {
           populateOptionsForm(config);
           document.getElementById('options-submit-btn').textContent = 'Update';
           showScreen(optionsScreen);
+        } else if (config.blockType === 'button') {
+          populateButtonForm(config);
+          document.getElementById('button-submit-btn').textContent = 'Update';
+          showScreen(buttonScreen);
         }
         return true;
       }
@@ -261,6 +268,7 @@ document.querySelectorAll('.field-type-btn').forEach((btn) => {
     const { type } = btn.dataset;
     if (type === 'input') showScreen(inputScreen);
     else if (type === 'options') showScreen(optionsScreen);
+    else if (type === 'button') showScreen(buttonScreen);
   });
 });
 
@@ -375,6 +383,54 @@ optionsForm.addEventListener('submit', (e) => {
   actions.sendHTML(buildBlockTable('tfs2-form-options', fields));
   if (editMode) actions.closeLibrary();
   resetOptionsForm();
+  showScreen(pickerScreen);
+});
+
+// --- Button: Reset ---
+function resetButtonForm() {
+  buttonForm.reset();
+  editMode = false;
+  document.getElementById('button-submit-btn').textContent = 'Add to Page';
+  buttonScreen.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === 0);
+  });
+  buttonScreen.querySelectorAll('.tab-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === 0);
+  });
+}
+
+// --- Button: Populate for edit ---
+function populateButtonForm(config) {
+  if (config.type) document.getElementById('button-type').value = config.type;
+  if (config.label) document.getElementById('button-title').value = config.label;
+  if (config.name) document.getElementById('button-name').value = config.name;
+  if (config.value) document.getElementById('button-value').value = config.value;
+  if (config.id) document.getElementById('button-id').value = config.id;
+  if (config['error-message']) document.getElementById('button-error-msg').value = config['error-message'];
+  if (config['server-error-message']) document.getElementById('button-server-error-msg').value = config['server-error-message'];
+}
+
+// --- Button: Back/Cancel ---
+document.getElementById('button-back-btn').addEventListener('click', () => { resetButtonForm(); showScreen(pickerScreen); });
+document.getElementById('button-cancel-btn').addEventListener('click', () => { resetButtonForm(); showScreen(pickerScreen); });
+
+// --- Submit Button form ---
+buttonForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const fields = [
+    ['label', document.getElementById('button-title').value.trim()],
+    ['type', document.getElementById('button-type').value],
+    ['name', document.getElementById('button-name').value.trim()],
+    ['value', document.getElementById('button-value').value.trim()],
+    ['id', document.getElementById('button-id').value.trim()],
+    ['error-message', document.getElementById('button-error-msg').value.trim()],
+    ['server-error-message', document.getElementById('button-server-error-msg').value.trim()],
+  ];
+
+  actions.sendHTML(buildBlockTable('tfs2-form-button', fields));
+  if (editMode) actions.closeLibrary();
+  resetButtonForm();
   showScreen(pickerScreen);
 });
 

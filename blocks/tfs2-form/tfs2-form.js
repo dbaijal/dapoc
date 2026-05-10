@@ -227,10 +227,29 @@ function buildButton(config) {
   const wrapper = document.createElement('div');
   wrapper.className = 'tfs2-form-actions';
 
+  if (config['error-message']) {
+    const errorSpan = document.createElement('span');
+    errorSpan.className = 'tfs2-form-error-msg';
+    errorSpan.textContent = config['error-message'];
+    errorSpan.style.display = 'none';
+    wrapper.append(errorSpan);
+  }
+
+  if (config['server-error-message']) {
+    const serverErrorSpan = document.createElement('span');
+    serverErrorSpan.className = 'tfs2-form-server-error-msg';
+    serverErrorSpan.textContent = config['server-error-message'];
+    serverErrorSpan.style.display = 'none';
+    wrapper.append(serverErrorSpan);
+  }
+
   const button = document.createElement('button');
   button.type = config.type || 'submit';
   button.textContent = config.label || 'Submit';
-  button.className = `tfs2-form-btn${config.style ? ` tfs2-form-btn-${config.style}` : ''}`;
+  button.className = 'tfs2-form-btn';
+  if (config.name) button.name = config.name;
+  if (config.value) button.value = config.value;
+  if (config.id) button.id = config.id;
   wrapper.append(button);
 
   return wrapper;
