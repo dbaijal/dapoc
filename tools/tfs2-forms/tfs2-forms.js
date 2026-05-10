@@ -80,7 +80,7 @@ function parseSelectionHTML(html) {
   else if (headerText.includes('tfs2-form-options')) blockType = 'options';
   if (!blockType) return null;
 
-  const config = { blockType: blockType };
+  const config = { blockType };
   const rows = table.querySelectorAll('tr');
   rows.forEach((row, index) => {
     if (index === 0) return;
