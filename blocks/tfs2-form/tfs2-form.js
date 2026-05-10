@@ -335,6 +335,22 @@ function setupMultiStep(form) {
     });
     prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
     nextBtn.style.display = index === steps.length - 1 ? 'none' : 'inline-block';
+    nav.style.display = index === steps.length - 1 ? 'none' : 'flex';
+
+    if (index === steps.length - 1) {
+      const lastStepActions = steps[index].querySelector('.tfs2-form-actions');
+      if (lastStepActions && !lastStepActions.querySelector('.tfs2-form-btn-prev')) {
+        const prevClone = document.createElement('button');
+        prevClone.type = 'button';
+        prevClone.className = 'tfs2-form-btn tfs2-form-btn-secondary tfs2-form-btn-prev';
+        prevClone.textContent = 'Previous';
+        prevClone.addEventListener('click', () => {
+          currentStep -= 1;
+          showStep(currentStep);
+        });
+        lastStepActions.prepend(prevClone);
+      }
+    }
   }
 
   prevBtn.addEventListener('click', () => {
