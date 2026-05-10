@@ -225,6 +225,130 @@ function collectFormData() {
   return fields;
 }
 
+let editMode = false;
+
+// --- Edit Mode ---
+function parseSelectionHTML(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const table = doc.querySelector('table');
+  if (!table) return null;
+
+  const firstRow = table.querySelector('tr');
+  if (!firstRow) return null;
+
+  const headerCell = firstRow.querySelector('td[colspan], th');
+  const headerText = headerCell ? headerCell.textContent.trim() : '';
+  if (headerText !== 'tfs2-form') return null;
+
+  const config = {};
+  const rows = table.querySelectorAll('tr');
+  rows.forEach((row, index) => {
+    if (index === 0) return;
+    const cells = row.querySelectorAll('td');
+    if (cells.length === 2) {
+      const key = cells[0].textContent.trim();
+      const value = cells[1].textContent.trim();
+      if (key) config[key] = value;
+    }
+  });
+  return config;
+}
+
+function populateFormConfig(config) {
+  if (config['action-types']) {
+    config['action-types'].split(',').forEach((code) => {
+      addActionType(code.trim());
+    });
+  }
+
+  if (config['eloqua-form-name']) {
+    const panel = configSections.querySelector('[data-action="1001"]');
+    if (panel) panel.querySelector('.eloqua-form-name').value = config['eloqua-form-name'];
+  }
+  if (config['eloqua-instance']) {
+    const panel = configSections.querySelector('[data-action="1001"]');
+    if (panel) panel.querySelector('.eloqua-instance').value = config['eloqua-instance'];
+  }
+  if (config['gcms-form-id']) {
+    const panel = configSections.querySelector('[data-action="1002"]');
+    if (panel) panel.querySelector('.gcms-form-id').value = config['gcms-form-id'];
+  }
+  if (config['marketo-form-id']) {
+    const panel = configSections.querySelector('[data-action="1005"]');
+    if (panel) panel.querySelector('.marketo-form-id').value = config['marketo-form-id'];
+  }
+  if (config['email-template']) {
+    const panel = configSections.querySelector('[data-action="1006"]');
+    if (panel) panel.querySelector('.email-template').value = config['email-template'];
+  }
+  if (config['email-subject']) {
+    const panel = configSections.querySelector('[data-action="1006"]');
+    if (panel) panel.querySelector('.email-subject').value = config['email-subject'];
+  }
+  if (config['email-mailto']) {
+    const panel = configSections.querySelector('[data-action="1006"]');
+    if (panel) {
+      config['email-mailto'].split(',').forEach((email) => {
+        const row = createRepeatableRow('email-mailto');
+        row.querySelector('.mailto-input').value = email.trim();
+        panel.querySelector('.email-mailto').appendChild(row);
+      });
+    }
+  }
+  if (config['nonlsg-type']) {
+    const panel = configSections.querySelector('[data-action="1004"]');
+    if (panel) panel.querySelector('.nonlsg-type').value = config['nonlsg-type'];
+  }
+  if (config['s3-form-id']) {
+    const panel = configSections.querySelector('[data-action="1009"]');
+    if (panel) panel.querySelector('.s3-form-id').value = config['s3-form-id'];
+  }
+
+  if (config['mqo-form']) document.getElementById('mqo-form').value = config['mqo-form'];
+  if (config.division) document.getElementById('division').value = config.division;
+  if (config.id) document.getElementById('form-container-id').value = config.id;
+
+  if (config['session-storage'] === 'true') {
+    sessionStorageToggle.checked = true;
+    sessionStorageFields.style.display = 'block';
+    if (config['session-key']) document.getElementById('session-key').value = config['session-key'];
+    if (config['session-persist'] === 'true') document.getElementById('session-persist').checked = true;
+  }
+}
+
+async function tryEditSelection() {
+  try {
+    const selection = await actions.getSelection();
+    if (selection) {
+      const config = parseSelectionHTML(selection);
+      if (config) {
+        editMode = true;
+        populateFormConfig(config);
+        document.getElementById('config-submit-btn').textContent = 'Update';
+        return true;
+      }
+    }
+  } catch (err) {
+    // No selection — proceed with add mode
+  }
+  return false;
+}
+
+// --- Edit button ---
+const editBtn = document.createElement('button');
+editBtn.type = 'button';
+editBtn.className = 'btn-edit-selected';
+editBtn.textContent = 'Edit Selected Form Config';
+editBtn.addEventListener('click', async () => {
+  const edited = await tryEditSelection();
+  if (!edited) {
+    editBtn.textContent = 'Select a tfs2-form block table first';
+    setTimeout(() => { editBtn.textContent = 'Edit Selected Form Config'; }, 2000);
+  }
+});
+document.querySelector('.plugin-header').appendChild(editBtn);
+
 // --- Tab switching ---
 document.querySelectorAll('.tab').forEach((tab) => {
   tab.addEventListener('click', () => {
@@ -253,6 +377,7 @@ configForm.addEventListener('submit', (e) => {
   const fields = collectFormData();
   const tableHTML = buildBlockTable('tfs2-form', fields);
   actions.sendHTML(tableHTML);
+  if (editMode) actions.closeLibrary();
 });
 
 // --- Cancel ---

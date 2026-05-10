@@ -29,6 +29,24 @@ body {
   color: #1a1a1a;
 }
 
+.plugin-header .btn-edit-selected {
+  width: 100%;
+  padding: 12px 16px;
+  margin-top: 12px;
+  background: #f5f9ff;
+  color: #1473e6;
+  border: 1.5px solid #1473e6;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.plugin-header .btn-edit-selected:hover {
+  background: #e6f0ff;
+}
+
 /* Tabs */
 .tabs {
   display: flex;
