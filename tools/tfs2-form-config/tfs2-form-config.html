@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TFS2 Form Config</title>
+  <link rel="stylesheet" href="tfs2-form-config.css">
+</head>
+<body>
+  <div id="app">
+    <div class="plugin-header">
+      <h2>Form Container</h2>
+    </div>
+
+    <form id="form-config-form" class="config-form">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button type="button" class="tab active" data-tab="properties">Properties</button>
+        <button type="button" class="tab" data-tab="session-storage">Session Storage</button>
+      </div>
+
+      <!-- Properties Tab -->
+      <div class="tab-panel active" data-panel="properties">
+        <!-- Action Type Multi-select -->
+        <div class="form-group">
+          <label>Action Type <span class="req">*</span></label>
+          <div class="multiselect-wrapper">
+            <select id="action-type-select">
+              <option value="">Select action type to add...</option>
+              <option value="1001">Form: Send form data to Eloqua</option>
+              <option value="1002">Form: Send form data to GCMS</option>
+              <option value="1003">Form: Send form data to LSG</option>
+              <option value="1004">Form: Send form data to Non LSG</option>
+              <option value="1005">Form: Send form data to Marketo</option>
+              <option value="1006">Form: Send form data to Email</option>
+              <option value="1007">Form: Send form data to CORA</option>
+              <option value="1009">Form: Send form data to S3</option>
+              <option value="1010">Form: Send form data to ELMS</option>
+              <option value="1011">Form: Send form data to FSBIO site</option>
+              <option value="1013">Form: Send form data to Genesys DB</option>
+            </select>
+            <div id="selected-actions" class="selected-tags"></div>
+          </div>
+        </div>
+
+        <!-- Dynamic Config Sections -->
+        <div id="config-sections"></div>
+
+        <!-- Common Fields -->
+        <div class="form-section common-fields">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="mqo-form">MQO Form <span class="req">*</span></label>
+              <select id="mqo-form">
+                <option value="">Select</option>
+                <option value="form-a">Form A</option>
+                <option value="form-b">Form B</option>
+                <option value="form-c">Form C</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="division">Division <span class="req">*</span></label>
+              <select id="division">
+                <option value="">Select</option>
+                <option value="div-1">Division 1</option>
+                <option value="div-2">Division 2</option>
+                <option value="div-3">Division 3</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="form-container-id">ID</label>
+            <input type="text" id="form-container-id" placeholder="Auto-generated if empty">
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Storage Tab -->
+      <div class="tab-panel" data-panel="session-storage">
+        <div class="form-group checkbox-group">
+          <label><input type="checkbox" id="enable-session-storage"> Enable Session Storage</label>
+        </div>
+        <div id="session-storage-fields" style="display:none;">
+          <div class="form-group">
+            <label for="session-key">Session Storage Key</label>
+            <input type="text" id="session-key" placeholder="e.g. formData">
+          </div>
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="session-persist"> Persist across pages</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="submit" id="config-submit-btn" class="btn-primary">Add to Page</button>
+        <button type="button" id="config-cancel-btn" class="btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Config Section Templates (hidden) -->
+  <template id="tpl-eloqua">
+    <div class="config-panel" data-action="1001">
+      <div class="config-panel-header">
+        <h3>Eloqua Configuration</h3>
+      </div>
+      <div class="form-group">
+        <label>Eloqua Form HTML Name</label>
+        <input type="text" class="eloqua-form-name" placeholder="Enter Eloqua form name">
+      </div>
+      <div class="form-section">
+        <h4>Region Configuration</h4>
+        <div class="repeatable-list eloqua-regions"></div>
+        <button type="button" class="btn-add-row add-eloqua-region">+ Add Region</button>
+      </div>
+      <div class="form-group">
+        <label>Eloqua Instance</label>
+        <select class="eloqua-instance">
+          <option value="">Select</option>
+          <option value="instance-1">Instance 1</option>
+          <option value="instance-2">Instance 2</option>
+          <option value="instance-3">Instance 3</option>
+        </select>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-gcms">
+    <div class="config-panel" data-action="1002">
+      <div class="config-panel-header">
+        <h3>GCMS Form Id Configuration</h3>
+      </div>
+      <div class="form-group">
+        <label>GCMS Form Id</label>
+        <div class="input-with-btn">
+          <input type="text" class="gcms-form-id" placeholder="Enter or Fetch GCMS Form ID">
+          <button type="button" class="btn-fetch" disabled title="API integration pending">Fetch</button>
+        </div>
+      </div>
+      <div class="form-section">
+        <h4>Region Configuration</h4>
+        <div class="repeatable-list gcms-regions"></div>
+        <button type="button" class="btn-add-row add-gcms-region">+ Add Region</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-email">
+    <div class="config-panel" data-action="1006">
+      <div class="config-panel-header">
+        <h3>Email Configuration</h3>
+      </div>
+      <div class="form-group">
+        <label>Email Template</label>
+        <select class="email-template">
+          <option value="standard">Standard</option>
+          <option value="chatbot">Chatbot</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" class="email-subject" placeholder="Email subject line">
+      </div>
+      <div class="form-group">
+        <label>Mailto <span class="req">*</span></label>
+        <div class="repeatable-list email-mailto"></div>
+        <button type="button" class="btn-add-row add-email-mailto">+ Add Email</button>
+      </div>
+      <div class="form-group checkbox-group">
+        <label><input type="checkbox" class="enable-regional-email"> Enable Regional Email Configuration</label>
+      </div>
+      <div class="regional-email-config" style="display:none;">
+        <div class="form-section">
+          <h4>Regional Email Configuration</h4>
+          <div class="repeatable-list email-regional"></div>
+          <button type="button" class="btn-add-row add-email-regional">+ Add Region</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-marketo">
+    <div class="config-panel" data-action="1005">
+      <div class="config-panel-header">
+        <h3>Marketo Configuration</h3>
+      </div>
+      <div class="form-group">
+        <label>Marketo Form Id</label>
+        <input type="text" class="marketo-form-id" placeholder="Enter Marketo Form ID">
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-s3">
+    <div class="config-panel" data-action="1009">
+      <div class="config-panel-header">
+        <h3>PDX-S3 Configuration</h3>
+      </div>
+      <div class="form-group">
+        <label>PDX S3 Form Id</label>
+        <input type="text" class="s3-form-id" placeholder="Enter PDX S3 Form ID">
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-nonlsg">
+    <div class="config-panel" data-action="1004">
+      <div class="config-panel-header">
+        <h3>Non LSG Configuration</h3>
+      </div>
+      <div class="form-group">
+        <label>Non LSG Type</label>
+        <select class="nonlsg-type">
+          <option value="lead">Form: Non-LSG Lead</option>
+          <option value="case">Form: Non-LSG Case</option>
+          <option value="quote">Form: Non-LSG Quote</option>
+          <option value="bulk-quote">Form: Non-LSG Bulk Quote</option>
+        </select>
+      </div>
+    </div>
+  </template>
+
+  <script type="module" src="tfs2-form-config.js"></script>
+</body>
+</html>

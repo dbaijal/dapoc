@@ -11,6 +11,13 @@
       "url": "https://main--dapoc--dbaijal.aem.live/tools/tfs2-forms/tfs2-forms.html"
     },
     {
+      "id": "tfs2-form-config",
+      "title": "TFS2 Form Config",
+      "environments": ["edit"],
+      "daLibrary": true,
+      "url": "https://main--dapoc--dbaijal.aem.page/tools/tfs2-form-config/tfs2-form-config.html"
+    },
+    {
       "id": "da-plugin-demo",
       "title": "Plugin demo",
       "environments": ["edit"],
