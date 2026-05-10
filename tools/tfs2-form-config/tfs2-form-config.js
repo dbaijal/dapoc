@@ -143,6 +143,9 @@ function addActionType(code) {
 function collectFormData() {
   const fields = [];
 
+  const multistep = document.getElementById('multistep-toggle').checked;
+  if (multistep) fields.push(['multistep', 'true']);
+
   fields.push(['action-types', [...selectedActions].join(',')]);
 
   selectedActions.forEach((code) => {
@@ -256,6 +259,9 @@ function parseSelectionHTML(html) {
 }
 
 function populateFormConfig(config) {
+  if (config.multistep === 'true') {
+    document.getElementById('multistep-toggle').checked = true;
+  }
   if (config['action-types']) {
     config['action-types'].split(',').forEach((code) => {
       addActionType(code.trim());

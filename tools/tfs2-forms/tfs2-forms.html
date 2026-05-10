@@ -31,6 +31,10 @@
           <span class="field-type-icon">⬜</span>
           <span class="field-type-label">Button</span>
         </button>
+        <button class="field-type-btn" data-type="step">
+          <span class="field-type-icon">📑</span>
+          <span class="field-type-label">Step</span>
+        </button>
         <button class="field-type-btn" data-type="fragment">
           <span class="field-type-icon">🔗</span>
           <span class="field-type-label">Fragment</span>
@@ -400,6 +404,33 @@
       </form>
     </div>
   </div>
+    <!-- Screen 7: Step Dialog -->
+    <div id="step-screen" class="screen">
+      <div class="screen-header">
+        <button id="step-back-btn" class="back-btn">&larr; Back</button>
+        <h2>Form Step</h2>
+      </div>
+
+      <form id="step-form" class="field-form">
+        <div class="tab-panel active">
+          <div class="form-group">
+            <label for="step-title">Step Title <span class="req">*</span></label>
+            <input type="text" id="step-title" required placeholder="e.g. Personal Details">
+            <span class="hint">Displayed as the step heading</span>
+          </div>
+          <div class="form-group">
+            <label for="step-number">Step Number <span class="req">*</span></label>
+            <input type="number" id="step-number" required min="1" placeholder="e.g. 1">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="step-submit-btn" class="btn-primary">Add to Page</button>
+          <button type="button" id="step-cancel-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+
     <!-- Screen 5: Fragment Dialog -->
     <div id="fragment-screen" class="screen">
       <div class="screen-header">

@@ -13,6 +13,7 @@ function getBlockType(block) {
   if (block.classList.contains('tfs2-form-options')) return 'options';
   if (block.classList.contains('tfs2-form-label')) return 'label';
   if (block.classList.contains('tfs2-form-button')) return 'button';
+  if (block.classList.contains('tfs2-form-step')) return 'step';
   return null;
 }
 
@@ -265,48 +266,173 @@ async function buildField(type, config) {
   }
 }
 
+async function processFieldBlock(fieldBlock) {
+  if (fieldBlock.classList.contains('tfs2-form-fragment')) {
+    const fragmentConfig = getBlockConfig(fieldBlock);
+    const path = fragmentConfig.path || '';
+    if (path) {
+      const fragmentFields = await fetchFragmentFields(path);
+      const built = await Promise.all(
+        fragmentFields.map((f) => buildField(f.type, f.config)),
+      );
+      return built.filter(Boolean);
+    }
+    return [];
+  }
+
+  const fieldConfig = getBlockConfig(fieldBlock);
+  const type = getBlockType(fieldBlock);
+  const element = await buildField(type, fieldConfig);
+  return element ? [element] : [];
+}
+
+function setupMultiStep(form) {
+  const steps = form.querySelectorAll('.tfs2-form-step-panel');
+  if (steps.length === 0) return;
+
+  let currentStep = 0;
+
+  const stepper = document.createElement('div');
+  stepper.className = 'tfs2-form-stepper';
+
+  steps.forEach((step, i) => {
+    const title = step.querySelector('.tfs2-form-step-title');
+    const stepLabel = title ? title.textContent : `Step ${i + 1}`;
+
+    const indicator = document.createElement('div');
+    indicator.className = 'tfs2-form-stepper-item';
+    indicator.innerHTML = `<span class="tfs2-form-stepper-circle">${i + 1}</span><span class="tfs2-form-stepper-label">${stepLabel}</span>`;
+    stepper.append(indicator);
+
+    if (title) title.remove();
+  });
+
+  form.prepend(stepper);
+
+  const nav = document.createElement('div');
+  nav.className = 'tfs2-form-step-nav';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.type = 'button';
+  prevBtn.className = 'tfs2-form-btn tfs2-form-btn-secondary';
+  prevBtn.textContent = 'Previous';
+
+  const nextBtn = document.createElement('button');
+  nextBtn.type = 'button';
+  nextBtn.className = 'tfs2-form-btn';
+  nextBtn.textContent = 'Next';
+
+  nav.append(prevBtn, nextBtn);
+  form.append(nav);
+
+  function showStep(index) {
+    steps.forEach((step, i) => {
+      step.style.display = i === index ? 'flex' : 'none';
+    });
+    stepper.querySelectorAll('.tfs2-form-stepper-item').forEach((item, i) => {
+      item.classList.toggle('active', i === index);
+      item.classList.toggle('completed', i < index);
+    });
+    prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+    nextBtn.style.display = index === steps.length - 1 ? 'none' : 'inline-block';
+  }
+
+  prevBtn.addEventListener('click', () => {
+    if (currentStep > 0) {
+      currentStep -= 1;
+      showStep(currentStep);
+    }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const currentPanel = steps[currentStep];
+    const invalidField = currentPanel.querySelector(':invalid');
+    if (invalidField) {
+      invalidField.focus();
+      invalidField.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    if (currentStep < steps.length - 1) {
+      currentStep += 1;
+      showStep(currentStep);
+    }
+  });
+
+  showStep(0);
+}
+
 export default async function decorate(block) {
   const config = getBlockConfig(block);
   const section = block.closest('.section');
   if (!section) return;
 
+  const isMultiStep = config.multistep === 'true';
+
   const form = document.createElement('form');
   if (config.action) form.action = config.action;
-  form.method = 'POST';
+  form.method = config.method || 'POST';
   if (config.thankyou) form.dataset.thankyou = config.thankyou;
 
-  const fieldBlocks = section.querySelectorAll(
-    '.tfs2-form-input, .tfs2-form-options, .tfs2-form-label, .tfs2-form-button, .tfs2-form-fragment',
+  const allBlocks = section.querySelectorAll(
+    '.tfs2-form-input, .tfs2-form-options, .tfs2-form-label, .tfs2-form-button, .tfs2-form-fragment, .tfs2-form-step',
   );
 
-  const processingPromises = [...fieldBlocks].map(async (fieldBlock) => {
-    if (fieldBlock.classList.contains('tfs2-form-fragment')) {
-      const fragmentConfig = getBlockConfig(fieldBlock);
-      const path = fragmentConfig.path || '';
-      if (path) {
-        const fragmentFields = await fetchFragmentFields(path);
-        const built = await Promise.all(
-          fragmentFields.map((f) => buildField(f.type, f.config)),
-        );
-        return built.filter(Boolean);
+  if (isMultiStep) {
+    const panels = [];
+    let panelIndex = -1;
+
+    [...allBlocks].forEach((fieldBlock) => {
+      if (fieldBlock.classList.contains('tfs2-form-step')) {
+        const stepConfig = getBlockConfig(fieldBlock);
+        panelIndex += 1;
+        panels.push({ stepConfig, fields: [] });
+      } else if (panelIndex >= 0) {
+        panels[panelIndex].fields.push(fieldBlock);
       }
-      return [];
-    }
+    });
 
-    const fieldConfig = getBlockConfig(fieldBlock);
-    const type = getBlockType(fieldBlock);
-    const element = await buildField(type, fieldConfig);
-    return element ? [element] : [];
-  });
+    const panelPromises = panels.map(async (panel) => {
+      const div = document.createElement('div');
+      div.className = 'tfs2-form-step-panel';
+      div.dataset.step = panel.stepConfig.step || '';
 
-  const results = await Promise.all(processingPromises);
-  results.forEach((elements) => {
-    elements.forEach((el) => form.append(el));
-  });
+      const stepHeading = document.createElement('h3');
+      stepHeading.className = 'tfs2-form-step-title';
+      stepHeading.textContent = panel.stepConfig.title || `Step ${panel.stepConfig.step}`;
+      div.append(stepHeading);
 
-  fieldBlocks.forEach((fieldBlock) => {
+      const fieldResults = await Promise.all(
+        panel.fields.map((fb) => processFieldBlock(fb)),
+      );
+      fieldResults.forEach((elements) => {
+        elements.forEach((el) => div.append(el));
+      });
+
+      return div;
+    });
+
+    const builtPanels = await Promise.all(panelPromises);
+    builtPanels.forEach((p) => form.append(p));
+
+    setupMultiStep(form);
+  } else {
+    const fieldBlocks = section.querySelectorAll(
+      '.tfs2-form-input, .tfs2-form-options, .tfs2-form-label, .tfs2-form-button, .tfs2-form-fragment',
+    );
+
+    const processingPromises = [...fieldBlocks].map(
+      (fieldBlock) => processFieldBlock(fieldBlock),
+    );
+
+    const results = await Promise.all(processingPromises);
+    results.forEach((elements) => {
+      elements.forEach((el) => form.append(el));
+    });
+  }
+
+  allBlocks.forEach((fieldBlock) => {
     fieldBlock.closest(
-      '.tfs2-form-input-wrapper, .tfs2-form-options-wrapper, .tfs2-form-label-wrapper, .tfs2-form-button-wrapper, .tfs2-form-fragment-wrapper',
+      '.tfs2-form-input-wrapper, .tfs2-form-options-wrapper, .tfs2-form-label-wrapper, .tfs2-form-button-wrapper, .tfs2-form-fragment-wrapper, .tfs2-form-step-wrapper',
     )?.remove();
   });
 

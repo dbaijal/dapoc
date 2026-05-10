@@ -10,6 +10,8 @@ const buttonScreen = document.getElementById('button-screen');
 const buttonForm = document.getElementById('button-form');
 const fragmentScreen = document.getElementById('fragment-screen');
 const fragmentForm = document.getElementById('fragment-form');
+const stepScreen = document.getElementById('step-screen');
+const stepForm = document.getElementById('step-form');
 const formScreen = document.getElementById('form-screen');
 const formContainerForm = document.getElementById('form-container-form');
 const inputForm = document.getElementById('input-form');
@@ -86,6 +88,7 @@ function parseSelectionHTML(html) {
   else if (headerText.includes('tfs2-form-input')) blockType = 'input';
   else if (headerText.includes('tfs2-form-options')) blockType = 'options';
   else if (headerText.includes('tfs2-form-button')) blockType = 'button';
+  else if (headerText.includes('tfs2-form-step')) blockType = 'step';
   else if (headerText.includes('tfs2-form-fragment')) blockType = 'fragment';
   if (!blockType) return null;
 
@@ -220,6 +223,19 @@ function populateFormContainerForm(config) {
   if (config.id) document.getElementById('form-id').value = config.id;
 }
 
+// --- Step: Reset ---
+function resetStepForm() {
+  stepForm.reset();
+  editMode = false;
+  document.getElementById('step-submit-btn').textContent = 'Add to Page';
+}
+
+// --- Step: Populate for edit ---
+function populateStepForm(config) {
+  if (config.title) document.getElementById('step-title').value = config.title;
+  if (config.step) document.getElementById('step-number').value = config.step;
+}
+
 // --- Fragment: Reset ---
 function resetFragmentForm() {
   fragmentForm.reset();
@@ -277,6 +293,10 @@ async function tryEditSelection() {
           populateButtonForm(config);
           document.getElementById('button-submit-btn').textContent = 'Update';
           showScreen(buttonScreen);
+        } else if (config.blockType === 'step') {
+          populateStepForm(config);
+          document.getElementById('step-submit-btn').textContent = 'Update';
+          showScreen(stepScreen);
         } else if (config.blockType === 'fragment') {
           populateFragmentForm(config);
           document.getElementById('fragment-submit-btn').textContent = 'Update';
@@ -335,6 +355,7 @@ document.querySelectorAll('.field-type-btn').forEach((btn) => {
     else if (type === 'input') showScreen(inputScreen);
     else if (type === 'options') showScreen(optionsScreen);
     else if (type === 'button') showScreen(buttonScreen);
+    else if (type === 'step') showScreen(stepScreen);
     else if (type === 'fragment') showScreen(fragmentScreen);
   });
 });
@@ -495,6 +516,25 @@ formContainerForm.addEventListener('submit', (e) => {
   actions.sendHTML(buildBlockTable('tfs2-form', fields));
   if (editMode) actions.closeLibrary();
   resetFormContainerForm();
+  showScreen(pickerScreen);
+});
+
+// --- Step: Back/Cancel ---
+document.getElementById('step-back-btn').addEventListener('click', () => { resetStepForm(); showScreen(pickerScreen); });
+document.getElementById('step-cancel-btn').addEventListener('click', () => { resetStepForm(); showScreen(pickerScreen); });
+
+// --- Submit Step form ---
+stepForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const fields = [
+    ['title', document.getElementById('step-title').value.trim()],
+    ['step', document.getElementById('step-number').value.trim()],
+  ];
+
+  actions.sendHTML(buildBlockTable('tfs2-form-step', fields));
+  if (editMode) actions.closeLibrary();
+  resetStepForm();
   showScreen(pickerScreen);
 });
 
