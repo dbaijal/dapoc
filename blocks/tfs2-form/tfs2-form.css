@@ -120,14 +120,15 @@
   position: relative;
   margin-bottom: 40px;
   padding: 0;
+  overflow: hidden;
 }
 
 .tfs2-form .tfs2-form-stepper::before {
   content: '';
   position: absolute;
   top: 18px;
-  left: 18px;
-  right: 18px;
+  left: 12.5%;
+  right: 12.5%;
   height: 3px;
   background: #ddd;
   z-index: 0;
