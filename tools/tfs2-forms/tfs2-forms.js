@@ -8,6 +8,8 @@ const inputScreen = document.getElementById('input-screen');
 const optionsScreen = document.getElementById('options-screen');
 const buttonScreen = document.getElementById('button-screen');
 const buttonForm = document.getElementById('button-form');
+const fragmentScreen = document.getElementById('fragment-screen');
+const fragmentForm = document.getElementById('fragment-form');
 const inputForm = document.getElementById('input-form');
 const optionsForm = document.getElementById('options-form');
 const backBtn = document.getElementById('back-btn');
@@ -81,6 +83,7 @@ function parseSelectionHTML(html) {
   if (headerText.includes('tfs2-form-input')) blockType = 'input';
   else if (headerText.includes('tfs2-form-options')) blockType = 'options';
   else if (headerText.includes('tfs2-form-button')) blockType = 'button';
+  else if (headerText.includes('tfs2-form-fragment')) blockType = 'fragment';
   if (!blockType) return null;
 
   const config = { blockType };
@@ -199,6 +202,18 @@ function populateOptionsForm(config) {
   if (config.id) document.getElementById('options-id').value = config.id;
 }
 
+// --- Fragment: Reset ---
+function resetFragmentForm() {
+  fragmentForm.reset();
+  editMode = false;
+  document.getElementById('fragment-submit-btn').textContent = 'Add to Page';
+}
+
+// --- Fragment: Populate for edit ---
+function populateFragmentForm(config) {
+  if (config.path) document.getElementById('fragment-path').value = config.path;
+}
+
 // --- Button: Reset ---
 function resetButtonForm() {
   buttonForm.reset();
@@ -244,6 +259,10 @@ async function tryEditSelection() {
           populateButtonForm(config);
           document.getElementById('button-submit-btn').textContent = 'Update';
           showScreen(buttonScreen);
+        } else if (config.blockType === 'fragment') {
+          populateFragmentForm(config);
+          document.getElementById('fragment-submit-btn').textContent = 'Update';
+          showScreen(fragmentScreen);
         }
         return true;
       }
@@ -293,6 +312,7 @@ document.querySelectorAll('.field-type-btn').forEach((btn) => {
     if (type === 'input') showScreen(inputScreen);
     else if (type === 'options') showScreen(optionsScreen);
     else if (type === 'button') showScreen(buttonScreen);
+    else if (type === 'fragment') showScreen(fragmentScreen);
   });
 });
 
@@ -431,6 +451,24 @@ buttonForm.addEventListener('submit', (e) => {
   actions.sendHTML(buildBlockTable('tfs2-form-button', fields));
   if (editMode) actions.closeLibrary();
   resetButtonForm();
+  showScreen(pickerScreen);
+});
+
+// --- Fragment: Back/Cancel ---
+document.getElementById('fragment-back-btn').addEventListener('click', () => { resetFragmentForm(); showScreen(pickerScreen); });
+document.getElementById('fragment-cancel-btn').addEventListener('click', () => { resetFragmentForm(); showScreen(pickerScreen); });
+
+// --- Submit Fragment form ---
+fragmentForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const fields = [
+    ['path', document.getElementById('fragment-path').value.trim()],
+  ];
+
+  actions.sendHTML(buildBlockTable('tfs2-form-fragment', fields));
+  if (editMode) actions.closeLibrary();
+  resetFragmentForm();
   showScreen(pickerScreen);
 });
 

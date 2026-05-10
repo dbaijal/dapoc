@@ -31,10 +31,9 @@
           <span class="field-type-label">Form</span>
           <span class="coming-soon">Soon</span>
         </button>
-        <button class="field-type-btn" data-type="fragment" disabled>
+        <button class="field-type-btn" data-type="fragment">
           <span class="field-type-icon">🔗</span>
           <span class="field-type-label">Fragment</span>
-          <span class="coming-soon">Soon</span>
         </button>
       </div>
     </div>
@@ -348,6 +347,29 @@
         <div class="form-actions">
           <button type="submit" id="options-submit-btn" class="btn-primary">Add to Page</button>
           <button type="button" id="options-cancel-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+    <!-- Screen 5: Fragment Dialog -->
+    <div id="fragment-screen" class="screen">
+      <div class="screen-header">
+        <button id="fragment-back-btn" class="back-btn">&larr; Back</button>
+        <h2>Form Fragment</h2>
+      </div>
+
+      <form id="fragment-form" class="field-form">
+        <div class="tab-panel active">
+          <div class="form-group">
+            <label for="fragment-path">Fragment Path <span class="req">*</span></label>
+            <input type="text" id="fragment-path" required placeholder="e.g. /fragments/form-fragments/contact-fields">
+            <span class="hint">Path to the fragment document containing reusable form fields</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="fragment-submit-btn" class="btn-primary">Add to Page</button>
+          <button type="button" id="fragment-cancel-btn" class="btn-secondary">Cancel</button>
         </div>
       </form>
     </div>
