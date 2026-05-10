@@ -80,7 +80,7 @@ function parseSelectionHTML(html) {
   else if (headerText.includes('tfs2-form-options')) blockType = 'options';
   if (!blockType) return null;
 
-  const config = { _blockType: blockType };
+  const config = { blockType: blockType };
   const rows = table.querySelectorAll('tr');
   rows.forEach((row, index) => {
     if (index === 0) return;
@@ -205,11 +205,11 @@ async function tryEditSelection() {
       const config = parseSelectionHTML(selection);
       if (config) {
         editMode = true;
-        if (config._blockType === 'input') {
+        if (config.blockType === 'input') {
           populateInputForm(config);
           document.getElementById('submit-btn').textContent = 'Update';
           showScreen(inputScreen);
-        } else if (config._blockType === 'options') {
+        } else if (config.blockType === 'options') {
           populateOptionsForm(config);
           document.getElementById('options-submit-btn').textContent = 'Update';
           showScreen(optionsScreen);
