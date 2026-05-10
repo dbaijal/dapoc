@@ -10,6 +10,8 @@ const buttonScreen = document.getElementById('button-screen');
 const buttonForm = document.getElementById('button-form');
 const fragmentScreen = document.getElementById('fragment-screen');
 const fragmentForm = document.getElementById('fragment-form');
+const formScreen = document.getElementById('form-screen');
+const formContainerForm = document.getElementById('form-container-form');
 const inputForm = document.getElementById('input-form');
 const optionsForm = document.getElementById('options-form');
 const backBtn = document.getElementById('back-btn');
@@ -80,7 +82,8 @@ function parseSelectionHTML(html) {
   const headerText = headerCell ? headerCell.textContent.trim() : '';
 
   let blockType = null;
-  if (headerText.includes('tfs2-form-input')) blockType = 'input';
+  if (headerText === 'tfs2-form') blockType = 'form';
+  else if (headerText.includes('tfs2-form-input')) blockType = 'input';
   else if (headerText.includes('tfs2-form-options')) blockType = 'options';
   else if (headerText.includes('tfs2-form-button')) blockType = 'button';
   else if (headerText.includes('tfs2-form-fragment')) blockType = 'fragment';
@@ -202,6 +205,21 @@ function populateOptionsForm(config) {
   if (config.id) document.getElementById('options-id').value = config.id;
 }
 
+// --- Form Container: Reset ---
+function resetFormContainerForm() {
+  formContainerForm.reset();
+  editMode = false;
+  document.getElementById('form-submit-btn').textContent = 'Add to Page';
+}
+
+// --- Form Container: Populate for edit ---
+function populateFormContainerForm(config) {
+  if (config.action) document.getElementById('form-action').value = config.action;
+  if (config.thankyou) document.getElementById('form-thankyou').value = config.thankyou;
+  if (config.method) document.getElementById('form-method').value = config.method;
+  if (config.id) document.getElementById('form-id').value = config.id;
+}
+
 // --- Fragment: Reset ---
 function resetFragmentForm() {
   fragmentForm.reset();
@@ -263,6 +281,10 @@ async function tryEditSelection() {
           populateFragmentForm(config);
           document.getElementById('fragment-submit-btn').textContent = 'Update';
           showScreen(fragmentScreen);
+        } else if (config.blockType === 'form') {
+          populateFormContainerForm(config);
+          document.getElementById('form-submit-btn').textContent = 'Update';
+          showScreen(formScreen);
         }
         return true;
       }
@@ -309,7 +331,8 @@ document.querySelectorAll('.tab').forEach((tab) => {
 document.querySelectorAll('.field-type-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     const { type } = btn.dataset;
-    if (type === 'input') showScreen(inputScreen);
+    if (type === 'form') showScreen(formScreen);
+    else if (type === 'input') showScreen(inputScreen);
     else if (type === 'options') showScreen(optionsScreen);
     else if (type === 'button') showScreen(buttonScreen);
     else if (type === 'fragment') showScreen(fragmentScreen);
@@ -451,6 +474,27 @@ buttonForm.addEventListener('submit', (e) => {
   actions.sendHTML(buildBlockTable('tfs2-form-button', fields));
   if (editMode) actions.closeLibrary();
   resetButtonForm();
+  showScreen(pickerScreen);
+});
+
+// --- Form Container: Back/Cancel ---
+document.getElementById('form-back-btn').addEventListener('click', () => { resetFormContainerForm(); showScreen(pickerScreen); });
+document.getElementById('form-cancel-btn').addEventListener('click', () => { resetFormContainerForm(); showScreen(pickerScreen); });
+
+// --- Submit Form Container ---
+formContainerForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const fields = [
+    ['action', document.getElementById('form-action').value.trim()],
+    ['thankyou', document.getElementById('form-thankyou').value.trim()],
+    ['method', document.getElementById('form-method').value],
+    ['id', document.getElementById('form-id').value.trim()],
+  ];
+
+  actions.sendHTML(buildBlockTable('tfs2-form', fields));
+  if (editMode) actions.closeLibrary();
+  resetFormContainerForm();
   showScreen(pickerScreen);
 });
 
