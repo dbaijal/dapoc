@@ -199,6 +199,30 @@ function populateOptionsForm(config) {
   if (config.id) document.getElementById('options-id').value = config.id;
 }
 
+// --- Button: Reset ---
+function resetButtonForm() {
+  buttonForm.reset();
+  editMode = false;
+  document.getElementById('button-submit-btn').textContent = 'Add to Page';
+  buttonScreen.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === 0);
+  });
+  buttonScreen.querySelectorAll('.tab-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === 0);
+  });
+}
+
+// --- Button: Populate for edit ---
+function populateButtonForm(config) {
+  if (config.type) document.getElementById('button-type').value = config.type;
+  if (config.label) document.getElementById('button-title').value = config.label;
+  if (config.name) document.getElementById('button-name').value = config.name;
+  if (config.value) document.getElementById('button-value').value = config.value;
+  if (config.id) document.getElementById('button-id').value = config.id;
+  if (config['error-message']) document.getElementById('button-error-msg').value = config['error-message'];
+  if (config['server-error-message']) document.getElementById('button-server-error-msg').value = config['server-error-message'];
+}
+
 // --- Edit Mode ---
 
 async function tryEditSelection() {
@@ -385,30 +409,6 @@ optionsForm.addEventListener('submit', (e) => {
   resetOptionsForm();
   showScreen(pickerScreen);
 });
-
-// --- Button: Reset ---
-function resetButtonForm() {
-  buttonForm.reset();
-  editMode = false;
-  document.getElementById('button-submit-btn').textContent = 'Add to Page';
-  buttonScreen.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', i === 0);
-  });
-  buttonScreen.querySelectorAll('.tab-panel').forEach((p, i) => {
-    p.classList.toggle('active', i === 0);
-  });
-}
-
-// --- Button: Populate for edit ---
-function populateButtonForm(config) {
-  if (config.type) document.getElementById('button-type').value = config.type;
-  if (config.label) document.getElementById('button-title').value = config.label;
-  if (config.name) document.getElementById('button-name').value = config.name;
-  if (config.value) document.getElementById('button-value').value = config.value;
-  if (config.id) document.getElementById('button-id').value = config.id;
-  if (config['error-message']) document.getElementById('button-error-msg').value = config['error-message'];
-  if (config['server-error-message']) document.getElementById('button-server-error-msg').value = config['server-error-message'];
-}
 
 // --- Button: Back/Cancel ---
 document.getElementById('button-back-btn').addEventListener('click', () => { resetButtonForm(); showScreen(pickerScreen); });
