@@ -87,17 +87,64 @@ function buildInput(config) {
   return wrapper;
 }
 
-function buildOptions(config) {
+function parseOptions(config) {
+  if (!config.options) return [];
+  if (config.options.includes('|')) {
+    return config.options.split('|').map((o) => {
+      const parts = o.split(',');
+      return { text: parts[0].trim(), value: (parts[1] || parts[0]).trim() };
+    }).filter((o) => o.text);
+  }
+  return config.options.split(',').map((o) => ({
+    text: o.trim(),
+    value: o.trim().toLowerCase().replace(/\s+/g, '-'),
+  })).filter((o) => o.text);
+}
+
+async function fetchDatasourceOptions(config) {
+  const dsType = config['datasource-type'];
+  const dsRegion = config['datasource-region'] || 'global';
+  let url = '';
+
+  if (dsType === 'custom') {
+    url = config['datasource-url'] || '';
+  } else {
+    url = `/data/${dsType}${dsRegion !== 'global' ? `-${dsRegion}` : ''}.json`;
+  }
+
+  if (!url) return [];
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) return [];
+    const json = await resp.json();
+    const data = json.data || json;
+    return data.map((item) => ({
+      text: item.text || item.label || item.name || item.Option || '',
+      value: item.value || item.code || item.Value || '',
+    })).filter((o) => o.text);
+  } catch (err) {
+    return [];
+  }
+}
+
+async function buildOptions(config) {
   const wrapper = document.createElement('div');
   wrapper.className = 'tfs2-form-field';
 
   const optionType = config.type || 'select';
-  const options = (config.options || '').split(',').map((o) => o.trim()).filter(Boolean);
+  const fieldId = config.id || config.name || '';
 
-  if (config.label) {
+  let options = [];
+  if (config.source === 'datasource') {
+    options = await fetchDatasourceOptions(config);
+  } else {
+    options = parseOptions(config);
+  }
+
+  if (config.label && config['hide-title'] !== 'true') {
     const label = document.createElement('label');
     label.textContent = config.label;
-    if (optionType === 'select') label.setAttribute('for', config.name || '');
+    if (optionType === 'select' || optionType === 'multiselect') label.setAttribute('for', fieldId);
     if (config.required === 'true') {
       const req = document.createElement('span');
       req.className = 'tfs2-form-required';
@@ -107,23 +154,31 @@ function buildOptions(config) {
     wrapper.append(label);
   }
 
-  if (optionType === 'select') {
+  if (config['help-message']) {
+    const help = document.createElement('p');
+    help.className = 'tfs2-form-help';
+    help.textContent = config['help-message'];
+    wrapper.append(help);
+  }
+
+  if (optionType === 'select' || optionType === 'multiselect') {
     const select = document.createElement('select');
     select.name = config.name || '';
-    select.id = config.name || '';
+    select.id = fieldId;
     if (config.required === 'true') select.required = true;
+    if (optionType === 'multiselect') select.multiple = true;
 
     const placeholder = document.createElement('option');
     placeholder.value = '';
-    placeholder.textContent = config.placeholder || 'Select...';
+    placeholder.textContent = config.placeholder || '-Select-';
     placeholder.disabled = true;
     placeholder.selected = true;
     select.append(placeholder);
 
     options.forEach((opt) => {
       const option = document.createElement('option');
-      option.value = opt.toLowerCase().replace(/\s+/g, '-');
-      option.textContent = opt;
+      option.value = opt.value;
+      option.textContent = opt.text;
       select.append(option);
     });
     wrapper.append(select);
@@ -139,13 +194,13 @@ function buildOptions(config) {
       const input = document.createElement('input');
       input.type = optionType;
       input.name = config.name || '';
-      input.value = opt.toLowerCase().replace(/\s+/g, '-');
-      input.id = `${config.name}-${input.value}`;
+      input.value = opt.value;
+      input.id = `${config.name}-${opt.value}`;
       if (config.required === 'true' && optionType === 'radio') input.required = true;
 
       const label = document.createElement('label');
       label.setAttribute('for', input.id);
-      label.textContent = opt;
+      label.textContent = opt.text;
 
       optWrapper.append(input, label);
       group.append(optWrapper);
@@ -181,7 +236,7 @@ function buildButton(config) {
   return wrapper;
 }
 
-function buildField(type, config) {
+async function buildField(type, config) {
   switch (type) {
     case 'input': return buildInput(config);
     case 'options': return buildOptions(config);
@@ -211,14 +266,17 @@ export default async function decorate(block) {
       const path = fragmentConfig.path || '';
       if (path) {
         const fragmentFields = await fetchFragmentFields(path);
-        return fragmentFields.map((f) => buildField(f.type, f.config)).filter(Boolean);
+        const built = await Promise.all(
+          fragmentFields.map((f) => buildField(f.type, f.config)),
+        );
+        return built.filter(Boolean);
       }
       return [];
     }
 
     const fieldConfig = getBlockConfig(fieldBlock);
     const type = getBlockType(fieldBlock);
-    const element = buildField(type, fieldConfig);
+    const element = await buildField(type, fieldConfig);
     return element ? [element] : [];
   });
 

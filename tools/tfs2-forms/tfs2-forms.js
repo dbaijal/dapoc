@@ -5,26 +5,31 @@ const { actions } = await DA_SDK;
 
 const pickerScreen = document.getElementById('picker-screen');
 const inputScreen = document.getElementById('input-screen');
+const optionsScreen = document.getElementById('options-screen');
 const inputForm = document.getElementById('input-form');
+const optionsForm = document.getElementById('options-form');
 const backBtn = document.getElementById('back-btn');
 const cancelBtn = document.getElementById('cancel-btn');
 const inputLabel = document.getElementById('input-label');
 const inputName = document.getElementById('input-name');
 const qparamToggle = document.getElementById('input-qparam-toggle');
 const qparamGroup = document.getElementById('qparam-name-group');
+const optionsSource = document.getElementById('options-source');
+const optionsLocalGroup = document.getElementById('options-local-group');
+const optionsDatasourceGroup = document.getElementById('options-datasource-group');
+const optionsDatasourceType = document.getElementById('options-datasource-type');
+const optionsRegionGroup = document.getElementById('options-region-group');
+const optionsCustomUrlGroup = document.getElementById('options-custom-url-group');
+const optionsRequired = document.getElementById('options-required');
+const optionsRequiredMsgGroup = document.getElementById('options-required-msg-group');
+const optionsLabel = document.getElementById('options-label');
+const optionsName = document.getElementById('options-name');
 
 let editMode = false;
 
 function showScreen(screen) {
   document.querySelectorAll('.screen').forEach((s) => s.classList.remove('active'));
   screen.classList.add('active');
-}
-
-function autoGenerateName() {
-  const label = inputLabel.value.trim();
-  if (label && !inputName.dataset.manual) {
-    inputName.value = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
-  }
 }
 
 function buildBlockTable(blockName, fields) {
@@ -35,16 +40,25 @@ function buildBlockTable(blockName, fields) {
   return `<table><tr><th colspan="2">${blockName}</th></tr>${rows}</table>`;
 }
 
+// --- Input Field Logic ---
+
+function autoGenerateName(labelEl, nameEl) {
+  const label = labelEl.value.trim();
+  if (label && !nameEl.dataset.manual) {
+    nameEl.value = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
+  }
+}
+
 function resetInputForm() {
   inputForm.reset();
   inputName.dataset.manual = '';
   editMode = false;
   qparamGroup.style.display = 'none';
   document.getElementById('submit-btn').textContent = 'Add to Page';
-  document.querySelectorAll('.tab').forEach((t, i) => {
+  inputScreen.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', i === 0);
   });
-  document.querySelectorAll('.tab-panel').forEach((p, i) => {
+  inputScreen.querySelectorAll('.tab-panel').forEach((p, i) => {
     p.classList.toggle('active', i === 0);
   });
 }
@@ -60,9 +74,13 @@ function parseSelectionHTML(html) {
 
   const headerCell = firstRow.querySelector('td[colspan], th');
   const headerText = headerCell ? headerCell.textContent.trim() : '';
-  if (!headerText.includes('tfs2-form-input')) return null;
 
-  const config = {};
+  let blockType = null;
+  if (headerText.includes('tfs2-form-input')) blockType = 'input';
+  else if (headerText.includes('tfs2-form-options')) blockType = 'options';
+  if (!blockType) return null;
+
+  const config = { _blockType: blockType };
   const rows = table.querySelectorAll('tr');
   rows.forEach((row, index) => {
     if (index === 0) return;
@@ -102,6 +120,84 @@ function populateInputForm(config) {
   if (config.id) document.getElementById('input-id').value = config.id;
 }
 
+// --- Options Field Logic ---
+
+function addOptionRow(text = '', value = '') {
+  const list = document.getElementById('options-list');
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Display text" value="${text}">
+    <input type="text" placeholder="Value" value="${value}">
+    <button type="button" class="btn-remove-option">&times;</button>
+  `;
+  row.querySelector('.btn-remove-option').addEventListener('click', () => row.remove());
+  list.appendChild(row);
+}
+
+function resetOptionsForm() {
+  optionsForm.reset();
+  optionsName.dataset.manual = '';
+  editMode = false;
+  document.getElementById('options-list').innerHTML = '';
+  optionsLocalGroup.style.display = 'block';
+  optionsDatasourceGroup.style.display = 'none';
+  optionsRequiredMsgGroup.style.display = 'none';
+  optionsRegionGroup.style.display = 'block';
+  optionsCustomUrlGroup.style.display = 'none';
+  document.getElementById('options-submit-btn').textContent = 'Add to Page';
+  optionsScreen.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === 0);
+  });
+  optionsScreen.querySelectorAll('.tab-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === 0);
+  });
+}
+
+function populateOptionsForm(config) {
+  if (config.label) optionsLabel.value = config.label;
+  if (config.type) document.getElementById('options-type').value = config.type;
+  if (config.name) {
+    optionsName.value = config.name;
+    optionsName.dataset.manual = 'true';
+  }
+  if (config.source) {
+    optionsSource.value = config.source;
+    if (config.source === 'datasource') {
+      optionsLocalGroup.style.display = 'none';
+      optionsDatasourceGroup.style.display = 'block';
+    }
+  }
+  if (config['datasource-type']) {
+    optionsDatasourceType.value = config['datasource-type'];
+    if (config['datasource-type'] === 'custom') {
+      optionsRegionGroup.style.display = 'none';
+      optionsCustomUrlGroup.style.display = 'block';
+    }
+  }
+  if (config['datasource-region']) document.getElementById('options-datasource-region').value = config['datasource-region'];
+  if (config['datasource-url']) document.getElementById('options-datasource-url').value = config['datasource-url'];
+  if (config.options) {
+    config.options.split('|').forEach((opt) => {
+      const parts = opt.split(',');
+      addOptionRow(parts[0] || '', parts[1] || parts[0] || '');
+    });
+  }
+  if (config.required === 'true') {
+    optionsRequired.checked = true;
+    optionsRequiredMsgGroup.style.display = 'block';
+  }
+  if (config['required-message']) document.getElementById('options-required-msg').value = config['required-message'];
+  if (config['hide-title'] === 'true') document.getElementById('options-hide-title').checked = true;
+  if (config['constraint-message']) document.getElementById('options-constraint-msg').value = config['constraint-message'];
+  if (config.readonly === 'true') document.getElementById('options-readonly').checked = true;
+  if (config['help-message']) document.getElementById('options-help').value = config['help-message'];
+  if (config.placeholder) document.getElementById('options-placeholder').value = config.placeholder;
+  if (config.id) document.getElementById('options-id').value = config.id;
+}
+
+// --- Edit Mode ---
+
 async function tryEditSelection() {
   try {
     const selection = await actions.getSelection();
@@ -109,12 +205,17 @@ async function tryEditSelection() {
       const config = parseSelectionHTML(selection);
       if (config) {
         editMode = true;
-        populateInputForm(config);
-        document.getElementById('submit-btn').textContent = 'Update';
-        showScreen(inputScreen);
+        if (config._blockType === 'input') {
+          populateInputForm(config);
+          document.getElementById('submit-btn').textContent = 'Update';
+          showScreen(inputScreen);
+        } else if (config._blockType === 'options') {
+          populateOptionsForm(config);
+          document.getElementById('options-submit-btn').textContent = 'Update';
+          showScreen(optionsScreen);
+        }
         return true;
       }
-      // Debug: show what we got
       const debugEl = document.getElementById('debug-output');
       if (debugEl) debugEl.textContent = `Got selection but couldn't parse: ${selection.substring(0, 500)}`;
     } else {
@@ -142,98 +243,138 @@ async function checkForEditMode() {
   });
 }
 
-// Tab switching
+// --- Tab switching (scoped) ---
 document.querySelectorAll('.tab').forEach((tab) => {
   tab.addEventListener('click', () => {
     const { tab: tabName } = tab.dataset;
-    document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
+    const tabContainer = tab.closest('.screen') || document;
+    tabContainer.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+    tabContainer.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
     tab.classList.add('active');
-    document.querySelector(`[data-panel="${tabName}"]`).classList.add('active');
+    tabContainer.querySelector(`[data-panel="${tabName}"]`).classList.add('active');
   });
 });
 
-// Field type picker
+// --- Field type picker ---
 document.querySelectorAll('.field-type-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     const { type } = btn.dataset;
-    if (type === 'input') {
-      showScreen(inputScreen);
-    }
+    if (type === 'input') showScreen(inputScreen);
+    else if (type === 'options') showScreen(optionsScreen);
   });
 });
 
-// Auto-generate name from label
-inputLabel.addEventListener('input', autoGenerateName);
-inputName.addEventListener('input', () => {
-  inputName.dataset.manual = 'true';
-});
+// --- Input: Auto-generate name ---
+inputLabel.addEventListener('input', () => autoGenerateName(inputLabel, inputName));
+inputName.addEventListener('input', () => { inputName.dataset.manual = 'true'; });
 
-// Query param toggle
+// --- Options: Auto-generate name ---
+optionsLabel.addEventListener('input', () => autoGenerateName(optionsLabel, optionsName));
+optionsName.addEventListener('input', () => { optionsName.dataset.manual = 'true'; });
+
+// --- Input: Query param toggle ---
 qparamToggle.addEventListener('change', () => {
   qparamGroup.style.display = qparamToggle.checked ? 'flex' : 'none';
 });
 
-// Back button
-backBtn.addEventListener('click', () => {
-  resetInputForm();
-  showScreen(pickerScreen);
+// --- Options: Source toggle ---
+optionsSource.addEventListener('change', () => {
+  const isLocal = optionsSource.value === 'local';
+  optionsLocalGroup.style.display = isLocal ? 'block' : 'none';
+  optionsDatasourceGroup.style.display = isLocal ? 'none' : 'block';
 });
 
-// Cancel button
-cancelBtn.addEventListener('click', () => {
-  resetInputForm();
-  showScreen(pickerScreen);
+// --- Options: Datasource type toggle ---
+optionsDatasourceType.addEventListener('change', () => {
+  const isCustom = optionsDatasourceType.value === 'custom';
+  optionsRegionGroup.style.display = isCustom ? 'none' : 'block';
+  optionsCustomUrlGroup.style.display = isCustom ? 'block' : 'none';
 });
 
-// Submit input form
+// --- Options: Required toggle ---
+optionsRequired.addEventListener('change', () => {
+  optionsRequiredMsgGroup.style.display = optionsRequired.checked ? 'block' : 'none';
+});
+
+// --- Options: Add option button ---
+document.getElementById('add-option-btn').addEventListener('click', () => addOptionRow());
+
+// --- Back/Cancel buttons ---
+backBtn.addEventListener('click', () => { resetInputForm(); showScreen(pickerScreen); });
+cancelBtn.addEventListener('click', () => { resetInputForm(); showScreen(pickerScreen); });
+document.getElementById('options-back-btn').addEventListener('click', () => { resetOptionsForm(); showScreen(pickerScreen); });
+document.getElementById('options-cancel-btn').addEventListener('click', () => { resetOptionsForm(); showScreen(pickerScreen); });
+
+// --- Submit Input form ---
 inputForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const label = inputLabel.value.trim();
-  const type = document.getElementById('input-constraint').value;
-  const name = inputName.value.trim();
-  const placeholder = document.getElementById('input-placeholder').value.trim();
-  const value = document.getElementById('input-value').value.trim();
-  const required = document.getElementById('input-required').checked;
-  const readonly = document.getElementById('input-readonly').checked;
-  const hideTitle = document.getElementById('input-hide-title').checked;
-  const constraintMsg = document.getElementById('input-constraint-msg').value.trim();
-  const minlength = document.getElementById('input-minlength').value.trim();
-  const maxlength = document.getElementById('input-maxlength').value.trim();
-  const multivalue = document.getElementById('input-multivalue').checked;
-  const confirmation = document.getElementById('input-confirmation').checked;
-  const qparam = qparamToggle.checked ? document.getElementById('input-qparam').value.trim() : '';
-  const helpMsg = document.getElementById('input-help').value.trim();
-  const customId = document.getElementById('input-id').value.trim();
-
   const fields = [
-    ['label', label],
-    ['type', type],
-    ['name', name],
-    ['placeholder', placeholder],
-    ['value', value],
-    ['required', required ? 'true' : ''],
-    ['readonly', readonly ? 'true' : ''],
-    ['hide-title', hideTitle ? 'true' : ''],
-    ['constraint-message', constraintMsg],
-    ['minlength', minlength],
-    ['maxlength', maxlength],
-    ['multi-value', multivalue ? 'true' : ''],
-    ['confirmation-field', confirmation ? 'true' : ''],
-    ['query-param', qparam],
-    ['help-message', helpMsg],
-    ['id', customId],
+    ['label', inputLabel.value.trim()],
+    ['type', document.getElementById('input-constraint').value],
+    ['name', inputName.value.trim()],
+    ['placeholder', document.getElementById('input-placeholder').value.trim()],
+    ['value', document.getElementById('input-value').value.trim()],
+    ['required', document.getElementById('input-required').checked ? 'true' : ''],
+    ['readonly', document.getElementById('input-readonly').checked ? 'true' : ''],
+    ['hide-title', document.getElementById('input-hide-title').checked ? 'true' : ''],
+    ['constraint-message', document.getElementById('input-constraint-msg').value.trim()],
+    ['minlength', document.getElementById('input-minlength').value.trim()],
+    ['maxlength', document.getElementById('input-maxlength').value.trim()],
+    ['multi-value', document.getElementById('input-multivalue').checked ? 'true' : ''],
+    ['confirmation-field', document.getElementById('input-confirmation').checked ? 'true' : ''],
+    ['query-param', qparamToggle.checked ? document.getElementById('input-qparam').value.trim() : ''],
+    ['help-message', document.getElementById('input-help').value.trim()],
+    ['id', document.getElementById('input-id').value.trim()],
   ];
 
-  const tableHTML = buildBlockTable('tfs2-form-input', fields);
-  actions.sendHTML(tableHTML);
+  actions.sendHTML(buildBlockTable('tfs2-form-input', fields));
+  if (editMode) actions.closeLibrary();
+  resetInputForm();
+  showScreen(pickerScreen);
+});
 
-  if (editMode) {
-    actions.closeLibrary();
+// --- Submit Options form ---
+optionsForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const source = optionsSource.value;
+  let optionsValue = '';
+
+  if (source === 'local') {
+    const rows = document.querySelectorAll('#options-list .option-row');
+    const opts = [];
+    rows.forEach((row) => {
+      const inputs = row.querySelectorAll('input[type="text"]');
+      const text = inputs[0].value.trim();
+      const val = inputs[1].value.trim() || text;
+      if (text) opts.push(`${text},${val}`);
+    });
+    optionsValue = opts.join('|');
   }
 
-  resetInputForm();
+  const fields = [
+    ['label', optionsLabel.value.trim()],
+    ['type', document.getElementById('options-type').value],
+    ['name', optionsName.value.trim()],
+    ['source', source],
+    ['options', optionsValue],
+    ['datasource-type', source === 'datasource' ? optionsDatasourceType.value : ''],
+    ['datasource-region', source === 'datasource' && optionsDatasourceType.value !== 'custom' ? document.getElementById('options-datasource-region').value : ''],
+    ['datasource-url', source === 'datasource' && optionsDatasourceType.value === 'custom' ? document.getElementById('options-datasource-url').value.trim() : ''],
+    ['placeholder', document.getElementById('options-placeholder').value.trim()],
+    ['required', optionsRequired.checked ? 'true' : ''],
+    ['required-message', optionsRequired.checked ? document.getElementById('options-required-msg').value.trim() : ''],
+    ['hide-title', document.getElementById('options-hide-title').checked ? 'true' : ''],
+    ['constraint-message', document.getElementById('options-constraint-msg').value.trim()],
+    ['readonly', document.getElementById('options-readonly').checked ? 'true' : ''],
+    ['help-message', document.getElementById('options-help').value.trim()],
+    ['id', document.getElementById('options-id').value.trim()],
+  ];
+
+  actions.sendHTML(buildBlockTable('tfs2-form-options', fields));
+  if (editMode) actions.closeLibrary();
+  resetOptionsForm();
   showScreen(pickerScreen);
 });
 

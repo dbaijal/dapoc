@@ -18,10 +18,9 @@
           <span class="field-type-icon">✏️</span>
           <span class="field-type-label">Input</span>
         </button>
-        <button class="field-type-btn" data-type="options" disabled>
+        <button class="field-type-btn" data-type="options">
           <span class="field-type-icon">☰</span>
           <span class="field-type-label">Options</span>
-          <span class="coming-soon">Soon</span>
         </button>
         <button class="field-type-btn" data-type="button" disabled>
           <span class="field-type-icon">⬜</span>
@@ -159,6 +158,135 @@
         <div class="form-actions">
           <button type="submit" id="submit-btn" class="btn-primary">Add to Page</button>
           <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+    <!-- Screen 3: Options Dialog with Tabs -->
+    <div id="options-screen" class="screen">
+      <div class="screen-header">
+        <button id="options-back-btn" class="back-btn">&larr; Back</button>
+        <h2>Form Options Field</h2>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs options-tabs">
+        <button class="tab active" data-tab="options-properties">Properties</button>
+        <button class="tab" data-tab="options-constraints">Constraints</button>
+        <button class="tab" data-tab="options-about">About</button>
+      </div>
+
+      <form id="options-form" class="field-form">
+        <!-- Properties Tab -->
+        <div class="tab-panel active" data-panel="options-properties">
+          <div class="form-group">
+            <label for="options-type">Type</label>
+            <select id="options-type">
+              <option value="select">Drop-down</option>
+              <option value="radio">Radio buttons</option>
+              <option value="checkbox">Checkboxes</option>
+              <option value="multiselect">Multi-select drop-down</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="options-label">Title <span class="req">*</span></label>
+            <input type="text" id="options-label" required placeholder="e.g. Country / Region">
+          </div>
+          <div class="form-group">
+            <label for="options-name">Name <span class="req">*</span></label>
+            <input type="text" id="options-name" required placeholder="e.g. country">
+            <span class="hint">Used as the field identifier in form submission</span>
+          </div>
+
+          <div class="form-section">
+            <h3>Source</h3>
+            <div class="form-group">
+              <label for="options-source">Options Source</label>
+              <select id="options-source">
+                <option value="local">Local (manual options)</option>
+                <option value="datasource">Datasource (external)</option>
+              </select>
+            </div>
+
+            <!-- Local Options -->
+            <div id="options-local-group">
+              <div class="form-group">
+                <label>Options <span class="hint">(one per line: text,value)</span></label>
+                <div id="options-list" class="options-list"></div>
+                <button type="button" id="add-option-btn" class="btn-add-option">+ Add Option</button>
+              </div>
+            </div>
+
+            <!-- Datasource Options -->
+            <div id="options-datasource-group" style="display:none;">
+              <div class="form-group">
+                <label for="options-datasource-type">Options Type</label>
+                <select id="options-datasource-type">
+                  <option value="country">Country</option>
+                  <option value="state">State / Province</option>
+                  <option value="custom">Custom URL</option>
+                </select>
+              </div>
+              <div class="form-group" id="options-region-group">
+                <label for="options-datasource-region">Region to populate</label>
+                <select id="options-datasource-region">
+                  <option value="global">Global</option>
+                  <option value="americas">Americas</option>
+                  <option value="europe">Europe</option>
+                  <option value="asia-pacific">Asia Pacific</option>
+                </select>
+              </div>
+              <div class="form-group" id="options-custom-url-group" style="display:none;">
+                <label for="options-datasource-url">Datasource URL</label>
+                <input type="text" id="options-datasource-url" placeholder="e.g. /data/options.json">
+                <span class="hint">Path to JSON file with options data</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Constraints Tab -->
+        <div class="tab-panel" data-panel="options-constraints">
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="options-hide-title"> Hide the title from being displayed</label>
+          </div>
+          <div class="form-group">
+            <label for="options-constraint-msg">Constraint Message</label>
+            <textarea id="options-constraint-msg" rows="3" placeholder="Error message shown when validation fails"></textarea>
+          </div>
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="options-required"> Required</label>
+          </div>
+          <div class="form-group" id="options-required-msg-group" style="display:none;">
+            <label for="options-required-msg">Required Message</label>
+            <input type="text" id="options-required-msg" placeholder="e.g. Country / Region is required">
+          </div>
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="options-readonly"> Make read only</label>
+          </div>
+        </div>
+
+        <!-- About Tab -->
+        <div class="tab-panel" data-panel="options-about">
+          <div class="form-group">
+            <label for="options-help">Help Message</label>
+            <input type="text" id="options-help" placeholder="Displayed below the label">
+          </div>
+          <div class="form-group">
+            <label for="options-placeholder">Placeholder text</label>
+            <input type="text" id="options-placeholder" placeholder="e.g. -Select-">
+          </div>
+          <div class="form-group">
+            <label for="options-id">ID</label>
+            <input type="text" id="options-id" placeholder="Auto-generated if empty">
+            <span class="hint">Leave empty for auto-generated ID</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="submit" id="options-submit-btn" class="btn-primary">Add to Page</button>
+          <button type="button" id="options-cancel-btn" class="btn-secondary">Cancel</button>
         </div>
       </form>
     </div>
