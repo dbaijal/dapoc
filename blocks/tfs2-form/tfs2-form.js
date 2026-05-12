@@ -411,13 +411,15 @@ function getFieldValue(form, name) {
 }
 
 function evalCondition(fieldValue, operator, ruleValue) {
+  const fv = (fieldValue || '').toLowerCase();
+  const rv = (ruleValue || '').toLowerCase();
   switch (operator) {
-    case 'is-equal-to': return fieldValue === ruleValue;
-    case 'is-not-equal-to': return fieldValue !== ruleValue;
-    case 'contains': return fieldValue.includes(ruleValue);
-    case 'starts-with': return fieldValue.startsWith(ruleValue);
-    case 'is-empty': return !fieldValue;
-    case 'is-not-empty': return !!fieldValue;
+    case 'is-equal-to': return fv === rv;
+    case 'is-not-equal-to': return fv !== rv;
+    case 'contains': return fv.includes(rv);
+    case 'starts-with': return fv.startsWith(rv);
+    case 'is-empty': return !fv;
+    case 'is-not-empty': return !!fv;
     default: return false;
   }
 }
