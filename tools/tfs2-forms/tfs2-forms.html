@@ -312,6 +312,7 @@
       <div class="tabs options-tabs">
         <button class="tab active" data-tab="options-properties">Properties</button>
         <button class="tab" data-tab="options-constraints">Constraints</button>
+        <button class="tab" data-tab="options-rules">Rules</button>
         <button class="tab" data-tab="options-about">About</button>
       </div>
 
@@ -403,6 +404,31 @@
           <div class="form-group checkbox-group">
             <label><input type="checkbox" id="options-readonly"> Make read only</label>
           </div>
+        </div>
+
+        <!-- Rules Tab -->
+        <div class="tab-panel" data-panel="options-rules">
+          <div class="rules-header">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="options-rule-action">Action</label>
+                <select id="options-rule-action">
+                  <option value="show">Show</option>
+                  <option value="hide">Hide</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>This field if</label>
+                <select id="options-rule-logic">
+                  <option value="any">Any</option>
+                  <option value="all">All</option>
+                </select>
+                <span class="hint">of the following conditions are met</span>
+              </div>
+            </div>
+          </div>
+          <div id="options-rule-conditions" class="rule-conditions"></div>
+          <button type="button" id="add-options-rule-condition" class="btn-add-row">+ Add Condition</button>
         </div>
 
         <!-- About Tab -->

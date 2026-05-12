@@ -219,6 +219,16 @@ async function buildOptions(config) {
     wrapper.append(group);
   }
 
+  if (config['rule-action']) {
+    wrapper.dataset.ruleAction = config['rule-action'];
+    wrapper.dataset.ruleLogic = config['rule-logic'] || 'any';
+    let ruleIdx = 1;
+    while (config[`rule-${ruleIdx}`]) {
+      wrapper.dataset[`rule${ruleIdx}`] = config[`rule-${ruleIdx}`];
+      ruleIdx += 1;
+    }
+  }
+
   return wrapper;
 }
 

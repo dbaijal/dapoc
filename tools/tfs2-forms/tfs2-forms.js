@@ -309,6 +309,94 @@ function addOptionRow(text = '', value = '') {
   list.appendChild(row);
 }
 
+function resetOptionsRuleFields() {
+  document.getElementById('options-rule-conditions').innerHTML = '';
+  document.getElementById('options-rule-action').value = 'show';
+  document.getElementById('options-rule-logic').value = 'any';
+}
+
+function collectOptionsRuleFields() {
+  const fields = [];
+  const ruleAction = document.getElementById('options-rule-action').value;
+  const ruleLogic = document.getElementById('options-rule-logic').value;
+  const conditionRows = document.getElementById('options-rule-conditions').querySelectorAll('.rule-condition-row');
+
+  if (conditionRows.length > 0) {
+    const hasValid = [...conditionRows].some((row) => row.querySelector('.rule-source-field').value.trim());
+    if (hasValid) {
+      fields.push(['rule-action', ruleAction]);
+      fields.push(['rule-logic', ruleLogic]);
+      conditionRows.forEach((row, i) => {
+        const source = row.querySelector('.rule-source-field').value.trim();
+        const op = row.querySelector('.rule-operator').value;
+        const val = row.querySelector('.rule-value').value.trim();
+        if (source) {
+          fields.push([`rule-${i + 1}`, `${source}:${op}:${val}`]);
+        }
+      });
+    }
+  }
+  return fields;
+}
+
+function addOptionsRuleConditionRow(sourceField = '', operator = 'contains', value = '') {
+  const container = document.getElementById('options-rule-conditions');
+  const row = document.createElement('div');
+  row.className = 'rule-condition-row';
+
+  if (availableFields.length > 0) {
+    row.innerHTML = `
+      <select class="rule-source-field">${buildFieldDropdown()}</select>
+      <select class="rule-operator">
+        <option value="contains"${operator === 'contains' ? ' selected' : ''}>contains</option>
+        <option value="is-equal-to"${operator === 'is-equal-to' ? ' selected' : ''}>is equal to</option>
+        <option value="is-not-equal-to"${operator === 'is-not-equal-to' ? ' selected' : ''}>is not equal to</option>
+        <option value="starts-with"${operator === 'starts-with' ? ' selected' : ''}>starts with</option>
+        <option value="is-empty"${operator === 'is-empty' ? ' selected' : ''}>is empty</option>
+        <option value="is-not-empty"${operator === 'is-not-empty' ? ' selected' : ''}>is not empty</option>
+      </select>
+      <input type="text" class="rule-value" placeholder="Value" value="${value}">
+      <button type="button" class="btn-remove-condition">&times;</button>
+    `;
+    const sourceSelect = row.querySelector('.rule-source-field');
+    if (sourceField && ![...sourceSelect.options].some((o) => o.value === sourceField)) {
+      const customOpt = document.createElement('option');
+      customOpt.value = sourceField;
+      customOpt.textContent = sourceField;
+      sourceSelect.insertBefore(customOpt, sourceSelect.lastElementChild);
+    }
+    if (sourceField) sourceSelect.value = sourceField;
+  } else {
+    row.innerHTML = `
+      <input type="text" class="rule-source-field" placeholder="Source field name" value="${sourceField}">
+      <select class="rule-operator">
+        <option value="contains"${operator === 'contains' ? ' selected' : ''}>contains</option>
+        <option value="is-equal-to"${operator === 'is-equal-to' ? ' selected' : ''}>is equal to</option>
+        <option value="is-not-equal-to"${operator === 'is-not-equal-to' ? ' selected' : ''}>is not equal to</option>
+        <option value="starts-with"${operator === 'starts-with' ? ' selected' : ''}>starts with</option>
+        <option value="is-empty"${operator === 'is-empty' ? ' selected' : ''}>is empty</option>
+        <option value="is-not-empty"${operator === 'is-not-empty' ? ' selected' : ''}>is not empty</option>
+      </select>
+      <input type="text" class="rule-value" placeholder="Value" value="${value}">
+      <button type="button" class="btn-remove-condition">&times;</button>
+    `;
+  }
+
+  row.querySelector('.btn-remove-condition').addEventListener('click', () => row.remove());
+  container.appendChild(row);
+}
+
+function populateOptionsRuleFields(config) {
+  if (config['rule-action']) document.getElementById('options-rule-action').value = config['rule-action'];
+  if (config['rule-logic']) document.getElementById('options-rule-logic').value = config['rule-logic'];
+  let i = 1;
+  while (config[`rule-${i}`]) {
+    const parts = config[`rule-${i}`].split(':');
+    addOptionsRuleConditionRow(parts[0] || '', parts[1] || 'contains', parts.slice(2).join(':') || '');
+    i += 1;
+  }
+}
+
 function resetOptionsForm() {
   optionsForm.reset();
   optionsName.dataset.manual = '';
@@ -319,6 +407,7 @@ function resetOptionsForm() {
   optionsRequiredMsgGroup.style.display = 'none';
   optionsRegionGroup.style.display = 'block';
   optionsCustomUrlGroup.style.display = 'none';
+  resetOptionsRuleFields();
   document.getElementById('options-submit-btn').textContent = 'Add to Page';
   optionsScreen.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', i === 0);
@@ -368,6 +457,7 @@ function populateOptionsForm(config) {
   if (config['help-message']) document.getElementById('options-help').value = config['help-message'];
   if (config.placeholder) document.getElementById('options-placeholder').value = config.placeholder;
   if (config.id) document.getElementById('options-id').value = config.id;
+  populateOptionsRuleFields(config);
 }
 
 // --- Form Container: Reset ---
@@ -558,6 +648,7 @@ optionsRequired.addEventListener('change', () => {
 
 // --- Options: Add option button ---
 document.getElementById('add-option-btn').addEventListener('click', () => addOptionRow());
+document.getElementById('add-options-rule-condition').addEventListener('click', () => addOptionsRuleConditionRow());
 
 // --- Back/Cancel buttons ---
 backBtn.addEventListener('click', () => { resetInputForm(); showScreen(pickerScreen); });
@@ -631,6 +722,7 @@ optionsForm.addEventListener('submit', (e) => {
     ['readonly', document.getElementById('options-readonly').checked ? 'true' : ''],
     ['help-message', document.getElementById('options-help').value.trim()],
     ['id', document.getElementById('options-id').value.trim()],
+    ...collectOptionsRuleFields(),
   ];
 
   actions.sendHTML(buildBlockTable('tfs2-form-options', fields));
