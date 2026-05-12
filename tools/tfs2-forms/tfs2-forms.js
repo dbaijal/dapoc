@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import DA_SDK from 'https://da.live/nx/utils/sdk.js';
 
-const { actions } = await DA_SDK;
+const { context, actions, daFetch } = await DA_SDK;
 
 const pickerScreen = document.getElementById('picker-screen');
 const inputScreen = document.getElementById('input-screen');
@@ -64,20 +64,25 @@ const availableFields = [];
 
 async function loadAvailableFields() {
   try {
-    const selection = await actions.getSelection();
-    if (!selection) return;
+    const path = context.path || '';
+    const org = context.org || '';
+    const repo = context.repo || '';
+    if (!path || !org || !repo) return;
+
+    const resp = await daFetch(`https://admin.da.live/source/${org}/${repo}${path}.html`);
+    if (!resp.ok) return;
+
+    const html = await resp.text();
     const parser = new DOMParser();
-    const doc = parser.parseFromString(selection, 'text/html');
-    const tables = doc.querySelectorAll('table');
-    tables.forEach((table) => {
-      const rows = table.querySelectorAll('tr');
+    const doc = parser.parseFromString(html, 'text/html');
+
+    doc.querySelectorAll('div[class*="tfs2-form-"]').forEach((block) => {
+      const rows = block.querySelectorAll(':scope > div');
       rows.forEach((row) => {
-        const cells = row.querySelectorAll('td');
-        if (cells.length === 2 && cells[0].textContent.trim() === 'name') {
-          const fieldName = cells[1].textContent.trim();
-          if (fieldName && !availableFields.includes(fieldName)) {
-            availableFields.push(fieldName);
-          }
+        const key = row.children[0]?.textContent?.trim();
+        const val = row.children[1]?.textContent?.trim();
+        if (key === 'name' && val && !availableFields.includes(val)) {
+          availableFields.push(val);
         }
       });
     });
@@ -98,48 +103,65 @@ function buildFieldDropdown() {
 function addRuleConditionRow(sourceField = '', operator = 'contains', value = '') {
   const row = document.createElement('div');
   row.className = 'rule-condition-row';
-  row.innerHTML = `
-    <select class="rule-source-field">${buildFieldDropdown()}</select>
-    <select class="rule-operator">
-      <option value="contains"${operator === 'contains' ? ' selected' : ''}>contains</option>
-      <option value="is-equal-to"${operator === 'is-equal-to' ? ' selected' : ''}>is equal to</option>
-      <option value="is-not-equal-to"${operator === 'is-not-equal-to' ? ' selected' : ''}>is not equal to</option>
-      <option value="starts-with"${operator === 'starts-with' ? ' selected' : ''}>starts with</option>
-      <option value="is-empty"${operator === 'is-empty' ? ' selected' : ''}>is empty</option>
-      <option value="is-not-empty"${operator === 'is-not-empty' ? ' selected' : ''}>is not empty</option>
-    </select>
-    <input type="text" class="rule-value" placeholder="Value" value="${value}">
-    <button type="button" class="btn-remove-condition">&times;</button>
-  `;
 
-  const sourceSelect = row.querySelector('.rule-source-field');
-  if (sourceField) {
-    if ([...sourceSelect.options].some((o) => o.value === sourceField)) {
-      sourceSelect.value = sourceField;
-    } else {
-      const customOpt = document.createElement('option');
-      customOpt.value = sourceField;
-      customOpt.textContent = sourceField;
-      sourceSelect.insertBefore(customOpt, sourceSelect.lastElementChild);
-      sourceSelect.value = sourceField;
-    }
-  }
+  if (availableFields.length > 0) {
+    row.innerHTML = `
+      <select class="rule-source-field">${buildFieldDropdown()}</select>
+      <select class="rule-operator">
+        <option value="contains"${operator === 'contains' ? ' selected' : ''}>contains</option>
+        <option value="is-equal-to"${operator === 'is-equal-to' ? ' selected' : ''}>is equal to</option>
+        <option value="is-not-equal-to"${operator === 'is-not-equal-to' ? ' selected' : ''}>is not equal to</option>
+        <option value="starts-with"${operator === 'starts-with' ? ' selected' : ''}>starts with</option>
+        <option value="is-empty"${operator === 'is-empty' ? ' selected' : ''}>is empty</option>
+        <option value="is-not-empty"${operator === 'is-not-empty' ? ' selected' : ''}>is not empty</option>
+      </select>
+      <input type="text" class="rule-value" placeholder="Value" value="${value}">
+      <button type="button" class="btn-remove-condition">&times;</button>
+    `;
 
-  sourceSelect.addEventListener('change', () => {
-    if (sourceSelect.value === '__custom__') {
-      // eslint-disable-next-line no-alert
-      const customName = prompt('Enter the source field name:');
-      if (customName) {
-        const opt = document.createElement('option');
-        opt.value = customName;
-        opt.textContent = customName;
-        sourceSelect.insertBefore(opt, sourceSelect.lastElementChild);
-        sourceSelect.value = customName;
+    const sourceSelect = row.querySelector('.rule-source-field');
+    if (sourceField) {
+      if ([...sourceSelect.options].some((o) => o.value === sourceField)) {
+        sourceSelect.value = sourceField;
       } else {
-        sourceSelect.value = '';
+        const customOpt = document.createElement('option');
+        customOpt.value = sourceField;
+        customOpt.textContent = sourceField;
+        sourceSelect.insertBefore(customOpt, sourceSelect.lastElementChild);
+        sourceSelect.value = sourceField;
       }
     }
-  });
+
+    sourceSelect.addEventListener('change', () => {
+      if (sourceSelect.value === '__custom__') {
+        // eslint-disable-next-line no-alert
+        const customName = prompt('Enter the source field name:');
+        if (customName) {
+          const opt = document.createElement('option');
+          opt.value = customName;
+          opt.textContent = customName;
+          sourceSelect.insertBefore(opt, sourceSelect.lastElementChild);
+          sourceSelect.value = customName;
+        } else {
+          sourceSelect.value = '';
+        }
+      }
+    });
+  } else {
+    row.innerHTML = `
+      <input type="text" class="rule-source-field" placeholder="Source field name" value="${sourceField}">
+      <select class="rule-operator">
+        <option value="contains"${operator === 'contains' ? ' selected' : ''}>contains</option>
+        <option value="is-equal-to"${operator === 'is-equal-to' ? ' selected' : ''}>is equal to</option>
+        <option value="is-not-equal-to"${operator === 'is-not-equal-to' ? ' selected' : ''}>is not equal to</option>
+        <option value="starts-with"${operator === 'starts-with' ? ' selected' : ''}>starts with</option>
+        <option value="is-empty"${operator === 'is-empty' ? ' selected' : ''}>is empty</option>
+        <option value="is-not-empty"${operator === 'is-not-empty' ? ' selected' : ''}>is not empty</option>
+      </select>
+      <input type="text" class="rule-value" placeholder="Value" value="${value}">
+      <button type="button" class="btn-remove-condition">&times;</button>
+    `;
+  }
 
   row.querySelector('.btn-remove-condition').addEventListener('click', () => row.remove());
   ruleConditions.appendChild(row);
@@ -168,7 +190,7 @@ function collectRuleFields() {
       fields.push(['rule-action', ruleAction]);
       fields.push(['rule-logic', ruleLogic]);
       conditionRows.forEach((row, i) => {
-        const source = row.querySelector('.rule-source-field').value;
+        const source = row.querySelector('.rule-source-field').value.trim();
         const op = row.querySelector('.rule-operator').value;
         const val = row.querySelector('.rule-value').value.trim();
         if (source) {
