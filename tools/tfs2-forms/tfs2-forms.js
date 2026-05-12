@@ -195,7 +195,7 @@ function collectRuleFields() {
         const op = row.querySelector('.rule-operator').value;
         const val = row.querySelector('.rule-value').value.trim();
         if (source) {
-          fields.push([`rule-${i + 1}`, `${source}:${op}:${val}`]);
+          fields.push([`rule-${i + 1}`, `${source}~${op}~${val}`]);
         }
       });
     }
@@ -208,7 +208,7 @@ function populateRuleFields(config) {
   if (config['rule-logic']) document.getElementById('rule-logic').value = config['rule-logic'];
   let i = 1;
   while (config[`rule-${i}`]) {
-    const parts = config[`rule-${i}`].split(':');
+    const parts = config[`rule-${i}`].split('~');
     const source = parts[0] || '';
     const op = parts[1] || 'contains';
     const val = parts.slice(2).join(':') || '';
@@ -331,7 +331,7 @@ function collectOptionsRuleFields() {
         const op = row.querySelector('.rule-operator').value;
         const val = row.querySelector('.rule-value').value.trim();
         if (source) {
-          fields.push([`rule-${i + 1}`, `${source}:${op}:${val}`]);
+          fields.push([`rule-${i + 1}`, `${source}~${op}~${val}`]);
         }
       });
     }
@@ -391,7 +391,7 @@ function populateOptionsRuleFields(config) {
   if (config['rule-logic']) document.getElementById('options-rule-logic').value = config['rule-logic'];
   let i = 1;
   while (config[`rule-${i}`]) {
-    const parts = config[`rule-${i}`].split(':');
+    const parts = config[`rule-${i}`].split('~');
     addOptionsRuleConditionRow(parts[0] || '', parts[1] || 'contains', parts.slice(2).join(':') || '');
     i += 1;
   }
