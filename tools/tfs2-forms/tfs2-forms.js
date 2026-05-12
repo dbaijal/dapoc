@@ -57,11 +57,149 @@ function autoGenerateName(labelEl, nameEl) {
   }
 }
 
+// --- Rules Tab Logic ---
+const ruleConditions = document.getElementById('rule-conditions');
+const addRuleConditionBtn = document.getElementById('add-rule-condition');
+const availableFields = [];
+
+async function loadAvailableFields() {
+  try {
+    const selection = await actions.getSelection();
+    if (!selection) return;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(selection, 'text/html');
+    const tables = doc.querySelectorAll('table');
+    tables.forEach((table) => {
+      const rows = table.querySelectorAll('tr');
+      rows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length === 2 && cells[0].textContent.trim() === 'name') {
+          const fieldName = cells[1].textContent.trim();
+          if (fieldName && !availableFields.includes(fieldName)) {
+            availableFields.push(fieldName);
+          }
+        }
+      });
+    });
+  } catch (err) {
+    // Fallback — fields not available
+  }
+}
+
+function buildFieldDropdown() {
+  let options = '<option value="">Select source field</option>';
+  availableFields.forEach((name) => {
+    options += `<option value="${name}">${name}</option>`;
+  });
+  options += '<option value="__custom__">Type custom name...</option>';
+  return options;
+}
+
+function addRuleConditionRow(sourceField = '', operator = 'contains', value = '') {
+  const row = document.createElement('div');
+  row.className = 'rule-condition-row';
+  row.innerHTML = `
+    <select class="rule-source-field">${buildFieldDropdown()}</select>
+    <select class="rule-operator">
+      <option value="contains"${operator === 'contains' ? ' selected' : ''}>contains</option>
+      <option value="is-equal-to"${operator === 'is-equal-to' ? ' selected' : ''}>is equal to</option>
+      <option value="is-not-equal-to"${operator === 'is-not-equal-to' ? ' selected' : ''}>is not equal to</option>
+      <option value="starts-with"${operator === 'starts-with' ? ' selected' : ''}>starts with</option>
+      <option value="is-empty"${operator === 'is-empty' ? ' selected' : ''}>is empty</option>
+      <option value="is-not-empty"${operator === 'is-not-empty' ? ' selected' : ''}>is not empty</option>
+    </select>
+    <input type="text" class="rule-value" placeholder="Value" value="${value}">
+    <button type="button" class="btn-remove-condition">&times;</button>
+  `;
+
+  const sourceSelect = row.querySelector('.rule-source-field');
+  if (sourceField) {
+    if ([...sourceSelect.options].some((o) => o.value === sourceField)) {
+      sourceSelect.value = sourceField;
+    } else {
+      const customOpt = document.createElement('option');
+      customOpt.value = sourceField;
+      customOpt.textContent = sourceField;
+      sourceSelect.insertBefore(customOpt, sourceSelect.lastElementChild);
+      sourceSelect.value = sourceField;
+    }
+  }
+
+  sourceSelect.addEventListener('change', () => {
+    if (sourceSelect.value === '__custom__') {
+      // eslint-disable-next-line no-alert
+      const customName = prompt('Enter the source field name:');
+      if (customName) {
+        const opt = document.createElement('option');
+        opt.value = customName;
+        opt.textContent = customName;
+        sourceSelect.insertBefore(opt, sourceSelect.lastElementChild);
+        sourceSelect.value = customName;
+      } else {
+        sourceSelect.value = '';
+      }
+    }
+  });
+
+  row.querySelector('.btn-remove-condition').addEventListener('click', () => row.remove());
+  ruleConditions.appendChild(row);
+}
+
+addRuleConditionBtn.addEventListener('click', () => addRuleConditionRow());
+
+// Load available fields on plugin init
+loadAvailableFields();
+
+function resetRuleFields() {
+  ruleConditions.innerHTML = '';
+  document.getElementById('rule-action').value = 'show';
+  document.getElementById('rule-logic').value = 'any';
+}
+
+function collectRuleFields() {
+  const fields = [];
+  const ruleAction = document.getElementById('rule-action').value;
+  const ruleLogic = document.getElementById('rule-logic').value;
+  const conditionRows = ruleConditions.querySelectorAll('.rule-condition-row');
+
+  if (conditionRows.length > 0) {
+    const hasValidCondition = [...conditionRows].some((row) => row.querySelector('.rule-source-field').value);
+    if (hasValidCondition) {
+      fields.push(['rule-action', ruleAction]);
+      fields.push(['rule-logic', ruleLogic]);
+      conditionRows.forEach((row, i) => {
+        const source = row.querySelector('.rule-source-field').value;
+        const op = row.querySelector('.rule-operator').value;
+        const val = row.querySelector('.rule-value').value.trim();
+        if (source) {
+          fields.push([`rule-${i + 1}`, `${source}:${op}:${val}`]);
+        }
+      });
+    }
+  }
+  return fields;
+}
+
+function populateRuleFields(config) {
+  if (config['rule-action']) document.getElementById('rule-action').value = config['rule-action'];
+  if (config['rule-logic']) document.getElementById('rule-logic').value = config['rule-logic'];
+  let i = 1;
+  while (config[`rule-${i}`]) {
+    const parts = config[`rule-${i}`].split(':');
+    const source = parts[0] || '';
+    const op = parts[1] || 'contains';
+    const val = parts.slice(2).join(':') || '';
+    addRuleConditionRow(source, op, val);
+    i += 1;
+  }
+}
+
 function resetInputForm() {
   inputForm.reset();
   inputName.dataset.manual = '';
   editMode = false;
   qparamGroup.style.display = 'none';
+  resetRuleFields();
   document.getElementById('submit-btn').textContent = 'Add to Page';
   inputScreen.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', i === 0);
@@ -130,6 +268,7 @@ function populateInputForm(config) {
   }
   if (config['help-message']) document.getElementById('input-help').value = config['help-message'];
   if (config.id) document.getElementById('input-id').value = config.id;
+  populateRuleFields(config);
 }
 
 // --- Options Field Logic ---
@@ -335,6 +474,8 @@ async function checkForEditMode() {
   });
 }
 
+// (Rules logic moved above resetRuleFields)
+
 // --- Tab switching (scoped) ---
 document.querySelectorAll('.tab').forEach((tab) => {
   tab.addEventListener('click', () => {
@@ -422,6 +563,7 @@ inputForm.addEventListener('submit', (e) => {
     ['query-param', qparamToggle.checked ? document.getElementById('input-qparam').value.trim() : ''],
     ['help-message', document.getElementById('input-help').value.trim()],
     ['id', document.getElementById('input-id').value.trim()],
+    ...collectRuleFields(),
   ];
 
   actions.sendHTML(buildBlockTable('tfs2-form-input', fields));

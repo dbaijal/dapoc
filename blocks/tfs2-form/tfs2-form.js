@@ -85,6 +85,16 @@ function buildInput(config) {
     wrapper.append(confirmInput);
   }
 
+  if (config['rule-action']) {
+    wrapper.dataset.ruleAction = config['rule-action'];
+    wrapper.dataset.ruleLogic = config['rule-logic'] || 'any';
+    let idx = 1;
+    while (config[`rule-${idx}`]) {
+      wrapper.dataset[`rule${idx}`] = config[`rule-${idx}`];
+      idx += 1;
+    }
+  }
+
   return wrapper;
 }
 
@@ -377,6 +387,99 @@ function setupMultiStep(form) {
   showStep(0);
 }
 
+function getFieldValue(form, name) {
+  const field = form.querySelector(`[name="${name}"]`);
+  if (!field) return '';
+  if (field.type === 'checkbox') {
+    return [...form.querySelectorAll(`[name="${name}"]:checked`)].map((cb) => cb.value).join(',');
+  }
+  if (field.type === 'radio') {
+    const checked = form.querySelector(`[name="${name}"]:checked`);
+    return checked ? checked.value : '';
+  }
+  return field.value || '';
+}
+
+function evalCondition(fieldValue, operator, ruleValue) {
+  switch (operator) {
+    case 'is-equal-to': return fieldValue === ruleValue;
+    case 'is-not-equal-to': return fieldValue !== ruleValue;
+    case 'contains': return fieldValue.includes(ruleValue);
+    case 'starts-with': return fieldValue.startsWith(ruleValue);
+    case 'is-empty': return !fieldValue;
+    case 'is-not-empty': return !!fieldValue;
+    default: return false;
+  }
+}
+
+function initRuleEngine(form) {
+  const rules = [];
+  form.querySelectorAll('.tfs2-form-field, .tfs2-form-actions').forEach((fieldWrapper) => {
+    const fieldEl = fieldWrapper.querySelector('input, select, textarea');
+    if (!fieldEl) return;
+    const { name: fieldName } = fieldEl;
+    if (!fieldName) return;
+
+    const { ruleAction, ruleLogic } = fieldWrapper.dataset;
+    if (!ruleAction) return;
+
+    const conditions = [];
+    let idx = 1;
+    while (fieldWrapper.dataset[`rule${idx}`]) {
+      const parts = fieldWrapper.dataset[`rule${idx}`].split(':');
+      conditions.push({
+        sourceField: parts[0] || '',
+        operator: parts[1] || 'contains',
+        value: parts.slice(2).join(':') || '',
+      });
+      idx += 1;
+    }
+
+    if (conditions.length) {
+      rules.push({
+        targetField: fieldName,
+        action: ruleAction,
+        logic: ruleLogic,
+        conditions,
+      });
+    }
+  });
+
+  if (rules.length === 0) return;
+
+  const evaluateRules = () => {
+    rules.forEach((rule) => {
+      const results = rule.conditions.map(
+        (c) => evalCondition(getFieldValue(form, c.sourceField), c.operator, c.value),
+      );
+      const met = rule.logic === 'any' ? results.some((r) => r) : results.every((r) => r);
+      const target = form.querySelector(`[name="${rule.targetField}"]`);
+      if (!target) return;
+      const wrapper = target.closest('.tfs2-form-field');
+      if (!wrapper) return;
+
+      if (rule.action === 'show') {
+        wrapper.style.display = met ? 'flex' : 'none';
+      } else {
+        wrapper.style.display = met ? 'none' : 'flex';
+      }
+    });
+  };
+
+  rules.forEach((rule) => {
+    if (rule.action === 'show') {
+      const target = form.querySelector(`[name="${rule.targetField}"]`);
+      if (target) {
+        const wrapper = target.closest('.tfs2-form-field');
+        if (wrapper) wrapper.style.display = 'none';
+      }
+    }
+  });
+
+  form.addEventListener('change', evaluateRules);
+  form.addEventListener('input', evaluateRules);
+}
+
 export default async function decorate(block) {
   const config = getBlockConfig(block);
   const section = block.closest('.section');
@@ -469,4 +572,5 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(form);
+  initRuleEngine(form);
 }

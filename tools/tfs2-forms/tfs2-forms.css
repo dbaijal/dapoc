@@ -354,6 +354,61 @@ h3 {
   background: #fafafa;
 }
 
+/* Rules Tab */
+.rules-header {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.rule-conditions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.rule-condition-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 12px;
+  background: #f8f9fb;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+}
+
+.rule-condition-row select,
+.rule-condition-row input[type="text"] {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  background: #fff;
+}
+
+.rule-condition-row select:focus,
+.rule-condition-row input:focus {
+  outline: none;
+  border-color: #1473e6;
+}
+
+.rule-condition-row .btn-remove-condition {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #cc3333;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.rule-condition-row .btn-remove-condition:hover {
+  background: #fff0f0;
+}
+
 /* Options List */
 .options-list {
   display: flex;
