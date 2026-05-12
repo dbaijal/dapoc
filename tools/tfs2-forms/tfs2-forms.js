@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import DA_SDK from 'https://da.live/nx/utils/sdk.js';
 
-const { context, actions, daFetch } = await DA_SDK;
+const { context, token, actions } = await DA_SDK;
 
 const pickerScreen = document.getElementById('picker-screen');
 const inputScreen = document.getElementById('input-screen');
@@ -64,12 +64,13 @@ const availableFields = [];
 
 async function loadAvailableFields() {
   try {
-    const path = context.path || '';
-    const org = context.org || '';
-    const repo = context.repo || '';
+    const { org, repo, path } = context;
     if (!path || !org || !repo) return;
 
-    const resp = await daFetch(`https://admin.da.live/source/${org}/${repo}${path}.html`);
+    const url = `https://admin.da.live/source/${org}/${repo}${path}.html`;
+    const resp = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!resp.ok) return;
 
     const html = await resp.text();
@@ -87,7 +88,7 @@ async function loadAvailableFields() {
       });
     });
   } catch (err) {
-    // Fallback — fields not available
+    // Fallback — fields not available, text input shown instead
   }
 }
 
