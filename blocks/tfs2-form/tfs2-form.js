@@ -488,8 +488,13 @@ function initRuleEngine(form) {
     }
   });
 
-  form.addEventListener('change', evaluateRules);
-  form.addEventListener('input', evaluateRules);
+  form.querySelectorAll('input, select, textarea').forEach((field) => {
+    field.addEventListener('change', evaluateRules);
+    field.addEventListener('input', evaluateRules);
+  });
+
+  // Evaluate immediately to set initial visibility
+  evaluateRules();
 }
 
 export default async function decorate(block) {
