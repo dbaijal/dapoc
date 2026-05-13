@@ -256,8 +256,6 @@ function populateRulesFromConfig(config) {
   }
 }
 
-loadAvailableFields();
-
 function resetInputForm() {
   inputForm.reset();
   inputName.dataset.manual = '';
