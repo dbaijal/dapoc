@@ -94,19 +94,19 @@ async function loadAvailableFields() {
   }
 }
 
-function refreshFieldDropdowns() {
-  rulesList.querySelectorAll('.rule-target-field, .rule-source-field').forEach((sel) => {
-    const current = sel.value;
-    sel.innerHTML = buildFieldOptions(current);
-  });
-}
-
 function buildFieldOptions(selectedValue = '') {
   let html = '<option value="">-- Select field --</option>';
   availableFields.forEach((f) => {
     html += `<option value="${f}"${f === selectedValue ? ' selected' : ''}>${f}</option>`;
   });
   return html;
+}
+
+function refreshFieldDropdowns() {
+  rulesList.querySelectorAll('.rule-target-field, .rule-source-field').forEach((sel) => {
+    const current = sel.value;
+    sel.innerHTML = buildFieldOptions(current);
+  });
 }
 
 function addConditionToRule(ruleCard, sourceField = '', operator = 'contains', value = '') {
