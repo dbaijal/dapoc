@@ -64,6 +64,7 @@ const rulesList = document.getElementById('rules-list');
 const availableFields = [];
 
 async function loadAvailableFields() {
+  availableFields.length = 0;
   try {
     const { org, repo, path } = context;
     if (!path || !org || !repo) return;
@@ -91,6 +92,13 @@ async function loadAvailableFields() {
   } catch (err) {
     // Fallback — fields not available
   }
+}
+
+function refreshFieldDropdowns() {
+  rulesList.querySelectorAll('.rule-target-field, .rule-source-field').forEach((sel) => {
+    const current = sel.value;
+    sel.innerHTML = buildFieldOptions(current);
+  });
 }
 
 function buildFieldOptions(selectedValue = '') {
@@ -208,7 +216,7 @@ function populateRulesFromConfig(config) {
   }
 }
 
-const fieldsReady = loadAvailableFields();
+loadAvailableFields();
 
 function resetInputForm() {
   inputForm.reset();
@@ -448,7 +456,7 @@ async function tryEditSelection() {
           document.getElementById('button-submit-btn').textContent = 'Update';
           showScreen(buttonScreen);
         } else if (config.blockType === 'rules') {
-          await fieldsReady;
+          await loadAvailableFields();
           populateRulesFromConfig(config);
           document.getElementById('rules-submit-btn').textContent = 'Update';
           showScreen(rulesScreen);
@@ -518,8 +526,9 @@ document.querySelectorAll('.field-type-btn').forEach((btn) => {
     else if (type === 'button') showScreen(buttonScreen);
     else if (type === 'step') showScreen(stepScreen);
     else if (type === 'rules') {
-      await fieldsReady;
+      await loadAvailableFields();
       if (rulesList.children.length === 0) addRuleCard();
+      else refreshFieldDropdowns();
       showScreen(rulesScreen);
     } else if (type === 'fragment') showScreen(fragmentScreen);
   });
