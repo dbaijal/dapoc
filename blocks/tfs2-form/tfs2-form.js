@@ -539,6 +539,14 @@ export default async function decorate(block) {
     });
   }
 
+  // Read centralized rules block before cleanup removes it from DOM
+  const rulesBlock = section.querySelector('.tfs2-form-rules');
+  let formRules = [];
+  if (rulesBlock) {
+    const rulesConfig = getBlockConfig(rulesBlock);
+    formRules = parseRulesBlock(rulesConfig);
+  }
+
   allBlocks.forEach((fieldBlock) => {
     fieldBlock.closest(
       '.tfs2-form-input-wrapper, .tfs2-form-options-wrapper, .tfs2-form-label-wrapper, .tfs2-form-button-wrapper, .tfs2-form-fragment-wrapper, .tfs2-form-step-wrapper, .tfs2-form-rules-wrapper',
@@ -559,15 +567,6 @@ export default async function decorate(block) {
       window.location.href = form.dataset.thankyou;
     }
   });
-
-  // Read centralized rules block
-  const rulesBlock = section.querySelector('.tfs2-form-rules');
-  let formRules = [];
-  if (rulesBlock) {
-    const rulesConfig = getBlockConfig(rulesBlock);
-    formRules = parseRulesBlock(rulesConfig);
-    rulesBlock.closest('.tfs2-form-rules-wrapper')?.remove();
-  }
 
   block.textContent = '';
   block.append(form);
