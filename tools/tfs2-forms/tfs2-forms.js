@@ -93,12 +93,20 @@ async function loadAvailableFields() {
   }
 }
 
+function buildFieldOptions(selectedValue = '') {
+  let html = '<option value="">-- Select field --</option>';
+  availableFields.forEach((f) => {
+    html += `<option value="${f}"${f === selectedValue ? ' selected' : ''}>${f}</option>`;
+  });
+  return html;
+}
+
 function addConditionToRule(ruleCard, sourceField = '', operator = 'contains', value = '') {
   const condContainer = ruleCard.querySelector('.rule-conditions');
   const row = document.createElement('div');
   row.className = 'rule-condition-row';
   row.innerHTML = `
-    <input type="text" class="rule-source-field" placeholder="Source field name" value="${sourceField}">
+    <select class="rule-source-field">${buildFieldOptions(sourceField)}</select>
     <select class="rule-operator">
       <option value="contains"${operator === 'contains' ? ' selected' : ''}>contains</option>
       <option value="is-equal-to"${operator === 'is-equal-to' ? ' selected' : ''}>is equal to</option>
@@ -125,7 +133,7 @@ function addRuleCard(target = '', action = 'show', logic = 'any', conditions = [
         <option value="hide"${action === 'hide' ? ' selected' : ''}>Hide</option>
       </select>
       <span class="rule-label">field</span>
-      <input type="text" class="rule-target-field" placeholder="Target field name" value="${target}">
+      <select class="rule-target-field">${buildFieldOptions(target)}</select>
       <span class="rule-label">if</span>
       <select class="rule-logic-select">
         <option value="any"${logic === 'any' ? ' selected' : ''}>any</option>
@@ -200,8 +208,7 @@ function populateRulesFromConfig(config) {
   }
 }
 
-// Load available fields on plugin init
-loadAvailableFields();
+const fieldsReady = loadAvailableFields();
 
 function resetInputForm() {
   inputForm.reset();
@@ -441,6 +448,7 @@ async function tryEditSelection() {
           document.getElementById('button-submit-btn').textContent = 'Update';
           showScreen(buttonScreen);
         } else if (config.blockType === 'rules') {
+          await fieldsReady;
           populateRulesFromConfig(config);
           document.getElementById('rules-submit-btn').textContent = 'Update';
           showScreen(rulesScreen);
@@ -502,15 +510,18 @@ document.querySelectorAll('.tab').forEach((tab) => {
 
 // --- Field type picker ---
 document.querySelectorAll('.field-type-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', async () => {
     const { type } = btn.dataset;
     if (type === 'form') showScreen(formScreen);
     else if (type === 'input') showScreen(inputScreen);
     else if (type === 'options') showScreen(optionsScreen);
     else if (type === 'button') showScreen(buttonScreen);
     else if (type === 'step') showScreen(stepScreen);
-    else if (type === 'rules') showScreen(rulesScreen);
-    else if (type === 'fragment') showScreen(fragmentScreen);
+    else if (type === 'rules') {
+      await fieldsReady;
+      if (rulesList.children.length === 0) addRuleCard();
+      showScreen(rulesScreen);
+    } else if (type === 'fragment') showScreen(fragmentScreen);
   });
 });
 

@@ -386,6 +386,17 @@ h3 {
   border-radius: 4px;
   font-size: 13px;
   background: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23555' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+.rule-condition-row input[type="text"] {
+  appearance: auto;
+  background-image: none;
+  padding-right: 10px;
 }
 
 .rule-condition-row select:focus,
@@ -433,17 +444,21 @@ h3 {
   flex-wrap: wrap;
 }
 
-.rule-card-header select,
-.rule-card-header input[type="text"] {
+.rule-card-header select {
   padding: 6px 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 13px;
   background: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23555' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+  min-width: 120px;
 }
 
-.rule-card-header select:focus,
-.rule-card-header input:focus {
+.rule-card-header select:focus {
   outline: none;
   border-color: #1473e6;
 }
