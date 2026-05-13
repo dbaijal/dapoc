@@ -63,8 +63,59 @@ const rulesForm = document.getElementById('rules-form');
 const rulesList = document.getElementById('rules-list');
 const availableFields = [];
 
+function extractFieldsFromHTML(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const fields = [];
+  doc.querySelectorAll('div[class*="tfs2-form-"]').forEach((block) => {
+    const rows = block.querySelectorAll(':scope > div');
+    rows.forEach((row) => {
+      const key = row.children[0]?.textContent?.trim();
+      const val = row.children[1]?.textContent?.trim();
+      if (key === 'name' && val && !fields.includes(val)) {
+        fields.push(val);
+      }
+    });
+  });
+  return fields;
+}
+
+function extractFieldsFromEditor() {
+  try {
+    const editorMain = window.parent?.document?.querySelector('main');
+    if (!editorMain) return [];
+    const fields = [];
+    editorMain.querySelectorAll('table').forEach((table) => {
+      const header = table.querySelector('tr th, tr td[colspan]');
+      if (!header || !header.textContent.trim().startsWith('tfs2-form-')) return;
+      const rows = table.querySelectorAll('tr');
+      rows.forEach((row, idx) => {
+        if (idx === 0) return;
+        const cells = row.querySelectorAll('td');
+        if (cells.length === 2) {
+          const key = cells[0]?.textContent?.trim();
+          const val = cells[1]?.textContent?.trim();
+          if (key === 'name' && val && !fields.includes(val)) {
+            fields.push(val);
+          }
+        }
+      });
+    });
+    return fields;
+  } catch (err) {
+    return [];
+  }
+}
+
 async function loadAvailableFields() {
   availableFields.length = 0;
+
+  const editorFields = extractFieldsFromEditor();
+  if (editorFields.length > 0) {
+    editorFields.forEach((f) => availableFields.push(f));
+    return;
+  }
+
   try {
     const { org, repo, path } = context;
     if (!path || !org || !repo) return;
@@ -72,23 +123,12 @@ async function loadAvailableFields() {
     const url = `https://admin.da.live/source/${org}/${repo}${path}.html`;
     const resp = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
     });
     if (!resp.ok) return;
 
     const html = await resp.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    doc.querySelectorAll('div[class*="tfs2-form-"]').forEach((block) => {
-      const rows = block.querySelectorAll(':scope > div');
-      rows.forEach((row) => {
-        const key = row.children[0]?.textContent?.trim();
-        const val = row.children[1]?.textContent?.trim();
-        if (key === 'name' && val && !availableFields.includes(val)) {
-          availableFields.push(val);
-        }
-      });
-    });
+    extractFieldsFromHTML(html).forEach((f) => availableFields.push(f));
   } catch (err) {
     // Fallback — fields not available
   }
