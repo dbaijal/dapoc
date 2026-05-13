@@ -266,40 +266,40 @@ async function buildField(type, config) {
   }
 }
 
-function extractRulesFromConfig(config) {
-  if (!config['rule-action']) return null;
-  const conditions = [];
-  let idx = 1;
-  while (config[`rule-${idx}`]) {
-    const parts = config[`rule-${idx}`].split('~');
-    conditions.push({
-      sourceField: parts[0] || '',
-      operator: parts[1] || 'contains',
-      value: parts.slice(2).join('~') || '',
+function parseRulesBlock(config) {
+  const rules = [];
+  let n = 1;
+  while (config[`${n}-target`]) {
+    const conditions = [];
+    let m = 1;
+    while (config[`${n}-cond-${m}`]) {
+      const parts = config[`${n}-cond-${m}`].split('~');
+      conditions.push({
+        sourceField: parts[0] || '',
+        operator: parts[1] || 'contains',
+        value: parts.slice(2).join('~') || '',
+      });
+      m += 1;
+    }
+    rules.push({
+      targetField: config[`${n}-target`],
+      action: config[`${n}-action`] || 'show',
+      logic: config[`${n}-logic`] || 'any',
+      conditions,
     });
-    idx += 1;
+    n += 1;
   }
-  if (conditions.length === 0) return null;
-  return {
-    targetField: config.name || '',
-    action: config['rule-action'],
-    logic: config['rule-logic'] || 'any',
-    conditions,
-  };
+  return rules;
 }
 
-async function processFieldBlock(fieldBlock, rules) {
+async function processFieldBlock(fieldBlock) {
   if (fieldBlock.classList.contains('tfs2-form-fragment')) {
     const fragmentConfig = getBlockConfig(fieldBlock);
     const path = fragmentConfig.path || '';
     if (path) {
       const fragmentFields = await fetchFragmentFields(path);
       const built = await Promise.all(
-        fragmentFields.map((f) => {
-          const rule = extractRulesFromConfig(f.config);
-          if (rule) rules.push(rule);
-          return buildField(f.type, f.config);
-        }),
+        fragmentFields.map((f) => buildField(f.type, f.config)),
       );
       return built.filter(Boolean);
     }
@@ -308,8 +308,6 @@ async function processFieldBlock(fieldBlock, rules) {
 
   const fieldConfig = getBlockConfig(fieldBlock);
   const type = getBlockType(fieldBlock);
-  const rule = extractRulesFromConfig(fieldConfig);
-  if (rule) rules.push(rule);
   const element = await buildField(type, fieldConfig);
   return element ? [element] : [];
 }
@@ -484,10 +482,8 @@ export default async function decorate(block) {
   form.method = config.method || 'POST';
   if (config.thankyou) form.dataset.thankyou = config.thankyou;
 
-  const formRules = [];
-
   const allBlocks = section.querySelectorAll(
-    '.tfs2-form-input, .tfs2-form-options, .tfs2-form-label, .tfs2-form-button, .tfs2-form-fragment, .tfs2-form-step',
+    '.tfs2-form-input, .tfs2-form-options, .tfs2-form-label, .tfs2-form-button, .tfs2-form-fragment, .tfs2-form-step, .tfs2-form-rules',
   );
 
   if (isMultiStep) {
@@ -515,7 +511,7 @@ export default async function decorate(block) {
       div.append(stepHeading);
 
       const fieldResults = await Promise.all(
-        panel.fields.map((fb) => processFieldBlock(fb, formRules)),
+        panel.fields.map((fb) => processFieldBlock(fb)),
       );
       fieldResults.forEach((elements) => {
         elements.forEach((el) => div.append(el));
@@ -534,7 +530,7 @@ export default async function decorate(block) {
     );
 
     const processingPromises = [...fieldBlocks].map(
-      (fieldBlock) => processFieldBlock(fieldBlock, formRules),
+      (fieldBlock) => processFieldBlock(fieldBlock),
     );
 
     const results = await Promise.all(processingPromises);
@@ -545,7 +541,7 @@ export default async function decorate(block) {
 
   allBlocks.forEach((fieldBlock) => {
     fieldBlock.closest(
-      '.tfs2-form-input-wrapper, .tfs2-form-options-wrapper, .tfs2-form-label-wrapper, .tfs2-form-button-wrapper, .tfs2-form-fragment-wrapper, .tfs2-form-step-wrapper',
+      '.tfs2-form-input-wrapper, .tfs2-form-options-wrapper, .tfs2-form-label-wrapper, .tfs2-form-button-wrapper, .tfs2-form-fragment-wrapper, .tfs2-form-step-wrapper, .tfs2-form-rules-wrapper',
     )?.remove();
   });
 
@@ -563,6 +559,15 @@ export default async function decorate(block) {
       window.location.href = form.dataset.thankyou;
     }
   });
+
+  // Read centralized rules block
+  const rulesBlock = section.querySelector('.tfs2-form-rules');
+  let formRules = [];
+  if (rulesBlock) {
+    const rulesConfig = getBlockConfig(rulesBlock);
+    formRules = parseRulesBlock(rulesConfig);
+    rulesBlock.closest('.tfs2-form-rules-wrapper')?.remove();
+  }
 
   block.textContent = '';
   block.append(form);
