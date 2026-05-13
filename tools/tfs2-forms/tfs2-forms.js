@@ -112,7 +112,7 @@ async function loadAvailableFields() {
 
   const editorFields = extractFieldsFromEditor();
   if (editorFields.length > 0) {
-    editorFields.forEach((f) => availableFields.push(f));
+    [...new Set(editorFields)].forEach((f) => availableFields.push(f));
     return;
   }
 
