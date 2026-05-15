@@ -274,6 +274,17 @@
               "columns": 2
             }
           }
+        },
+        {
+          "title": "TFS2 Form Rules",
+          "id": "tfs2-form-rules",
+          "plugins": {
+            "da": {
+              "name": "tfs2-form-rules",
+              "rows": 3,
+              "columns": 2
+            }
+          }
         }
       ]
     }

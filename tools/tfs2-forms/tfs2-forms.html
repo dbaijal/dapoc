@@ -39,6 +39,10 @@
           <span class="field-type-icon">🔗</span>
           <span class="field-type-label">Fragment</span>
         </button>
+        <button class="field-type-btn" data-type="rules">
+          <span class="field-type-icon">⚙️</span>
+          <span class="field-type-label">Rules</span>
+        </button>
         <button class="field-type-btn" data-type="upload" disabled>
           <span class="field-type-icon">📎</span>
           <span class="field-type-label">Upload</span>
@@ -102,7 +106,6 @@
       <div class="tabs">
         <button class="tab active" data-tab="properties">Properties</button>
         <button class="tab" data-tab="constraints">Constraints</button>
-        <button class="tab" data-tab="rules">Rules</button>
         <button class="tab" data-tab="about">About</button>
       </div>
 
@@ -191,31 +194,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Rules Tab -->
-        <div class="tab-panel" data-panel="rules">
-          <div class="rules-header">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="rule-action">Action</label>
-                <select id="rule-action">
-                  <option value="show">Show</option>
-                  <option value="hide">Hide</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>This field if</label>
-                <select id="rule-logic">
-                  <option value="any">Any</option>
-                  <option value="all">All</option>
-                </select>
-                <span class="hint">of the following conditions are met</span>
-              </div>
-            </div>
-          </div>
-          <div id="rule-conditions" class="rule-conditions"></div>
-          <button type="button" id="add-rule-condition" class="btn-add-row">+ Add Condition</button>
         </div>
 
         <!-- About Tab -->
@@ -312,7 +290,6 @@
       <div class="tabs options-tabs">
         <button class="tab active" data-tab="options-properties">Properties</button>
         <button class="tab" data-tab="options-constraints">Constraints</button>
-        <button class="tab" data-tab="options-rules">Rules</button>
         <button class="tab" data-tab="options-about">About</button>
       </div>
 
@@ -406,31 +383,6 @@
           </div>
         </div>
 
-        <!-- Rules Tab -->
-        <div class="tab-panel" data-panel="options-rules">
-          <div class="rules-header">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="options-rule-action">Action</label>
-                <select id="options-rule-action">
-                  <option value="show">Show</option>
-                  <option value="hide">Hide</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>This field if</label>
-                <select id="options-rule-logic">
-                  <option value="any">Any</option>
-                  <option value="all">All</option>
-                </select>
-                <span class="hint">of the following conditions are met</span>
-              </div>
-            </div>
-          </div>
-          <div id="options-rule-conditions" class="rule-conditions"></div>
-          <button type="button" id="add-options-rule-condition" class="btn-add-row">+ Add Condition</button>
-        </div>
-
         <!-- About Tab -->
         <div class="tab-panel" data-panel="options-about">
           <div class="form-group">
@@ -479,6 +431,24 @@
         <div class="form-actions">
           <button type="submit" id="step-submit-btn" class="btn-primary">Add to Page</button>
           <button type="button" id="step-cancel-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Screen 8: Rules Editor -->
+    <div id="rules-screen" class="screen">
+      <div class="screen-header">
+        <button id="rules-back-btn" class="back-btn">&larr; Back</button>
+        <h2>Form Rules</h2>
+      </div>
+
+      <form id="rules-form" class="field-form">
+        <div id="rules-list" class="rules-list"></div>
+        <button type="button" id="add-rule-btn" class="btn-add-row">+ Add Rule</button>
+
+        <div class="form-actions">
+          <button type="submit" id="rules-submit-btn" class="btn-primary">Add to Page</button>
+          <button type="button" id="rules-cancel-btn" class="btn-secondary">Cancel</button>
         </div>
       </form>
     </div>

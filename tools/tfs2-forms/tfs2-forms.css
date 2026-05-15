@@ -409,6 +409,69 @@ h3 {
   background: #fff0f0;
 }
 
+/* Rules List */
+.rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.rule-card {
+  background: #f8f9fb;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+}
+
+.rule-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.rule-card-header select,
+.rule-card-header input[type="text"] {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  background: #fff;
+}
+
+.rule-card-header select:focus,
+.rule-card-header input:focus {
+  outline: none;
+  border-color: #1473e6;
+}
+
+.rule-card-header .rule-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.rule-card .btn-remove-rule {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #cc3333;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.rule-card .btn-remove-rule:hover {
+  background: #fff0f0;
+}
+
 /* Options List */
 .options-list {
   display: flex;
