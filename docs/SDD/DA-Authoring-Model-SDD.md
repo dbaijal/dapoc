@@ -380,7 +380,7 @@ For blocks with complex authoring requirements (e.g. forms with validation rules
 
 This provides the guided authoring experience of AEM component dialogs while maintaining the table-based content model. The plugin is an authoring convenience — the block table remains the source of truth.
 
-### 6.5 Universal Editor (UE) Overlay
+### 6.5 Universal Editor (UE) Overlay with DA
 
 DA supports an optional Universal Editor (UE) overlay that provides dialog-based editing on top of the DA document:
 
@@ -389,3 +389,49 @@ DA supports an optional Universal Editor (UE) overlay that provides dialog-based
 - The dialog reads from and writes to the same DA table structure
 
 This does not change the authoring model — the block table format remains identical. The UE overlay is a UI enhancement, not a structural change. Blocks authored via raw table editing, Plugin UI, or UE overlay all produce the same output.
+
+### 6.6 Clarification: UE with AEM vs UE with DA
+
+A common misconception is that using Universal Editor (UE) with DA provides the same dialog experience as UE with AEM as the authoring source. **This is not the case.** UE adapts its behavior to the underlying content source. The dialogs, field types, content models, and block structures differ significantly.
+
+**UE is the editor — the content source determines what the editor can do.**
+
+| Aspect | UE + AEM (as authoring source) | UE + DA (as authoring source) |
+|---|---|---|
+| **Content storage** | JCR repository — structured node tree with typed properties | DA document — HTML tables |
+| **Content model** | Rich JCR model — parent-child nodes, resource types, sling models | Flat table model — rows and columns in an HTML document |
+| **Dialog fields available** | Full set: text, richtext, `aem-content` (content picker), `aem-tag`, reference, select, multiselect, number, date, checkbox, path browser | Subset: text, richtext, select, checkbox, number — limited to what DA table cells can represent |
+| **Container blocks** | True parent-child — separate JCR nodes for parent and each child, with `component-filters.json` governing which children are allowed | Flat table — no parent-child relationship. Items are rows in a single table. No filters needed |
+| **Adding child items** | "+" button creates a new child JCR node inside the parent container node | "+" button adds a new row to the same block table |
+| **Content picker** | `aem-content` field — opens a tree browser to select JCR content paths | Not available — author types or pastes a link/path directly in the table cell |
+| **Model complexity** | Requires model IDs, resource types, filter definitions, and parent-child registration in `component-definition.json` | Simple field list in `component-definition.json` — fields map directly to table cells |
+| **Block rendering** | Block JS reads properties from DOM attributes set by AEM's server-side rendering | Block JS reads table cell content from `.plain.html` |
+
+**Example — Accordion block in both approaches:**
+
+**UE + AEM:**
+- `component-definition.json` defines an `accordion` container model and a separate `accordion-item` child model
+- `component-filters.json` restricts the accordion container to only accept `accordion-item` children
+- Each accordion item is a separate JCR node with properties: `summary` (text), `text` (richtext), `fragmentPath` (aem-content picker)
+- Author clicks "+" inside the accordion to add a child item → opens a dialog with three fields
+- The `aem-content` picker for `fragmentPath` opens a tree browser to select AEM pages
+
+**UE + DA:**
+- `component-definition.json` defines a simple field list: `title` (text), `body` (richtext)
+- No `component-filters.json` needed — there is no container/child concept
+- Each accordion item is a row in a single table: column 1 = title, column 2 = body
+- Author clicks "+" to add a row → dialog shows two fields (title and body)
+- For fragment references, author pastes a path/link into the body cell — no content picker
+
+**The block table output is the same. The authoring dialog experience is different.**
+
+### 6.7 Summary — What Does Not Change Between UE + AEM and UE + DA
+
+| | Same? | Notes |
+|---|---|---|
+| Editor interface | Similar | UE provides a consistent editing shell in both cases |
+| Block table output (EDS delivery) | Same | The rendered EDS page is identical regardless of authoring source |
+| `component-definition.json` | Different | Simpler for DA — fewer field types, no parent-child models |
+| `component-filters.json` | Not needed for DA | Only required for UE + AEM container blocks |
+| Dialog field types | Fewer in DA | DA does not support `aem-content`, `aem-tag`, or path browsers |
+| Content model complexity | Simpler in DA | Flat tables vs JCR node hierarchies |
