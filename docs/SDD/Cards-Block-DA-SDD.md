@@ -104,30 +104,38 @@ Authors combine variants by listing them with commas. Select **one layout varian
 | `Cards` | Default — 3-col, image top, gray border |
 | `Cards (4-col)` | 4 cards per row |
 | `Cards (4-col, feature-card)` | 4 cards per row with feature card look |
-| `Cards (img-left, without-border)` | 2-col image left, no borders |
+| `Cards (2-col, img-left, without-border)` | 2-col, image left, no borders |
 | `Cards (overlay, overlay-light-text)` | Image background with white text overlay |
 | `Cards (feature-card, blue)` | Feature cards on brand blue background |
+| `Cards (fullwidth, img-left)` | Full-width card, image on the left |
 | `Cards (4-col, clickable, dark)` | 4-col clickable cards on dark background |
 
 Content rows (cards) start from row 2 onward.
 
 ### 4.3 Layout Variants
 
-Layout variants control the **grid structure** — how many cards per row and where the image is positioned. Select one layout variant. If none is selected, the default 3-column grid applies.
+Layout variants control the **grid structure** — how many cards per row. Select one layout variant. If none is selected, the default 3-column grid applies.
 
 | Variant | Value | Description |
 |---|---|---|
-| Default (3 col) | (none — baseline) | 3-column grid, image at top of each card |
+| Default (3 col) | (none — baseline) | 3-column grid |
+| 2 Column | `2-col` | 2-column grid |
 | 4 Column | `4-col` | 4-column grid |
-| Full Width — Image Left | `fullwidth-img-left` | Single column, image left + text right |
-| Full Width — Image Right | `fullwidth-img-right` | Single column, image right + text left |
-| Image Left (2 Col) | `img-left` | 2-column layout, image left text right per card |
-| Image Right (2 Col) | `img-right` | 2-column layout, image right text left per card |
-| List | `list` | Stacked list layout, image left text right, full-width cards |
+| Full Width | `fullwidth` | 1 card per row — full width |
 
 ### 4.4 Visual Treatment Variants
 
-Visual treatment variants control the **appearance** of each card. These can be combined with a layout variant and with each other.
+Visual treatment variants control the **appearance** of each card — including image position, borders, overlay, and card style. These can be combined with a layout variant and with each other.
+
+**Image Position:**
+
+| Variant | Value | Description |
+|---|---|---|
+| Default | (none — baseline) | Image at the top of the card |
+| Image Left | `img-left` | Image positioned to the left, text to the right |
+| Image Right | `img-right` | Image positioned to the right, text to the left |
+
+**Card Style:**
 
 | Variant | Value | Description |
 |---|---|---|
@@ -151,9 +159,9 @@ Layout and visual treatment are **independent** — layout controls the grid, vi
 | 3-col standard cards | default | default | `Cards` |
 | 4-col feature cards | 4-col | feature-card | `Cards (4-col, feature-card)` |
 | 3-col overlay with white text | default | overlay + overlay-light-text | `Cards (overlay, overlay-light-text)` |
-| Full-width clickable, no borders | fullwidth-img-left | clickable + without-border | `Cards (fullwidth-img-left, clickable, without-border)` |
-| 2-col image left, blue background | img-left | blue | `Cards (img-left, blue)` |
-| List layout, dark background | list | dark | `Cards (list, dark)` |
+| Full-width, image left, clickable, no borders | fullwidth | img-left + clickable + without-border | `Cards (fullwidth, img-left, clickable, without-border)` |
+| 2-col image left, blue background | 2-col | img-left + blue | `Cards (2-col, img-left, blue)` |
+| Full-width image right, dark background | fullwidth | img-right + dark | `Cards (fullwidth, img-right, dark)` |
 
 ### 4.6 Authoring Summary
 
@@ -245,7 +253,7 @@ Feature cards in a 4-column grid on a blue background.
 
 Single card per row with image on the left and text on the right.
 
-| Cards (fullwidth-img-left) | | |
+| Cards (fullwidth, img-left) | | |
 |---|---|---|
 | ![lab chemicals](lab-chemicals.jpg) | **Lab Chemicals** The Thermo Scientific portfolio includes over 5,000 organic synthesis reagents, including reducing and oxidizing reagents, organometallics, commonly used functional reagents, and specialty reagents for specific reactions. | [Learn more →](/chemicals) |
 
