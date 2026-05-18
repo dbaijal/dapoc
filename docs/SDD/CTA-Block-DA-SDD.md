@@ -101,39 +101,27 @@ Use the standalone CTA block when a call-to-action button is needed on its own �
 
 ### 5.2 Block Table Structure
 
-The standalone CTA is a **key-value block table**. The author creates a CTA block table and uses the CTA plugin to populate it.
+The standalone CTA is a **single-column block table** with one row. The CTA plugin writes structured content into the cell — the same content format used when CTA is authored inside other blocks (Cards, Hero, etc.).
 
-| CTA | |
-|---|---|
-| label | Learn more |
-| link | /products/overview |
-| style | primary |
-| icon | arrow |
-| external | false |
+| CTA |
+|---|
+| (CTA plugin inserts content here) |
+
+The plugin writes label, link, style, icon, and external metadata as structured content inside the single cell. The content format is identical whether the CTA is standalone or inside another block.
 
 ### 5.3 How to Author
 
 1. Add a **CTA block table** to the DA document (via library panel → Blocks → CTA)
-2. Place cursor in the **value cell** (column 2) of the table
+2. Place cursor in the **content cell** of the table
 3. Open the **CTA plugin** from the DA library panel
 4. Fill in: Label, Link, Style, Icon, Open in new window
-5. Click **Add** — the plugin populates the block table with the CTA content
+5. Click **Add** — the plugin inserts the CTA content into the cell
 
-### 5.4 Available Properties
+### 5.4 Which JS Decorates
 
-| Key (Column 1) | Value (Column 2) | Required |
-|---|---|---|
-| `label` | Button text (e.g. "Learn more") | Yes |
-| `link` | Destination URL or content path | Yes |
-| `style` | `primary`, `outline`, or `link` | Yes (default: primary) |
-| `icon` | `arrow`, `document`, `download`, `print`, or empty | No |
-| `external` | `true` or `false` — open in new window | No (default: false) |
+The standalone CTA block table is decorated by **`cta.js`** (the CTA block's own JavaScript). It reads the CTA content from the cell and renders the appropriate button with the correct style, icon, and link behaviour.
 
-Only include rows for properties that are needed. If icon is not required, omit the `icon` row. If the link opens in the same window, omit the `external` row.
-
-### 5.5 Which JS Decorates
-
-The standalone CTA block table is decorated by **`cta.js`** (the CTA block's own JavaScript). It reads the key-value rows and renders the appropriate button with the correct style, icon, and link behaviour.
+`cta.js` uses the same parsing logic that other block JS files (Cards, Hero) use to read CTA content — because the content format is the same everywhere.
 
 ---
 
@@ -254,14 +242,11 @@ When the author selects an existing CTA (in any block) and opens the CTA plugin,
 
 ### 8.1 Example 1 — Standalone Primary CTA with Arrow
 
-A prominent call-to-action placed directly on the page.
+A prominent call-to-action placed directly on the page. Author adds a CTA block table and uses the CTA plugin with: Label = "Explore Solutions", Link = "/products/overview", Style = Primary, Icon = Arrow.
 
-| CTA | |
-|---|---|
-| label | Explore Solutions |
-| link | /products/overview |
-| style | primary |
-| icon | arrow |
+| CTA |
+|---|
+| (CTA plugin content: "Explore Solutions" / primary / arrow → /products/overview) |
 
 **What renders:** A solid filled button with "Explore Solutions" text and a right-pointing arrow icon. Clicking navigates to `/products/overview` in the same window.
 
@@ -269,13 +254,11 @@ A prominent call-to-action placed directly on the page.
 
 ### 8.2 Example 2 — Standalone Outline CTA (No Icon)
 
-A secondary action with outline style.
+A secondary action with outline style. CTA plugin with: Label = "Contact Sales", Link = "/contact", Style = Outline, Icon = None.
 
-| CTA | |
-|---|---|
-| label | Contact Sales |
-| link | /contact |
-| style | outline |
+| CTA |
+|---|
+| (CTA plugin content: "Contact Sales" / outline → /contact) |
 
 **What renders:** A border-only button with "Contact Sales" text. No icon. Opens in the same window.
 
@@ -283,15 +266,11 @@ A secondary action with outline style.
 
 ### 8.3 Example 3 — Standalone Download CTA (New Window)
 
-A download action that opens in a new tab.
+A download action that opens in a new tab. CTA plugin with: Label = "Download Datasheet", Link = "/resources/datasheet.pdf", Style = Primary, Icon = Download, Open in new window = Yes.
 
-| CTA | |
-|---|---|
-| label | Download Datasheet |
-| link | /resources/datasheet.pdf |
-| style | primary |
-| icon | download |
-| external | true |
+| CTA |
+|---|
+| (CTA plugin content: "Download Datasheet" / primary / download / external → /resources/datasheet.pdf) |
 
 **What renders:** A solid filled button with "Download Datasheet" text and a download icon. Clicking opens the PDF in a new browser tab.
 
@@ -299,14 +278,11 @@ A download action that opens in a new tab.
 
 ### 8.4 Example 4 — Link Style CTA with Arrow
 
-A subtle text-link style action.
+A subtle text-link style action. CTA plugin with: Label = "Learn more", Link = "/products/details", Style = Link, Icon = Arrow.
 
-| CTA | |
-|---|---|
-| label | Learn more |
-| link | /products/details |
-| style | link |
-| icon | arrow |
+| CTA |
+|---|
+| (CTA plugin content: "Learn more" / link / arrow → /products/details) |
 
 **What renders:** A text link (no background, no border) with "Learn more" text and a right-pointing arrow icon. This is the most common CTA style seen across the site — the blue text with arrow as shown on the existing pages.
 
@@ -318,7 +294,7 @@ The same CTA plugin is used to author a CTA inside a Cards block. The author pla
 
 | Cards (img-left) | | |
 |---|---|---|
-| ![product](img.jpg) | **Building blocks for organic synthesis** Chemical synthesis reagents are essential... | (CTA plugin inserts here: "Learn more" / primary / arrow) |
+| ![product](img.jpg) | **Building blocks for organic synthesis** Chemical synthesis reagents are essential... | (CTA plugin content: "Learn more" / primary / arrow) |
 
 **What renders:** A card with image on the left, text content in the middle, and a primary CTA button with arrow icon on the right. The CTA styling and behaviour is identical to the standalone CTA.
 
@@ -326,13 +302,13 @@ The same CTA plugin is used to author a CTA inside a Cards block. The author pla
 
 ### 8.6 Example 6 — CTA Inside a Hero Block
 
-The CTA plugin is used to author a CTA inside the Hero block's `primary-cta` row.
+The CTA plugin is used to author CTAs inside the Hero block's `primary-cta` and `outline-cta` rows.
 
 | Hero (dark-background) | |
 |---|---|
 | image | ![hero banner](hero-bg.jpg) |
 | subtitle | Protecting Sample Integrity |
-| primary-cta | (CTA plugin inserts here: "Download Guide" / primary / download) |
-| outline-cta | (CTA plugin inserts here: "Contact Sales" / outline / arrow) |
+| primary-cta | (CTA plugin content: "Download Guide" / primary / download) |
+| outline-cta | (CTA plugin content: "Contact Sales" / outline / arrow) |
 
 **What renders:** A hero banner with two CTA buttons — a primary "Download Guide" button with download icon, and an outline "Contact Sales" button with arrow icon. Both rendered consistently with the site-wide CTA styling.
