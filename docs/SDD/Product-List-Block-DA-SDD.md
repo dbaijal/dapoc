@@ -13,10 +13,11 @@
 2. [Current State](#2-current-state)
 3. [EDS Approach](#3-eds-approach)
 4. [Architecture](#4-architecture)
-5. [Integration Contract](#5-integration-contract)
-6. [Cache Strategy](#6-cache-strategy)
-7. [Ownership and Boundaries](#7-ownership-and-boundaries)
-8. [DA Block Table Contract](#8-da-block-table-contract)
+5. [Client-Side Behaviour](#5-client-side-behaviour)
+6. [Integration Contract](#6-integration-contract)
+7. [Cache Strategy](#7-cache-strategy)
+8. [Ownership and Boundaries](#8-ownership-and-boundaries)
+9. [DA Block Table Contract](#9-da-block-table-contract)
 
 ---
 
@@ -163,13 +164,49 @@ Adopt Edge Worker + Product Microservice pattern:
 
 ---
 
-## 5. Integration Contract
+## 5. Client-Side Behaviour
+
+### 5.1 Quantity Validation
+
+Client-side quantity validation is handled within the EDS block JS, same as the current implementation. The existing validation logic from `lineItem.js` will be ported:
+
+- Minimum/maximum quantity limits
+- Integer-only checks
+- Non-zero validation
+- Error messaging on invalid input
+
+This runs in the browser — no server call needed for validation.
+
+### 5.2 Analytics (Product Impressions & Add-to-Cart)
+
+In the current AEM implementation, product impressions and Add-to-Cart events are pushed to `digitalData` / the AEM data layer. In EDS, there is no AEM data layer.
+
+Analytics tracking will be implemented directly within the block JS:
+
+- **Product impressions** — pushed when product rows are rendered and visible to the user
+- **Add-to-Cart events** — pushed when the user clicks the Add to Cart button
+
+The event structure will be kept consistent with existing analytics expectations where applicable. This aligns with the EDS approach where tracking is handled at the block level.
+
+### 5.3 Add-to-Cart
+
+Add-to-Cart remains client-side (same as current):
+
+1. User enters quantity and clicks Add to Cart
+2. Block JS validates quantity (see 5.1)
+3. Block JS calls the Mini-Cart service
+4. Mini-Cart service handles cart operations and stock validation
+5. Block JS updates the UI (success/error feedback)
+
+---
+
+## 6. Integration Contract
 
 | Aspect | Specification |
 |---|---|
 | Request | SKU list + locale/country + user context (cookie/token if authenticated) |
 | Response | Normalized JSON — array of product objects with name, SKU, size, price, availability, price access type |
-| Authentication | API Key in request header (`X-API-Key`) |
+| Authentication | API Key in request header (`X-API-Key`) or mTLS — exact mechanism depends on deployment model, network setup, and security standards |
 | SLA Target | < 500ms (p95 response time) for typical request (5–20 SKUs) |
 | Timeout | 2 seconds at the Edge Worker — if microservice does not respond within 2s, fallback is triggered |
 | Method | POST (SKU list in request body) or GET (SKUs as query parameter) — to be agreed |
@@ -178,11 +215,11 @@ The integration contract between the Edge Worker and the Product Microservice wi
 
 ---
 
-## 6. Cache Strategy
+## 7. Cache Strategy
 
 | User Type | Strategy | Details |
 |---|---|---|
-| Anonymous users | Edge-cached | Short TTL (5–15 minutes). Price changes reflect within TTL window. |
+| Anonymous users | Edge-cached | Cache key based on country + SKU list. Short TTL (5–15 minutes). Price changes reflect within TTL window. Refreshed on expiry. |
 | Logged-in users | All caches bypassed | Every request fetches live, personalized pricing from microservice. No edge caching for authenticated requests. |
 | Fallback | Stale-while-revalidate | If microservice is temporarily unavailable, serve last cached response (anonymous users only) to avoid complete failure. |
 
@@ -190,7 +227,7 @@ Final TTL is a business decision — trade-off between performance (longer TTL) 
 
 ---
 
-## 7. Ownership and Boundaries
+## 8. Ownership and Boundaries
 
 ### Ownership Matrix
 
@@ -244,9 +281,9 @@ Final TTL is a business decision — trade-off between performance (longer TTL) 
 
 ---
 
-## 8. DA Block Table Contract
+## 9. DA Block Table Contract
 
-### 8.1 Block Overview
+### 9.1 Block Overview
 
 | Property | Value |
 |---|---|
@@ -255,7 +292,7 @@ Final TTL is a business decision — trade-off between performance (longer TTL) 
 | Authoring Source | DA (Document Authoring) |
 | Delivery | Edge Delivery Services (EDS) via Edge Worker |
 
-### 8.2 Table Structure
+### 9.2 Table Structure
 
 The Product List block uses a **key-value pair** pattern. Each row is a configuration property.
 
@@ -264,7 +301,7 @@ The Product List block uses a **key-value pair** pattern. Each row is a configur
 | Column 1 | Key | Configuration property name |
 | Column 2 | Value | Configuration property value |
 
-### 8.3 Available Properties
+### 9.3 Available Properties
 
 | Key (Column 1) | Value (Column 2) | Required | Default | Description |
 |---|---|---|---|---|
@@ -277,7 +314,7 @@ The Product List block uses a **key-value pair** pattern. Each row is a configur
 
 Only include rows for properties that need to differ from defaults. If all columns should be shown, only the `sku-list` row is needed.
 
-### 8.4 How the Block Works at Delivery Time
+### 9.4 How the Block Works at Delivery Time
 
 1. Edge Worker reads the Product List block from the page HTML
 2. Extracts `sku-list` and column configuration from the block table rows
@@ -288,7 +325,7 @@ Only include rows for properties that need to differ from defaults. If all colum
 7. Injects rendered HTML into the response before delivering to the browser
 8. Client-side JS handles Add-to-Cart interactions, quantity validation, and analytics
 
-### 8.5 Authoring Summary
+### 9.5 Authoring Summary
 
 | Concern | Approach |
 |---|---|
@@ -301,7 +338,7 @@ Only include rows for properties that need to differ from defaults. If all colum
 | Rendering | Edge Worker renders HTML from microservice JSON response |
 | Default behaviour | All columns shown. Only `sku-list` row is strictly required. |
 
-### 8.6 Authoring Examples
+### 9.6 Authoring Examples
 
 **Example 1 — All Columns (Default)**
 
