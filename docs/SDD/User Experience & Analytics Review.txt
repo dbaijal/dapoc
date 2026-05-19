@@ -1,0 +1,1642 @@
+TFS  Discovery session - User Experience & Analytics Review (session-4)-20260225_085955-Meeting Recording
+
+0:10
+Hi, Priya.
+
+0:10
+Thanks for staying up late to join us.
+
+0:17
+Hey, Jennifer.
+
+1:33
+Welcome everyone.
+
+1:38
+Hey everybody.
+
+2:43
+For today's topics, we're going to be talking primarily about analytics and personalization.
+
+2:53
+I want to make sure that we have the correct people from Thermo Fisher before we get started.
+
+3:14
+Rob, are we also going to cover accessibility requirements?
+
+3:18
+We we do have a couple of people on the call from that team as well.
+
+3:24
+Yeah, that's 3rd, 4th on our list.
+
+3:26
+Yes.
+
+3:29
+OK.
+
+3:32
+We have the analytics team members on the call with regards to tag management stuff.
+
+3:38
+We should be good.
+
+3:39
+All right, excellent.
+
+3:46
+I notice.
+
+3:50
+But Pankaj should be on for personalization and targeting capabilities in use.
+
+4:03
+Hey, Jennifer, I'm here.
+
+4:04
+Oh, fabulous.
+
+4:05
+I'm so sorry.
+
+4:06
+I just didn't see you as I scanned down.
+
+4:08
+Thank you, Novis.
+
+4:12
+Yeah, I think we can get started.
+
+4:15
+I see you almost like you really got different teams.
+
+4:23
+All right, excellent.
+
+4:27
+So let me start with just kind of giving a, a basis and then we will for how edge delivery works with analytics and personalization AB testing.
+
+4:39
+And then we will kind of rely on you to give us a little bit deeper understanding of how it, how it works with your org.
+
+4:51
+So when the site is being completely rebuilt, right, So completely different Dom structure, everything's going to be different from that aspect.
+
+5:07
+But every page load for edge delivery is done with just the minimal amount of code in CSS and markup to make that page happen, right?
+
+5:21
+So there's no big libraries of, of anything.
+
+5:25
+We do have some page structural code as well as an on on page load things that do happen.
+
+5:37
+And that's where we can start to put in more kind of global analytics, global global level things.
+
+5:47
+But on a curb UI element basis that would be our blocks.
+
+5:53
+We're able to add things in also.
+
+5:56
+So if you think of that from an analytic standpoint, I might globally want to have every link have some data layer manipulation or maybe just a subset of them where it manipulates the data layer and then pushes that out to an analytics tool.
+
+6:19
+But I could also do that say on a, a block level, say it's an accordion and you're tracking, you know, opening and closing of of the accordion or on a video player, you know, where you're tracking their interactions with the video.
+
+6:36
+So we do it both at the block level and globally.
+
+6:40
+And then then it's just a matter of understanding from the Thermo Fisher analytics team what things you were tracking.
+
+6:49
+And ideally you have like a little bit of documentation around, you know, when somebody clicks this or, you know, they Scroll down and this is visible or whatever it may be, define that trigger for us and then tell us what needs to happen to the data layer.
+
+7:10
+And then that's how we implement it.
+
+7:13
+So it's pretty straightforward.
+
+7:17
+Hey, Rob.
+
+7:17
+So from analytics perspective, we don't really rely on CSS selectors, if you will to drive the triggers.
+
+7:28
+Most of the things that happen for example from an e-commerce perspective or something, they're all driven custom event.
+
+7:35
+And with regards to content on the page, we rely on custom events from the media players.
+
+7:40
+But when it comes to, as you mentioned, accordions or link tracking, we have data attributes that we implement on the respective containers to, you know, to track the visibility.
+
+7:53
+And when somebody does click on it, we capture those attributes to build out the hierarchy and the location of the link based on those data attributes.
+
+8:02
+And then we also use data attributes to capture impressions for things like carousels or specific, you know, elements on the site that we, you know, want to capture impressions for to potentially to compute click through rates and things like that.
+
+8:17
+So for now, our reliance is heavily on custom events and data attributes to when it comes to UI perspective.
+
+8:28
+And we don't push those things to the data layer.
+
+8:30
+We read the data attributes directly and then pass them along into analytics by computing the values in Adobe launch.
+
+8:41
+OK, so from a container level that's at a a block or a component level in am most likely.
+
+8:55
+Oh, for the links though, they would have to be on the respective link elements or items like tabs or, you know, whatever becomes the the toggle element for an FAQ, for example.
+
+9:07
+So it would depend on what that what the nature of the item is.
+
+9:13
+OK, yeah, what this and this is always a a tough conversation with analytics because it it depending upon how analytics is implemented, what you're watching, we might need to redo some of their reporting that you get out of the site.
+
+9:40
+So the more we understand of what you're looking for and how it's implemented, the more we can replicate it.
+
+9:48
+But anything that's kinda Dom specific, because like I said, we're completely rebuilding the entire page.
+
+9:56
+So all the markup is different.
+
+9:59
+You know that there might be some changes needed on the analytic side.
+
+10:05
+This is just a preparation statement.
+
+10:07
+I know you guys hate it, but don't know.
+
+10:11
+That's a very valid statement and we're actually doing the same right now.
+
+10:16
+We're migrating to Web SDK which is intended to wrap up towards the end of the year.
+
+10:20
+So we are resolutioning how we capture some of that information anyway, and that's why we have it set that if we do it with data attributes right, then it eliminates the need for both of the systems to know exactly what the other is expecting.
+
+10:37
+And we simply read those values, the order of the events, the trigger, the location, all of that becomes obsolete as long as those values are present.
+
+10:46
+We figure out the rest from Adobe launch this way.
+
+10:50
+If the only responsibility of the AEM pages ends up being the data attributes and to have the appropriate value, which will be potentially either driven by the content authoring team or be simply driven by the identifiers of the respective hierarchy.
+
+11:06
+And that that you know, that reduces the friction between the two.
+
+11:11
+So help us understand what kind of information you would need and give us a few examples of whether like, you know, for example, like what would you need from for data attributes understanding.
+
+11:22
+We have some solution documents we can share with you, but if you have any specific questions, help us understand, we can provide you all the information we can.
+
+11:31
+Awesome, That's, that's great.
+
+11:32
+And we would definitely want to go to the Web SDK route, the allocas.
+
+11:39
+So this ties in well.
+
+11:41
+How far along are you on that?
+
+11:44
+We're, we're just starting it, just starting it this year.
+
+11:47
+So it's going to be a few quarters before we wrap it up.
+
+11:51
+OK, Well we can support legacy analytics as well, although that would once you're ready with Web SDK that might add a little bit of rework that has to be done inside the code base, but we'll work through that.
+
+12:14
+I do want to call out something very important though.
+
+12:17
+We don't do component level analytics, OK.
+
+12:21
+So we're not worried about how the interaction is with every accordion.
+
+12:27
+For example, if we were to look at specific components like that, we're looking for anything that has FAQ content or anything that is relevant to customer support, things like that.
+
+12:39
+So most of our tracking is specific to specific areas of the site, not necessarily for every component.
+
+12:48
+So we don't do we.
+
+12:50
+Also, we don't use ACDL, we have our own data layer script that we use.
+
+12:56
+So it's very selective.
+
+12:58
+So we we don't have to worry about transporting any component level analytics that we do with AEM components and other cases.
+
+13:09
+OK, yeah, we'll we'll have to analytics.
+
+13:19
+So we're going to build out the site first, right.
+
+13:22
+So build out all of the blocks and then during our process, once we get to a certain level of block completion, then we start to dig into how we need to apply analytics across every page and anything that is going to be UI based that you're going to want.
+
+13:45
+So we'll go into deeper conversation in phase two of this engagement, which is the actual implementation.
+
+13:57
+And at that point we'll want to know, you know, where you're at on Web SDK.
+
+14:03
+We'll have to make a decision on whether we go Web SDK or legacy analytics and target and whatnot that you're doing so that we can then apply that to the code.
+
+14:17
+But that'll be, you know, halfway through the actual implementation sounds good.
+
+14:24
+I have one last question with regards to passing the information back and forth.
+
+14:30
+Right now there are components in AEM that directly set values in the data layer.
+
+14:35
+We are moving them to having meta tags.
+
+14:38
+So there's no direct communication between the data layer and the and the site.
+
+14:44
+And we read those meta tags with specific names of like analytics, Dash something and use it it.
+
+14:51
+Would that be something that would be a problem for this or would you still be able to add meta tags to the pages?
+
+14:58
+We'd be able to add meta tags to the pages without question.
+
+15:03
+OK, perfect.
+
+15:04
+So yeah, So OK, that helps.
+
+15:08
+OK with that.
+
+15:14
+I'd like to move on to personalization and target.
+
+15:20
+Is that still you, Dario?
+
+15:27
+That would be primarily Punk Edge.
+
+15:28
+I can assist where it may be necessary.
+
+15:31
+Can I, can I interrupt for a SEC?
+
+15:33
+Sorry.
+
+15:34
+Is anyone sharing the agenda or Jennifer, can you share the agenda?
+
+15:38
+It's in the chat.
+
+15:39
+It's in the chat.
+
+15:41
+I don't see it for some reason.
+
+15:44
+Oh, you must have come in again.
+
+15:45
+What was that?
+
+15:48
+He must have come after that was added.
+
+15:52
+Oh, it doesn't share the history.
+
+15:55
+Oh, interesting.
+
+15:56
+OK, please sit again.
+
+15:57
+No problem.
+
+16:00
+Thanks.
+
+16:03
+I was working off an agenda that you can't see.
+
+16:07
+Yeah, it's interesting that I joined late and it, Yeah, blocks it.
+
+16:12
+I guess that's for the acceptance criteria that we have to go through or something.
+
+16:20
+Yeah, it's probably a setting somewhere.
+
+16:22
+Yeah.
+
+16:23
+OK, thanks.
+
+16:25
+You bet.
+
+16:27
+OK.
+
+16:29
+So, so with Personalization noting, noting that header is is a little bit different here in that it's, it's going to have a lot of stuff built into the header that is going to be driven by things that are not necessarily edge delivery.
+
+16:48
+We'll talk about that especially on the commerce piece.
+
+16:52
+But general, is there any kind of personalization and we can even, you know, include targeting in there?
+
+17:00
+And what does that look like on a on a page basis outside of the header?
+
+17:05
+And we'll discuss the header separately.
+
+17:10
+Hey, Rob.
+
+17:11
+So yeah, I mean, for Thermo Fisher, we do use targeting as well as personalized content.
+
+17:19
+We call it like offers.
+
+17:21
+There's we just migrated off our legacy system earlier.
+
+17:26
+We were using a unique eye interact to serve these offers on our our, our site.
+
+17:31
+So let me just quickly share my screen.
+
+17:34
+So maybe that would be easier.
+
+17:37
+So is that using Adobe Target like Atjs or?
+
+17:41
+Yep.
+
+17:42
+So I'll just come to that, that part as well.
+
+17:45
+I mean, this is demo feature.com.
+
+17:47
+So you're right, we do use Target.
+
+17:51
+That's kind of a main delivery engine for us, delivering even recommendations and delivering our personalized content as well as AB testing.
+
+18:01
+So everything is happening through Target as of today.
+
+18:04
+If you see this big banner and that's coming, that's a personalized content and that's coming through Target and eventually coming through AEP.
+
+18:13
+So the entire personalization is configured through AEP as well as as Journey Optimizer.
+
+18:22
+So we have configured offers there in Journey Optimizer.
+
+18:28
+And in terms of like request, I got like a quick screen here, I hope maybe this one.
+
+18:35
+Let me know if you can see my screen with this diagrams.
+
+18:39
+Yes, perfect.
+
+18:40
+So when the customer, they come to any of our thermofisher.com page, they see a lot of offers.
+
+18:46
+So on on even on the home page there are plus 10 plus offers.
+
+18:51
+We show you see the big banner, a lot of small pods on the bottom.
+
+18:56
+All of these are offers.
+
+18:58
+There are two important components.
+
+18:59
+We wanted to explain the way it is set up.
+
+19:02
+It's really important and crucial for us how it works in the newer system.
+
+19:07
+So first is the default content.
+
+19:10
+So all of these on the pages itself, right?
+
+19:14
+We have a small, we have a very small component.
+
+19:17
+We call it like in track component or it called default offer component today.
+
+19:24
+I'm not sure on the name, but I'll confirm that.
+
+19:26
+So the the role of this component is to create a placement on the page and also get the default content which is living on the same AEM and just render it on the page stays hidden.
+
+19:43
+So in case of we don't get the precise content or any offer for this customer, we just show that default content.
+
+19:54
+So all.
+
+19:55
+So our system is totally decoupled as you know, right, the target run at runtime, but the base page has access to the default content.
+
+20:04
+I'll come to like.
+
+20:06
+Like basic float in in a second.
+
+20:09
+So we get the default component on the page which which maintains the the default at the second.
+
+20:16
+Once the page is loaded, we invoke our target call and target talks to AAP to get all the, the personalized content AAP at the runtime, you know, figure out who the customer is, get the right offer for, for this customer sends it back to target and get it back on the browser.
+
+20:36
+And we show those specialized content in the browser.
+
+20:39
+So target as, as you know, I can handle recommendations, can handle AB testing.
+
+20:45
+So all of those 3-4 different, you know, features target offers we are using in one or other form on the on the pages in, in thermofisher.com.
+
+20:55
+So that's like a very, very high level thing.
+
+20:58
+Any question on on the high level setup?
+
+21:01
+Yeah.
+
+21:02
+So these offers that are being authored are those experience fragments?
+
+21:08
+Absolutely.
+
+21:10
+But those are not managed in the the AEM which we we are planning to upgrade, but it's managed in a separate instance of AEM, which is managed by customer marketing team.
+
+21:22
+It's already in cloud.
+
+21:24
+And yeah, all of these are experience fragments.
+
+21:27
+They are not as you know that AEP they don't have any feature to to talk to AEM today.
+
+21:34
+So we have our automation application right our in house application which grabs all the content from our AEM systems and push it to AEP.
+
+21:44
+So AEP get access to the content and AEP serves that content on the pages.
+
+21:48
+So this is like controlled by customer marketing team, all the personalized content, only the it's the default offers which comes from the Thermo Fisher AEM.
+
+21:59
+Because if somehow the target is down or network is they're not connecting here, we still have the default offer or the content available on the pages through this, the same AEM where we have these pages insights, OK.
+
+22:19
+So everything with AB testing and with target are going to be currently built as experience fragment fragments in an AEM system somewhere that is being pulled in or are there other types of, of offers that are being generated outside of a as of today it's all experience fragments.
+
+22:46
+OK, which yeah, at least for the, the personalized content for AB testing, I'm not sure if there are any teams, they may might be using HTML from external, you know, sources, but it's primarily experience fragments and even target is is, you know, synced with our AEM.
+
+23:07
+So experience fragments can be pushed directly to Target for those AB testing.
+
+23:15
+Hey, on that AB testing note, I think our tests are built using the Wiziwig editor and HTML components from target.
+
+23:24
+I don't think AB testing is using experience fragments yet.
+
+23:29
+Thanks for adding that.
+
+23:30
+There is.
+
+23:31
+So yeah, it's up to the teams how they they leverage AB testing and they do have access to experience fragments from from AEM.
+
+23:39
+But yeah, it's up to them if, if they want to use the the tool directly or experience fragments.
+
+23:47
+All right, So those AB testing is built in target using just HTML.
+
+23:55
+Yeah, yeah.
+
+24:08
+Let's see, I think I'm going to jump back to personalization and and targeting just a little bit and then we'll come back to AB testing if that's all right.
+
+24:19
+And so from a page we have offers and that that are experienced fragments and they can be.
+
+24:30
+Let's see, are there sets of pages that is, there is a set of pages that use these and then and and then all of the others do not or does every page have the ability to do this?
+
+24:46
+Almost all pages on thermofisher.com they have like I don't see the header offer for some reason.
+
+24:51
+I'm, I'm in India site right now.
+
+24:53
+But yeah, almost all, all pages have header banner as well as show capability of showing the the footer banner, which is like a a fly out in the bottom here it's mostly the content pages which shows like most of our, our offers our personalized content, but it's search PDP and many other areas which also shows this personalized content.
+
+25:18
+OK.
+
+25:18
+So like expected on homepage maybe landing pages, but not necessarily a product page or is it really kind of any page, any page, any page.
+
+25:34
+OK, So OK, I mean, on the on the content pages, it's almost on all pages.
+
+25:41
+We have one or few offers for the PDP.
+
+25:45
+We do have a few one or two placements.
+
+25:48
+On search pages, we have placements.
+
+25:50
+On category pages, we have placements there.
+
+25:53
+There could be one or few sections where we still don't have a dedicated placement.
+
+25:58
+But on the top of the page, we have a header banner, which is kind of there for all pages throughout the site, which comes here.
+
+26:09
+OK, All right.
+
+26:11
+And let's talk about the header a little bit then as well.
+
+26:16
+How is the header currently implemented?
+
+26:20
+And is it like a global header that's used all over the place or is it just in the site up?
+
+26:29
+It's, it's partially managed with an AEM.
+
+26:31
+I'm, I'm not very expert on this.
+
+26:33
+It's, it's the content engineering team.
+
+26:36
+I'm not sure, Nagendra, you, you're here to explain this.
+
+26:42
+I can speak to my understanding, but if Nagendra, you're here, maybe you better speak to that.
+
+26:50
+So on a high level, it's managed in, in, in AEM, but on the site it's not directly tied to AEM.
+
+27:00
+But from a from AEM, we extract some of this content to an external application.
+
+27:06
+It's a, it's a independently managed in house application.
+
+27:10
+And that application, you know, brings this, this header on the on the pages.
+
+27:20
+Oh, so that the whole header in in the footer as well.
+
+27:24
+Yeah.
+
+27:25
+So this this whole section as well as this this entire footer, I think it's it's come from a separate in in house application.
+
+27:33
+So content is still managed in AEM, but I think from AEM it's fed to that application that application do some sort of transformation or some caching or something.
+
+27:44
+I'm not very expert on that, just barely know like a high level flow.
+
+27:49
+OK, yeah, we would need to get Nikenger on the call.
+
+27:53
+I don't think he's on here.
+
+27:55
+But in the past eight, the the header and footer were authored in AM, right.
+
+28:03
+But that has changed to a microservice.
+
+28:06
+So at the AM is no longer the controller of of the content for header and footer.
+
+28:13
+OK, so the header and footer are completely built somewhere else and we're injecting them into the page, Correct.
+
+28:20
+Yeah.
+
+28:21
+As a microservice.
+
+28:22
+Yeah.
+
+28:22
+OK, Yeah.
+
+28:26
+So when we can get you said Nkendra.
+
+28:30
+Yeah, Nkendra, Nkendra.
+
+28:32
+All right, so when we can get Nkendra, we can come back to this topic because we'll need to discuss the details of how that's loaded.
+
+28:40
+All right, that's fine.
+
+28:45
+That shortens up that discussion.
+
+28:48
+Let's see.
+
+28:51
+So will drop looks like Deepti wanna add something.
+
+28:55
+Yeah, yeah, yeah.
+
+28:57
+Hi Pankaj.
+
+28:58
+So one question I have here, I'm able to see us screen.
+
+29:02
+So the three cards which are coming in the home banner that are also the offers that are coming from personalization or only it is like stay curious, discover more is coming from the target.
+
+29:14
+So yeah, I mean very good question.
+
+29:17
+So you see this whole section along with these three ports.
+
+29:20
+That's what you mean.
+
+29:20
+This is 1 big offer for us and yeah, it's come coming through target as well as this is 1 offer coming from the same target.
+
+29:31
+This is recommendations right now coming from target.
+
+29:34
+All of these 4 ports, all of these three parts, they are also coming from target.
+
+29:40
+So home page is completely almost like built from target except this accelerating size blog section, OK.
+
+29:51
+And what is the response of the offers?
+
+29:53
+It is like HTML.
+
+29:55
+Oh no, I suppose that is, Yeah, no, that is that is correct.
+
+29:59
+If you see, I mean all of this content, all of these offers, they are managed into a separate cloud AEM, which is like different than this Hemo Fisher AEM on Prem environment.
+
+30:11
+So we have our marketers which who manages all these offers in in this system and as part of automation and we use Workfront for our campaign management.
+
+30:23
+So we have a lot of automation connecting Workfront to this custom in micro service stitch micro service connecting to AEP.
+
+30:30
+So this works as a bridge between Workfront.
+
+30:32
+It get the campaign detail it it learns which all these offers we want to, you know, configure in AEP and all of the configuration in AEP is managed by this this micro service.
+
+30:44
+So this fetch content from here which is like AEM and we use we push that HTML directly in AEP.
+
+30:52
+So AEP serves this HTML to to the pages we are target.
+
+30:57
+So target is just a dummy here, just a pass through all the offer all the content, everything is managed into AEP journey optimizer right now for us.
+
+31:09
+OK, so one question like as what I understood, the target integration is more like a client side integration.
+
+31:16
+So these offers will be these offers will be rendered when the page will be loaded.
+
+31:21
+So they will not come in a markup.
+
+31:24
+So they it's not a part of search.
+
+31:26
+So is that OK?
+
+31:28
+Yeah, that is OK that that is how it is configured.
+
+31:33
+All the offers are decoupled from the base page.
+
+31:36
+They just got the empty placement as well as they have access to the default content.
+
+31:42
+But yeah they are they are not in text in initial request.
+
+31:48
+So the things coming from the customer marketing team, is that just markup or is that markup and CSS libraries and JavaScript libraries along with it?
+
+32:00
+Some CSS, JavaScript libraries, wherever it's intended, it's needed.
+
+32:04
+It comes through those.
+
+32:06
+But we all like most of what we need, need these libraries.
+
+32:10
+They are already part of our header libraries and we access it from there because like it's almost needed on all pages.
+
+32:18
+So all right, so they, they are requiring the CSS libraries.
+
+32:22
+Yeah.
+
+32:23
+All right.
+
+32:23
+So when we move to edge delivery, those those libraries won't exist on the page.
+
+32:29
+So we'll have to talk about how this this might change or what we need to do in order to to get those experience fragments to display.
+
+32:40
+It could be a complete rework where experience fragments are no longer used and they're created as edge delivery fragments instead.
+
+32:51
+So even though if we are delivering it from target, which is like not part of the initial page, right, but it comes through an Ajax request and brings all the markup and just place it.
+
+33:04
+Do you think that flow even requires changes?
+
+33:08
+Well, so all experience fragments in AEM have both the the markup, but they rely on the client libs, right?
+
+33:19
+Existing an edge delivery won't have those client libs loaded at all.
+
+33:26
+They're big bulky files which are one of the reasons that slow pages down.
+
+33:32
+So we want to try and reduce that to the bare minimum.
+
+33:37
+So experience fragments typically in an edge delivery project would be recreated as edge delivery fragments, you know, so using blocks, putting the content on there.
+
+33:52
+And then when a block is loaded, a block requires, you know, the JavaScript and CSS just for that block and just for the things that are on that page, not a big library of everything that's possible.
+
+34:06
+So that's how an edge delivery page is going to be faster.
+
+34:09
+So we'll have to look at, you know, this process, yeah, what can change, what can't change and then kind of decide from there how we proceed certainly.
+
+34:24
+So we would love to understand that the change the the intended change, yes, you are right on those header libraries we need to find in a way to load in case of the new as delivery components pages.
+
+34:39
+But we need to see how it would impact the target and the current markup delivery because that will be invoked from the launch.
+
+34:48
+Once the base page is loaded from the network, right?
+
+34:51
+From the Edge, the base page is already loaded in the browser and the launch will fire and target call and it will bring the markups for recommendation, personalized content and etcetera, right and added on the page.
+
+35:04
+But yes, we need to learn how would we get all the those libraries on the page as well as if there is any a change coming to this target content as well.
+
+35:14
+So happy to use those in the coming meetings while while waiting for the page to load is an option.
+
+35:23
+Whenever we talk about personalization, AB testing and target, we tend to try and do that through like an Edge worker so that it happens.
+
+35:36
+You know, we intercept the response for the page request and then inject additional HTML and and stuff like that that's needed in order to load those offers all before the page even gets loaded into the browser to be rendered.
+
+35:55
+So we we are proactively trying to load things before they actually get to the browser.
+
+36:03
+I have a quick question on that.
+
+36:05
+I'm very new to this as delivery, but do we have Edge delivery working with target or AAP directly?
+
+36:12
+So they it, it can be connected with with Edge delivery and the request to target or AAP directly can be managed from AS delivery.
+
+36:22
+And yeah, even we would, you know, be very happy not to slow down this Ajax request, you know, for all the browser loading and everything and can directly through your edge worker and, you know, intercept the request on your edge, pass on this to target, get this offer, merge it into your HTML right there at Edge and set it as like one quick page.
+
+36:47
+But is it available today?
+
+36:49
+It yes.
+
+36:50
+And ideally, we would really only focus on above the fold for the edge worker.
+
+36:56
+And then everything below the fold can wait for our three phased page composition process in which you know the web SDK or Atjs is is called and then it would work on populating things below the fold.
+
+37:15
+So we'll probably end up with a combination of the two based on your hero offer being something that gets swapped out for users as well.
+
+37:25
+Whereas those offers down below the on the page are typically not going to be in that above the fold area.
+
+37:32
+So they can be loaded once the page is actually on the on the screen for the user in the browser.
+
+37:41
+OK, I mean, it's, it's great to hear that we have a connection, inbuilt connection from Edge to Target.
+
+37:47
+So definitely we would love to see how would you know get remove our dependency from launch and invoke target directly from Edge.
+
+37:55
+But as you said, right, I think for the the below the fold, all these these offers, we still need some sort of integration from the browser to target, right?
+
+38:06
+Yeah, yeah, that's, that's standard.
+
+38:08
+We're always loading up launch or DTM or whatever that has those processes built into it.
+
+38:17
+And while we're on that topic, right, so a typical strategy for loading Martech in general is throw everything into launch and then launch gets loaded at some point in Page composition and starts running everything.
+
+38:36
+And I want to point out that that is not necessarily the best way to load an edge delivery page.
+
+38:42
+They're going to be certain aspects of it that we're going to want to pull out of launch and load early.
+
+38:49
+Cookie consent being a very common one that we actually pull out of launch and load early.
+
+38:55
+Whereas other things that happen below the fold or analytics or things that are going to wait for the user to start to interact with the page will delay just a bit.
+
+39:06
+OK, that makes sense.
+
+39:09
+Yeah, our, our primary goal with an edge delivery page, the way we, we hit our core web vitals and page speed of 100 is by focusing on above the fold and loading that as fast as possible, getting every, you know, so your, your LCP, your largest content paint, that kind of stuff identified early and rendered so that all of a sudden you know, your, your measurements are, are satisfied and then everything below the fold is just kind of loaded afterwards.
+
+39:45
+And because they're below the fold, they don't impact those those numbers.
+
+39:52
+Yep.
+
+39:54
+Luke, you want to add something please?
+
+39:56
+Well, part of a lot of our implementation and issues with Target over the years has been.
+
+40:04
+Target's performance to deliver offers or even content to the page.
+
+40:10
+So we, we treat Target as as high up as possible within downloads and if that hopefully can be resolved because we have delivery of like 2.5 seconds potentially, which is concerning with SEO.
+
+40:32
+So I would, I would think that if, if this helps resolve some of that, that would be great.
+
+40:37
+If not, we probably need to consider keeping target calls up as high as possible because by the time Target retrieves an offering content to the page, it's still delayed, right.
+
+40:50
+Well, we like I said, we have two strategies at our disposal here.
+
+40:55
+1 is using edge workers and the other is using our three phase approach on loading in things from launch or even target directly.
+
+41:06
+And ideally we want to get to using web SDK for all of that.
+
+41:11
+But you know, we'll have to do from a planning standpoint.
+
+41:17
+We'll we'll plan for hero offer.
+
+41:20
+We know that's top of the fold and that will be something top of the page that we know that's going to be something that we'll have to address.
+
+41:28
+And then as we start to get pages complete with offers loading, we can run additional performance on them and see if we're going to need to change how we're loading offers in order to better impact our our performance scores.
+
+41:46
+Preferably if we can just keep, if we decide on how Target should be loaded, just keep that with all offers because most offers are above the fold anyway.
+
+41:57
+So, OK, I, I even if it drops a little bit below the fold, you know, why not keep the, the pipeline in the same way?
+
+42:10
+Yeah, yeah, we, we'll, we'll test it out and see what the, you know, the numbers show for us.
+
+42:16
+But yeah, I, yeah, I suspect it'll end up we will be loading a lot of things via the edge worker and that definitely speeds things up.
+
+42:28
+And Rob, with, with this new strategy like using edge worker for, for target call, we need to learn, I mean, what all changes we are expecting in our set up like especially on the target side right now, all of these activities that they are live in target.
+
+42:44
+So is there a way to to to tell target like what needs to be picked up by this Edge worker and what activities needs to be picked up by the launch the browser call, right?
+
+42:56
+Yeah.
+
+42:57
+You can think of Edge workers as kind of like your Edge side rendering and it's all JavaScript as well.
+
+43:05
+So whether whatever it needs to call, it will be able to call it.
+
+43:09
+So if target is the source, it would do the same thing as it does today.
+
+43:14
+It would do that offer request to target during the response of the page request and then, you know, adjust the markup before that response gets to the browser.
+
+43:27
+And then from there it executes just like any other her page.
+
+43:32
+So we would be able to configure in this JavaScript that you only pull this one activity from on the home page, only pull this one activity which is responsible for let's say hero banner and leave others for the normal course.
+
+43:54
+I'm, I'm sorry, I I got distracted by Keith's chat message.
+
+43:59
+I'm like, what does Keith ask me?
+
+44:02
+Yeah, No, nobody's maybe.
+
+44:03
+I mean, the ginger is here.
+
+44:04
+That's what he's telling me.
+
+44:06
+Yeah.
+
+44:07
+So I hope we we would have more meetings to discuss this these in depth, you know, yes, so we are still open.
+
+44:14
+I mean if you have any the question we can take that.
+
+44:17
+But yeah, we, we do have more questions on how to architect or solution this in future, but we can definitely defer those to our next meetings, right.
+
+44:26
+And and like I said, whatever we can pull out of being experienced fragments today into edge delivery fragments, we're going to see a lot better performance out of it because those experience come with a lot of baggage.
+
+44:44
+The experience fragments come with a lot of baggage and baggage being you know client vibes and bulky CSS and stuff like that.
+
+44:55
+So as of today as as I was trying to explain like we have two different AEM system here, right.
+
+45:01
+One is this the above 1 which is managed by the cloud host team or the GCE team here.
+
+45:07
+And this, this system we are upgrading to Edge and we are talking about you know, upgrading the site and all this.
+
+45:17
+And there is another AEM system which is managed by our customer marketing team, right?
+
+45:22
+And all of the experience fragment which like personalized content and everything is managed on this one.
+
+45:27
+And right now we don't have plan to upgrade this to, to Edge server or Edge AEM.
+
+45:34
+And anyway, you know, this is not directly plugged into the page.
+
+45:38
+All of this HTML is going to AEP 1st and it's the AEP who's serving HTML on the page as of today.
+
+45:45
+So we need to see if what kind of support AP has, right?
+
+45:50
+I mean, AP only offer can accept just the HTML.
+
+45:54
+So either we just pull HTML from this by our custom application or we pull it from somewhere else.
+
+45:59
+It's like a background background job, right?
+
+46:03
+Would not impact any of our customer request flow, isn't it right, But right.
+
+46:12
+So it's an experience fragment and you're, even if you're just pulling the HTML of it, that is going to be a, a traditional AEM mark set of markup, right, With all of the AEM tags, the, the bulk of a EMHTML, which isn't a really bad thing.
+
+46:33
+But what we don't have will be the JavaScript and CSS that make it a real experience fragment because those won't be loaded on the page.
+
+46:43
+So we'll have to tackle that to see if, I mean, I know we could load those libraries, but I would expect that to dramatically reduce our, our performance.
+
+46:58
+So that's something we'll have to test out and see if we need to make further adjustments to this process or we just have to wait until this process changes before you'll get the performance numbers that you want.
+
+47:15
+Sure.
+
+47:17
+Yeah, I, I think we can dedicate maybe 1 next meeting just to go in depth of this, this change and also talk about the new setup.
+
+47:26
+And once we have some numbers, then that would help us to take decisions on this, correct?
+
+47:33
+I agree.
+
+47:36
+Awesome.
+
+47:37
+Let's see, we're at 47 after.
+
+47:42
+We will definitely have more conversations on all of these topics, the analytics, tagging, personalization, target, AB testing, all of that.
+
+47:51
+This is a good start that can help with our documentation and planning though.
+
+47:56
+And I'll let you know if I, I have more questions about it.
+
+48:02
+Nick Gendra, let me let me come back to Nagendra after we hit a couple of other things.
+
+48:08
+So accessibility requirements.
+
+48:14
+So typically with accessibility, we try to build into everything so that it's keyboard addressable, screen reader addressable.
+
+48:23
+If there are specific things that we need to build into a block or, or as you're familiar with, with AEM components, let's let's talk about that now what, what are those accessibility, key accessibility things that are important.
+
+48:46
+So what we we need to be compliant with wake up.
+
+48:51
+I believe that we are right now in 2.1.
+
+48:58
+OK, 2.1.
+
+49:00
+All right, 2.1 AA.
+
+49:07
+Yeah, at least for US it's 2.12.1.
+
+49:11
+Yeah, right now we're at 2.1 AA.
+
+49:16
+You're mentioning that this will be accessible for screen readers and keyword only navigation, right?
+
+49:25
+Yeah.
+
+49:25
+So we'll have to keep in mind the the header footer will be coming to us.
+
+49:31
+So our focus will be on in the page.
+
+49:35
+But yeah, being able to navigate via keyboard and also be screen reader friendly will be key things that we'll have.
+
+49:45
+So I'm just trying to think.
+
+49:48
+So when you hit things like Carol cell carousels or accordions, making sure that you can navigate them with those different tools, OK.
+
+50:00
+One of the struggles that I believe that we had in the past to make sure that we can incorporate the, the appropriate Aria labels in some areas and which are needed.
+
+50:19
+So I don't know if our, our content writers are going to be able to continue to do that.
+
+50:28
+So typically the area labels are added by the the the block itself or by the code where an author doesn't have to worry about it.
+
+50:41
+Is there specific things where you're having authors add in their own labels?
+
+50:46
+Area labels?
+
+50:48
+So whenever we personalize something and we need to be very clear from what is not written that it might have a visual cue that needs to be translated into words for a screen reader user, those are the places where we might use Aria labels.
+
+51:13
+OK, I'd like to see an example of that at some point, if you don't mind.
+
+51:21
+Yeah, I, I think I, I need to speak with my team and gather that because I know that this is have this is something that has come up in the past.
+
+51:30
+And so I just want to make sure that we continue to be compliant.
+
+51:36
+Yeah.
+
+51:36
+Let me see if if they can help me find one of of the examples that has come up in in previous testings.
+
+51:47
+Yeah, perfect.
+
+51:48
+And I mean, we absolutely can do it.
+
+51:50
+I just want to see and understand the reasoning and how we might actually apply that so that authors could do that.
+
+51:59
+OK, draft, good question.
+
+52:03
+Whenever we identify anything that probably is not compliant for some reason, what is the open from your end to work on that?
+
+52:14
+I do remember that we when we work on the feature side efforts, the the video component was one of the most challenging for the translations and the capture take that should be displayed and so on.
+
+52:32
+So at the time we, we, we learn from you that it goes through a prioritization among other clients to the define where, what accessibility specifics you enable on components.
+
+52:46
+So I wonder if in this project will be if we identify something you can work in that or you will enable that for us or will follow the same part that you will need to prioritize among other clients priorities.
+
+53:05
+Yeah.
+
+53:05
+So this you're touching really into translations and the way the way translations will work moving forward with edge delivery will be that they use the exact same connector that's in AEM.
+
+53:19
+And then we will be able to pull out any kind of of labels or anything like that that you need translated.
+
+53:29
+Even if they're just properties on a a division tag, you know, or these area labels, we'd be able to pull them out as placeholders.
+
+53:41
+And then the that placeholders file would also be translated so that when, you know, the page goes live, regardless of what language it in, it's in, it will automatically pull those placeholders in and make them and apply them as translated text.
+
+54:04
+Is that what you're?
+
+54:05
+Yeah, yeah, yeah.
+
+54:07
+But in general, I think if we find out any other type of challenge and we provide feedback to you will be addressed, right to met our compliance repeat that I didn't quite understand.
+
+54:22
+Oh yeah, yeah.
+
+54:23
+I just want to make sure that if we find something that is not compliant with wake up 2.1 level 2 and we provide feedback to you, are you going to be taking the lead on addressing that for us, right.
+
+54:41
+In any of the components, any of the things.
+
+54:43
+I just touch on the specific right templation because just to give you an example, but if we find out something outside of that, it's it's is is there a commitment to work on that from your end?
+
+54:57
+Yeah.
+
+54:57
+Yeah, exactly.
+
+54:58
+If it's something that's OK there today, we are definitely committed to to making it right.
+
+55:04
+Sounds good.
+
+55:05
+Awesome.
+
+55:05
+Thank you, Ralph.
+
+55:07
+OK, let's see.
+
+55:13
+I I guess we have anything else on accessibility.
+
+55:20
+All right, let's see.
+
+55:25
+I think I wanna defer just a minute on the user feedback pain points and top performing underperforming pages and jump back to Nagendra.
+
+55:34
+Nagendra, are you still on the line?
+
+55:46
+Did he drop?
+
+55:47
+I'm just.
+
+55:48
+He's there.
+
+55:49
+Nope.
+
+55:50
+Yeah, he's still here.
+
+55:53
+He's trying to unmute.
+
+55:54
+I hope so.
+
+56:01
+What's the question?
+
+56:03
+Can you repeat again?
+
+56:06
+Well, I would like to discuss the how the header footer pieces work, but if he's distracted at the moment, maybe we can get to him on another case.
+
+56:17
+So let's go back user feedback, pain points.
+
+56:21
+Tell me about anything that you know is is troublesome for you.
+
+56:28
+Oh, he's not able to unmute.
+
+56:30
+That's good.
+
+56:31
+All right, let's see.
+
+56:40
+I don't know.
+
+56:41
+Jennifer, are you able to unmute him?
+
+56:43
+Let me try.
+
+56:47
+You might need to leave and then come back.
+
+56:50
+Nagendra.
+
+56:54
+Yeah.
+
+56:55
+I haven't muted him.
+
+56:56
+I wonder if it's a microphone issue.
+
+57:02
+I don't know.
+
+57:06
+Try leaving and coming back.
+
+57:07
+We only have a couple more minutes, but correct.
+
+57:10
+All right.
+
+57:13
+Yeah.
+
+57:13
+So just in general, what are some of the, you know, those pain points that you have, whether it's altering, whether it's delivery of the pages, integrations, things that are, you know, kind of things that are troublesome.
+
+57:33
+It's only going to unmute if you still.
+
+57:36
+Yeah.
+
+57:37
+Hey, Rob, sorry, I was not able to unmute.
+
+57:41
+So the question was how we integrated the header footer with the AM or like what exactly?
+
+57:45
+The question related to the header.
+
+57:48
+Yeah.
+
+57:48
+My understanding that is that you're building the header and footer externally and then you're injecting it into the pages.
+
+57:56
+My I, I would love to understand how that injection happens, what all is included in that injection, you know, from a, a, a CSS and JavaScript and how's that all work?
+
+58:10
+Yeah.
+
+58:11
+So this header footer is built in microservices and we have a header and footer components in AM.
+
+58:18
+Within that component we are actually verifying whether it's a author or publish environment dispatcher.
+
+58:25
+And we are injecting that header footer using the SSI ink basically server side include.
+
+58:31
+So that will be rendered as an HTML basically.
+
+58:34
+So all the CSS and HTML is part of that call.
+
+58:39
+And if there are any like VU, yeah, I think more part of the header footer only all the CSS and HTML.
+
+58:46
+This is basically you can hit that global header footer with thermofisher.com.
+
+58:50
+You will be able to see all the references and everything as part of that HTM.
+
+58:58
+OK, so that's currently a server side include with, yes, edge delivery because we're there is no server side, it's serverless.
+
+59:08
+We would have to load this via an edge worker in order to get the same kind of of architecture.
+
+59:19
+It's we're going to use an edge worker to be our server side renderer, if you will.
+
+59:26
+OK.
+
+59:27
+So do you see any like latency or any kind of issues if we go with the edge worker route or will it be the same if we go with the edge?
+
+59:37
+All right, so there's two possibilities.
+
+59:39
+One we just wait for the page to load and it loads the header and footer, you know, directly from wherever it's at.
+
+59:50
+That would be slow typically depending upon how much is is required in that load.
+
+59:59
+And then if we do server side rendering using an edge worker then.
+
+1:00:05
+That speeds things up because it does.
+
+1:00:07
+It does two things.
+
+1:00:08
+One, it's going to adjust the markup before it gets to the page to be rendered, but then there's also implementation of caching of of parts of that as well on the CDN.
+
+1:00:25
+So the edge worker route is definitely going to be faster.
+
+1:00:31
+It's just a a complexity that we would have to build in knowing that both the header and footer need to be loaded in via an edge worker.
+
+1:00:41
+So I'll have to dig a little bit more into the scale of what that edge worker looks like when it's being loaded.
+
+1:00:51
+I'm sorry, the header is is what that looks like being loaded.
+
+1:00:58
+Yeah, sure.
+
+1:00:58
+I'll send you the URL so that you can verify.
+
+1:01:02
+Yeah, in the chart I'll be able to send the exact URL what you're using now.
+
+1:01:08
+Oh, perfect.
+
+1:01:10
+And is there a difference in performance from your dev versus your production?
+
+1:01:17
+No, I think it is same.
+
+1:01:19
+It is.
+
+1:01:19
+It should be about the same.
+
+1:01:21
+OK, good.
+
+1:01:22
+Yeah, Yeah, just for dev.
+
+1:01:25
+That's all I need to to look at unless there's extra stuff that is loaded for dev versus production.
+
+1:01:36
+No, actually it is the same.
+
+1:01:38
+OK, all right.
+
+1:01:39
+Just did a different instance.
+
+1:01:41
+Yes, OK, great.
+
+1:01:44
+Perfect.
+
+1:01:45
+We are at at time Jennifer.
+
+1:01:49
+We'll have to touch on the user feedback and top performing underperforming pages at a later at a later date.
+
+1:02:00
+All right, sounds good.
+
+1:02:02
+And before everyone hangs up, I just wanted to remind that we are waiting for the component inventory before we know if we can proceed with this session on Friday and if we could also get the Excel document with attendees and emails and we can set up sessions for next week.
+
+1:02:21
+So far, we don't have any, but thank you everybody for your participation today.
+
+1:02:25
+I'll be sure to get the transcript and the notes out shortly.
+
+1:02:31
+Awesome.
+
+1:02:31
+Thank you.
+
+1:02:32
+Bye for now.
+
+1:02:33
+Thank you.

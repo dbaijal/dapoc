@@ -1,0 +1,1795 @@
+TFS  Discovery session Header & Footer (Search, Sign-in & Cart), Session _7-20260310_070013-Meeting Recording
+
+0:09
+Welcome everyone.
+
+1:01
+Hi, everybody.
+
+1:02
+Good morning.
+
+1:02
+Good evening.
+
+1:04
+Same to you.
+
+1:05
+Thanks for joining of course.
+
+1:15
+Morning.
+
+1:20
+Hey, good day, everybody.
+
+1:23
+Hello.
+
+1:23
+Hello.
+
+1:24
+I was just putting the agenda of topics in the chat.
+
+1:31
+We certainly have a full session.
+
+1:37
+Yeah, let's see where we can get.
+
+1:40
+That's good.
+
+2:10
+Let's see, Michael, we've got quite a crowd.
+
+2:15
+At what point shall we just get started?
+
+2:18
+Since it is being recorded, is there anyone in particular we should wait on?
+
+2:25
+Let's see somebody who knows the header.
+
+2:31
+Yeah, that's true.
+
+2:32
+Let me see.
+
+2:37
+Yeah, We have both Doug and Nagendra here.
+
+2:42
+Yeah.
+
+2:42
+Nagendra, can you take a look at the invitees, see if we're ready to start?
+
+2:49
+Yeah, sure.
+
+2:50
+For for the header, footer, we need Namratha.
+
+2:58
+Yeah.
+
+2:58
+And I think we have Namratha's team here.
+
+3:01
+Varvish, I think.
+
+3:02
+Varvish.
+
+3:02
+Oh, yeah.
+
+3:02
+Arvish.
+
+3:03
+OK, yes, maybe we will start with the AM integration, how we integrate header, footer and when we can jump into the more details of how it is developed if it is.
+
+3:17
+OK, sure sounds good.
+
+3:24
+Yeah, high level is a great place to start and then you know just we'll we'll move in from there.
+
+3:32
+I have some good questions for you.
+
+3:34
+Yeah, excellent.
+
+3:37
+Give me a second.
+
+3:40
+There's number there.
+
+3:41
+Yes.
+
+3:46
+Hope you can see my screen.
+
+3:49
+Yes, we can.
+
+3:51
+Yeah.
+
+3:52
+So in AEM actually how we integrate this global header footer which is actually developed using the micro services and as I earlier provided the URLs which we are using and these are the global header footer URLs as you see right using the SSI include, we are actually integrating these header footer with AEM and you can access this header footer with this URL.
+
+4:26
+And as I said we have a component called header include which actually handles the header part and we just identify our verifying whether it is author or publish and then dispatcher based on that.
+
+4:43
+We are just integrating the same header footer with the different UR LS.
+
+4:49
+Basically if it is author or publish URL, we configured some store engine X URL which is basically store.
+
+5:00
+However, this is returning 4 or 4.
+
+5:04
+But I think that's how we use as you see, right?
+
+5:10
+Whether it is like author is defined in a global level, OK to identify whether it is author or preview based or like since we're still using the JSP one.
+
+5:23
+And as you see that and if it is author, then we're getting this configured URL, basically this header URL, nginx.
+
+5:32
+And then we have I think earlier used to define user type since we have a different kinds of user, whether it's anonymous or the business user.
+
+5:44
+And we have few user types.
+
+5:47
+And then in the back end, we define, Hey Nikandra, I'm sorry to interrupt, but can we start even a little bit higher?
+
+5:56
+So like, you know, just in general, you know what you're doing, where it's being used and and then we can talk a little bit about moving forward.
+
+6:11
+We want to use the same thing and how we're going to use it, you know, for the details.
+
+6:17
+The details is how of how it's put together is only important to me if I need to rebuild it.
+
+6:24
+Yes, yeah.
+
+6:25
+What you need to build is the components converted into blocks, so which handles basically header and footer.
+
+6:33
+And as you see that you need to define whether it's just environment, author or publish.
+
+6:39
+Based on that we build these header footer URLs, basically user type and land code and country code and then just form URL and pass these parameters to that and then get the header footer.
+
+6:55
+However, if it is a dispatcher, we just integrate using the SSI include as I said right this is the SSI include.
+
+7:03
+Basically we're passing OK if it is a global header footer and if it is a header just pass the header and no jQuery because we have a different jQuery versions conflicting.
+
+7:13
+So that's why we pass this jQuery parameter whether we need jQuery as well to be loaded along with the header, footer and if not so that's how we just pass this parameter and render header, footer URL.
+
+7:28
+Like as you see this way this is a high level basically.
+
+7:33
+And for author and publish and we define as I said, right, we pass like a different parameters like user type, country, land, code and nature.
+
+7:43
+No jQuery, no trustar since we don't need a trustar pop up for author and publish, we pass those parameters.
+
+7:51
+This is high level like for header and the similar way footer include as well same similar way like we just pass all this, this is high level.
+
+8:01
+Let me know, all right, what's what sites is it being used on sites in the sense you you made a global header to be used across multiple sites?
+
+8:13
+I would assume so.
+
+8:14
+Yeah, exactly what sites?
+
+8:16
+Yeah.
+
+8:16
+So since we have a different micro sites and we have Phisher site, so the idea behind is to have a common place for all this header footer changes and for standardization and the maintenance and a different reason.
+
+8:32
+So all these header footers are moved out of AM now.
+
+8:37
+And as I said, it is serving for different micro sites, part of the Thermo Fisher and Fisher site and thermofisher.com.
+
+8:50
+OK.
+
+8:54
+And the the no query page, when I look at that, that's just a header division.
+
+9:03
+Is it like fully encapsulated?
+
+9:05
+I I'm seeing all of the looks like there's trust arc stuff being called in that page.
+
+9:14
+It yes.
+
+9:14
+Is that being added after the fact or is there a way to just get the header footer?
+
+9:22
+I see styles as well, yes, yes, as I said, right, yes, these are all part of the header footer only everything.
+
+9:30
+And if you don't want any one of these, I think you can pass, but I'm little bit unsure.
+
+9:34
+I think would wish no way to actually just render the HTML without the styles, right?
+
+9:40
+We will get the styles and everything as part of the header footer, right?
+
+9:43
+Only the parties like no jQuery and no trust talk, right?
+
+9:47
+We, we do have multiple optional selectors that allows you to remove different stuff and customize your header.
+
+9:53
+But yeah, for now trust tag is part of the header, but we are working on migrating that to a separate service and in due time we'll do that as well.
+
+10:05
+So if we want a trust tag, do we need to call separately for trust tag or As of now, trust tag is part of the header.
+
+10:14
+So by default you'll get the trust tag.
+
+10:16
+If you don't want it, you can always add the optional selector, no trust tag and it will not be part of the header.
+
+10:22
+Got it.
+
+10:22
+Just the question was when you move this trust arc out of the header footer, right, How it is going to integrate with the header footer?
+
+10:30
+So if any application doesn't want header, I mean, once this trust arc along with the header voter still should be able to.
+
+10:37
+We, we are working with the idea on that and we'll, we'll finalize the specifications as we progress and we'll let you know, OK.
+
+10:48
+Yeah.
+
+10:48
+The reason why we're asking is since we are moving into different AM version and a different development, right.
+
+10:56
+So that's the reason.
+
+10:57
+Yeah, sure.
+
+10:57
+Yeah, yeah.
+
+10:58
+That is primarily responsible for the trusted related stuff.
+
+11:03
+And we are actively working with him and Dennis to to configure it for the latest versions and how we are going to include it and how we are going to allow different applications to include different versions, different sites, everything.
+
+11:20
+Because right now what is happening, right, is that a header gives you the trust arc, but you don't have a lot of control over which version you want or you, you, you want some, some specific parameters and things like that.
+
+11:32
+So to make it more extensible, we are working on it as of now.
+
+11:36
+You get the trust tag or you don't get the trust tag.
+
+11:39
+That's it.
+
+11:40
+Yeah.
+
+11:40
+Thank you.
+
+11:42
+Yeah, Ralph, let me not have any questions on that.
+
+11:48
+Yeah, I'm, I'm trying to figure out, you know, where we can use the synergies between the two and what their goals are in order to make them work well together, right.
+
+12:03
+So because edge delivery is completely front end, you know what?
+
+12:09
+What I have seen before is we either can load in web components or I've been able to hit a URL that would actually give me the parts in a Jason format.
+
+12:24
+Like it would give me the HTML, the JavaScript and the CSS in Jason.
+
+12:33
+And then I would be able to take that Jason and you know, do whatever I need to it.
+
+12:40
+And if there were any libraries like I would be able to access those libraries and and load those libraries directly as well.
+
+12:49
+So I'm just trying to figure out how we can do something like that.
+
+12:53
+So you can continue to have and maintain your global header, but we can still load it efficiently the way an edge delivery site works.
+
+13:07
+Yeah, got you.
+
+13:08
+And I think we wish now it is only returning HTML response, right?
+
+13:15
+Yes, that's right.
+
+13:16
+Please.
+
+13:18
+Yeah.
+
+13:20
+Are there any other options there?
+
+13:22
+I mean are somewhere it puts all the pieces together.
+
+13:29
+So if I understand it correctly, you want to you want to know how we are injecting the trust stack and how can we no, no customize it?
+
+13:39
+No, but I, I want the header and just the header.
+
+13:42
+This the stuff that makes the header work so that I can embed it in an edge delivery page.
+
+13:52
+OK so that I believe was the was the goal behind migrating the Trust, ARC and Adobe launch and analytics out of header and to a separate repo from where it will be injected the same way we are injecting currently.
+
+14:11
+The header through SSI will have a separate SSI that will then be part of the global includes that will allow you to customize.
+
+14:19
+And header footer will only be just the HTML.
+
+14:22
+We have been actively removing many of the many of these stuff out of header footer so that header footer doesn't give you anything other than just the pure HTML content with links and stuff.
+
+14:34
+Yeah.
+
+14:37
+Where is that in that process?
+
+14:41
+We, I have already worked on it and we are reviewing it and we'll have it in QA by probably end of the week or beginning of the next week.
+
+14:51
+Oh, so you're close?
+
+14:52
+Yeah, we're very close.
+
+14:53
+Yeah.
+
+14:54
+Oh, well, that's perfect.
+
+14:57
+Yeah.
+
+14:57
+So ideally I, I can show you an example of of something that I did if that would help make it more clear.
+
+15:07
+But let's see.
+
+15:18
+Oh, let's continue to talk while I see if I can find it.
+
+15:24
+So many projects.
+
+15:26
+I'm like oh wait, where is it at?
+
+15:29
+And this header for is actually consist the search implementation and all sign in and cart.
+
+15:37
+However sign in and cart implementations are done separately and we have actually integrated all this into header footer except add to cart on the product pages.
+
+15:51
+So maybe we have a button to add to cart.
+
+15:54
+However, all the implementation done by the respective applications.
+
+16:00
+So no way actually we're handling all those in a, just giving you an information on that.
+
+16:14
+Yeah.
+
+16:15
+And everything is encapsulated.
+
+16:17
+So search is in there, cart is in there.
+
+16:21
+So if we can get header to load, we get search and cart and all that other stuff for free, right?
+
+16:30
+All right, So that simplifies that conversation and then integrations and stuff like that, all, just all pieces of it.
+
+16:44
+It's just how can I get it so that we have a little bit more control over what it loads and when it loads it?
+
+16:54
+I'm I'm looking at the the final code that is distributed and I'm seeing fonts being loaded and it may be that we have to header, footer actually load the fonts and edge delivery not load the font.
+
+17:12
+But that would mean that all edge delivery sites would be reliant on that header footer or a a header footer.
+
+17:24
+Yeah, most of them are like as part of the header footer.
+
+17:27
+However, we have some components we are referring the fonts and all.
+
+17:31
+But that can be taken care as part of the blocks development, right.
+
+17:35
+For in terms of header footer, yes.
+
+17:40
+To add to that, for fonts, we are already working on global include which is not really header footer.
+
+17:49
+It is just the global include that allows front end applications to include the global stuff, including fonts and some of the global CSS that will not be part of the header.
+
+18:05
+I think that clears that up it it'll give you basically a finer control over what you want rather than.
+
+18:12
+Even if you don't have a header or a footer, you will still be able to include the the global CSS and the fonts from that.
+
+18:19
+Global includes which is supposed to be a very static file just injected through SSI, similar to how we do with header and footer.
+
+18:36
+If if I think we already have that in QA deployed, let me see if I can find it Google link.
+
+19:02
+Yeah.
+
+19:02
+And one more like point, I just want to confirm that same goes for Adobe launch and like LOIJ is also that also I can see is getting loaded in header.
+
+19:13
+So is it like all OK, so all will be like separate and only the functionality which we need for the header only that script we can get is that so?
+
+19:26
+Yeah.
+
+19:26
+So right now header, footer, SSI includes everything, but we are migrating the analytic stuff to a separate repo, global analytics and the fonts and everything else to global includes.
+
+19:41
+We are still discussing how we are going to include, like we are going to use global includes to include the trust are related stuff, the analytic stuff or we are going to give applications full control over all three separate elements and how they want to include it.
+
+19:58
+But yeah, that's the idea.
+
+19:59
+We'll have three separate Ssis.
+
+20:01
+Server side includes that will allow front end applications to get the global includes the analytics and just the header part separately.
+
+20:11
+OK, thanks for letting us know or wish.
+
+20:17
+So the Rob, like as we mentioned right through the work agents, maybe we can still actually integrate the back end or SSIS, right.
+
+20:28
+So still, is that not the way how we want to go?
+
+20:32
+Are we still looking like Jason kind of format?
+
+20:41
+Well, I'm open to ideas.
+
+20:44
+So let's just start there.
+
+20:47
+Got it.
+
+20:48
+But what we have to remember is the way Edge delivery works is it's actually doing that page composition in the browser.
+
+20:58
+So and and its goal is to load only what it needs in order to load that page and make that page functional.
+
+21:09
+So it needs to be a fully encapsulated very fast loading something or provided to Edge delivery to the browser so that the browser can then load those things as that it that it does need.
+
+21:33
+So like I was working on Walgreens and Walgreens.
+
+21:41
+Do you mind if I share?
+
+21:43
+Yeah, please go ahead.
+
+21:46
+When I built Walgreens, it also has a universal header and footer.
+
+21:53
+And this is the footer.
+
+21:55
+And I basically, you know, I just called this URL that gave me the Jason and in the Jason it has some styling information.
+
+22:07
+It has I'll scroll all the way to the top and it has some of the the HTML escaped HTML in there as well.
+
+22:21
+But the main thing is I get that bit of of content that gives me everything that the header, in this case it's actually the footer.
+
+22:32
+But then it also provided different paths to different JS that it needed, that it could need in order to load.
+
+22:44
+And some of them didn't need it at all, like, so some of these things I'm trying to remember which ones, like, yeah.
+
+22:53
+So like I didn't need launch on the footer because I already had it.
+
+22:57
+And I didn't need Google API because I already had it.
+
+23:00
+But there were things with jQuery and the polyfill and stuff like that that I didn't need.
+
+23:07
+And I didn't need their rum, right, because I already had rum.
+
+23:12
+So there were different aspects of it, but I was able to take this and when that page loads and this has been a couple of years now, but it's, it's still kind of working.
+
+23:26
+All right.
+
+23:26
+You see that header kind of floated in and I'm, I'm missing content from it.
+
+23:31
+But all of this, this menu came from, from, from that Jason that they sent me.
+
+23:40
+So and it was so it was Jason packed with HTML and CSS and then separated out the different files that might be needed in order to make it render.
+
+23:52
+So that was how I was making it work for them, but they just already had it built like this.
+
+24:00
+So just an example of one way to make it happen.
+
+24:06
+So do you see any performance related if we go with the server side include the front end integration like how we do with the Walgreens now?
+
+24:19
+So what exactly the difference you would see?
+
+24:24
+Well, everything is going to be a little bit different.
+
+24:27
+So in order to do a server side include we switch it over to a cloud function, so an edge worker somewhere and that edge worker would then load in that server side rendered piece of content and inject it into the response before it gets to the browser.
+
+24:51
+So there is a way for us to use something that has been rendered elsewhere and then just pop it into the HTML as it goes to the browser.
+
+25:05
+You will see performance loss by having a global header and footer.
+
+25:14
+Regardless of how we do it, it's going to be slower because it's it's not on cached 100% on the CDN.
+
+25:25
+By using an edge worker we can minimize that because you we will end up with an edge worker with some CDN caching for the edge worker.
+
+25:36
+That can make it pretty fast, but not as fast as we would have it if we did full edge delivery.
+
+25:50
+Got it.
+
+25:53
+Yeah.
+
+25:53
+Maybe if we you could provide the difference and advantages and disadvantages with each approach, maybe that would give us a better idea while implementing.
+
+26:05
+Yeah.
+
+26:08
+Well, I mean, honestly, until we actually put it on a page and start testing it, we don't know how big the impact is going to be.
+
+26:17
+And even then it's we start to investigate it a little bit more and look for things that we might be able to tweak in order to improve that performance.
+
+26:29
+I mean, ideally you want to be able to reuse this header footer across many sites and totally understandable.
+
+26:39
+We just have to, you know work a little bit harder to make the edge delivery page meet the performance goals that the business wants.
+
+26:51
+Got it.
+
+27:01
+And yeah, if we are going with all this and then we have this change country, I mean change language option in the footer as well.
+
+27:10
+That is still I think with the AM right or wish that's being handed on the AM set right.
+
+27:19
+Yeah.
+
+27:19
+So maybe I'll just and that's mostly URL, right?
+
+27:25
+That's mostly just URL changes whenever you change a language.
+
+27:34
+I think it is also a cookie change, yeah.
+
+27:37
+Can I share my screen so that Yeah, a cookie change and a URL change, those are to be expected, but it's just pointing it to a different set of content.
+
+27:49
+And then, oh, and then the header and footer change itself.
+
+27:54
+Are those managed by the cookie or does it have a, a query parameter?
+
+28:00
+Or how would you change the language of the header, footer?
+
+28:04
+So yeah, as Urvish mentioned it purely based on the cookie, basically we have cookie defined called CKISO code and LAN code.
+
+28:16
+So based on these two parameters, I yeah, this will work.
+
+28:21
+And as you see right, I'm loading now Japan footer and as you see the URL is same.
+
+28:28
+However, this cookie has been changed from US to JP.
+
+28:33
+And if the country has 2 languages English and respective language and you would see the drop down option Japanese or English version based on this value.
+
+28:45
+So we would hit the servlet which is defined in AEM and send these two parameters based on that and then it will actually set the again cookies have been updated and the respective version of the footer will be rendered right.
+
+29:07
+So in looking at how that is handled, it would need the cookies in order to load the appropriate header footer and it would need that on the edge worker, OK, because the edge worker is what's going to go and grab the correct header footer.
+
+29:34
+Yes.
+
+29:35
+And I think we just restructuring these headers and cookies on the servlet side when we change this language in the footer and we have Thermo fisher.cnn.com and we are yeah, changing those headers as well based on the domain.
+
+30:01
+Now as you see it is for.com, I think maybe still, yeah, go ahead.
+
+30:07
+So when I do the select language that what it's doing is there's a little bit of JavaScript that is updating the cookies, correct?
+
+30:19
+Yeah.
+
+30:20
+JavaScript and the back end servlet as well.
+
+30:26
+What does it change on the back end servlet?
+
+30:30
+It's doing a request to make what change?
+
+30:33
+Yeah, maybe I did show you.
+
+30:37
+I'm not sure.
+
+30:38
+Jane, what?
+
+30:39
+Oh, what are those calls?
+
+30:41
+What was that eligibility something?
+
+30:44
+And it had parameters on the end of Yeah.
+
+30:48
+So like you have an ampersand country code equal JP and yeah.
+
+30:57
+So is that something that we could call it that's it, hit it, that's it hitting the servlet.
+
+31:04
+But we can't just call global header, footer slash footer slash jQuery and then add a query param, country code and language code.
+
+31:17
+Would that do the same thing or does it need the cookies?
+
+31:35
+I think we're not making many changes once we change the language as you see it, Just getting those parameters and resetting the headers and the cookies and like reinvoking the URL, That's what we are actually making changes on the servlet side as you see that right.
+
+32:05
+Yeah, I think like just updating the cookies and some headers.
+
+32:26
+Yeah, yeah, you see that it's a target path, basically just changing the country and the language code and send the target path for that page, rebuilding the URL, basically.
+
+32:42
+That's what we're doing on the change location and the resetting in case.
+
+32:51
+OK, so we can dig into this a little bit, you know, later.
+
+32:57
+I think I have an understanding of what you're doing.
+
+33:04
+Yeah.
+
+33:05
+We'll we'll have to come up with an approach and I think right now without you changing anything, an edge worker is going to be our best bet until we dig into it it deeper.
+
+33:25
+Yeah, got you.
+
+33:31
+This would be a spike that I'd want to do early is test that we can actually load it as is in an edge worker.
+
+33:53
+Hey, to add to that, I'll, I'll, I'll have to inform that only for TF we are making this set location call where the language changes dependent on AEM for the other sites.
+
+34:08
+For the other micro sites, the the JavaScript function to update the cookie is with header footer.
+
+34:16
+So, yeah, just wanted to let you know that, yeah, I, I kind of figured it was, but thank you for the clarification.
+
+34:25
+The other things like it's, if it's loading Alloy JS, you know, that's we would end up with multiple places calling it or we have the edge delivery site assume that the header is always going to load it.
+
+34:43
+What we lose is control of when it actually loads, which is a a big thing with edge delivery, right?
+
+34:52
+You know, because we have that three phased loading approach where we load things eager, lazy and delayed.
+
+35:00
+We would typically load Alloy JS delayed and and yeah, and this wouldn't allow it, right?
+
+35:11
+As soon as that header loads, it's loading and I'm going to try and load that header eagerly, trying to get it as as quickly as I can.
+
+35:21
+So I mean, we end up with some performance things that we'll have to address that we don't know how impactful they are until we actually start testing it and still we start loading it into a page to see what the impact is.
+
+35:48
+And for this header footer are there, is this pretty stable or is this are there plans to reconstruct it a different way?
+
+36:01
+Even rumblings talking about re architecting it?
+
+36:05
+Or is this just re architected new?
+
+36:09
+Is this the shiny new thing or where is this in its development life cycle?
+
+36:17
+I would say this is shiny new because we, I think we deployed, migrated to this micro service or two, two years ago.
+
+36:25
+Nagendra, correct me if I'm wrong.
+
+36:33
+Yeah, that's correct, Ravish.
+
+36:34
+It's been I think more than, yeah, a little over 2 years.
+
+36:38
+Yeah.
+
+36:39
+So a couple of years old.
+
+36:41
+OK.
+
+36:45
+And performance wise, have you been able to test the header and what kind of performance are you getting out of it for the performance, I really don't think I would be able to answer you that.
+
+37:00
+Maybe Nagantra, you could shed some light on it.
+
+37:05
+I think we, I, I'm not sure we have a dedicated performance test for header coder, but yeah, we do have the whole page.
+
+37:15
+Maybe Deepika might have an answer for that.
+
+37:18
+I'm not sure.
+
+37:20
+I, I'm just looking at your code there and it says performance begin and then you have a header 0 or a header 1 and a header 2.
+
+37:29
+So I, I'm asking, you know, are there different versions of the header and what is the performance variables that are being set here?
+
+37:43
+Did you know what?
+
+37:44
+Let let me get back to you on that as soon after discussing with, you know, the, the, the architects for the headers who really designed the whole thing.
+
+37:58
+Just give me some time, maybe, maybe in a day or two I'll get back if that's OK.
+
+38:02
+Yeah, that's, that's fine.
+
+38:06
+OK.
+
+38:10
+And then the way you add this to a page now is a server side include, correct?
+
+38:20
+Yes, that is correct.
+
+38:21
+Yes.
+
+38:21
+OK.
+
+38:24
+And it's fully encapsulated.
+
+38:26
+It doesn't require anything else on the page in order for it to work.
+
+38:30
+Yes, that's right.
+
+38:41
+When for the header in the footer, what parts of it are dynamic?
+
+38:48
+Like it's building out the menus or the the list of options down in the footer?
+
+38:58
+Where is all of that coming from?
+
+39:00
+What is?
+
+39:01
+Is that just AM pages?
+
+39:03
+Did somebody build the header and manually do those links?
+
+39:09
+Tell me, start with the header and then we can talk about the footer because I imagine it might be a little bit different.
+
+39:19
+Can you tell me how the how an author works with the header?
+
+39:29
+And so for now, maybe we can.
+
+39:32
+Yeah, go ahead.
+
+39:35
+So for the header and for the we, we have the metadata in the repo, which is in the Jason format.
+
+39:43
+We do have the API that allows you to read the metadata for a given country and language.
+
+39:53
+And we work with the authoring team from different, you know, regions, locales and sites.
+
+40:01
+To update the metadata, but the metadata itself is updated directly into the repo.
+
+40:06
+We considered separating it at one point I believe, but then we decided against it because it might have been riskier for that.
+
+40:16
+But essentially metadata sits with us and we updated directly into the repo in the Jason format.
+
+40:22
+What do you when you say metadata, what does the metadata include?
+
+40:28
+Pretty much what you see in the hamburger menu, the footer links pretty much all text content and links that you see.
+
+40:36
+That's all metadata.
+
+40:39
+Douglas, probably you may you may want to chime in here.
+
+40:43
+OK, so like to author this, it's all authored in the metadata file, right?
+
+40:53
+OK.
+
+40:54
+And is that just like a, a hierarchical set of of data because you have, you know, you have a fly out menu and then you have the standard horizontal navigation.
+
+41:10
+So that's just like a structured Jason, you said right, yes, that's right.
+
+41:19
+And there's, you know, there's like 36 or 39 versions for the different regional, you know, matching the regional, the AM regional nodes.
+
+41:36
+And so it's just 39 independent Jason files.
+
+41:44
+So from the content perspective, if there's a request from the businesses to change something or whatever, I review that and I work with Nervish to, to basically, you know, get that, write that code in.
+
+42:04
+So I'm sort of the editor, but there's no, there's no UI for authors to do anything OK, directly with Nervish's team to make that change in the at the source, OK.
+
+42:22
+And then you you have some, I don't know, maybe Java or JavaScript code that reads in the Jason and then decorates it into HTML, Is that correct?
+
+42:36
+That's right.
+
+42:40
+OK.
+
+42:41
+Is it Java or JavaScript?
+
+42:44
+It is JavaScript.
+
+42:45
+It is actually EJS because it's a node JS server that basically reads the metadata, takes the API call with the language ISO, the user type and all of these different optional parameters like no jQuery, no search bar, no card, whatever you want to because however you want to customize your headers and then it'll respond with the with the content, the HTML content that then can be injected directly into the page.
+
+43:13
+OK and then it just adds on whatever JS that is needed in order for the header to work right.
+
+43:24
+So that's kind of the way that that's exactly the way I would do it in edge delivery is that I would, you know, love to be able to just get Jason and then use some JavaScript to, you know, decorated into the Dom the way that I want it to be displayed.
+
+43:48
+And then, you know, tack on the any kind of CSS or JS that needs to be added that I don't already have.
+
+43:57
+So you're already doing what I would do from an edge or close to it, what I would do in edge delivery.
+
+44:05
+The question is how can we, you know, get the most performant version of your header the same way and and it may be we still keep the server and the server produce has this micro service and the micro service is called by the edge worker and the edge worker then injects it into the response for that page request.
+
+44:32
+Or, you know, we do something very similar to what your micro service is already doing, which is grab the Jason and then decorate it in the page.
+
+44:47
+So we'll we'll think about that and chew on it.
+
+44:49
+What about the footers?
+
+44:51
+The footer work exactly the same way.
+
+44:53
+Yes, the same.
+
+44:56
+OK, it's in the same source files.
+
+45:05
+Yeah.
+
+45:06
+Different Jason file though.
+
+45:09
+No.
+
+45:10
+Oh, it's in the same.
+
+45:11
+It's 1 Jason files are separated, but in the API response you'll get everything in the same.
+
+45:17
+Douglas, I'm sorry.
+
+45:19
+Yeah, but yeah, internally the files are different, but for the metadata viewing, we we do just merge all of them together and just serve it in the same API call for easy reading.
+
+45:31
+We do need to clean it up though.
+
+45:33
+Yeah, that's a, it's a bit of a mess still, but yeah, yeah, I think so.
+
+45:41
+We have a hamburger menu, the fly out separate metadata file, Jason file.
+
+45:45
+And for everything else we have a separate, separate file.
+
+45:49
+The generic stuff like footer links and photo, you know, photo legal content, things like that.
+
+45:57
+That's put in a separate file.
+
+46:00
+But yeah, we have 3 header, footer and hamburger menu.
+
+46:03
+Three separate Jason files for each locale.
+
+46:09
+OK, where does the CSS come from?
+
+46:14
+The CSS is with header, footer.
+
+46:17
+Yeah, the header and footer CSS are with header footer.
+
+46:19
+Other CSS are not with header footers.
+
+46:22
+All right.
+
+46:22
+But it's it's authored somewhere as a a CSS file and the the microservice just includes it or what's happening there?
+
+46:32
+It's a it's in the same repo when the HTML content is loaded.
+
+46:37
+So essentially the way the microservice works is that microservice the the the server will respond with HTML content that is decorated with the Jason file for that given locale.
+
+46:51
+It'll include the CSS file, it'll build the CSS file and then it'll include the references for those CSS files as well as some JavaScript files.
+
+47:00
+And then those are then loaded runtime, you know, in the browser because they're, they're also stored in the micro service as static assets.
+
+47:10
+Some of the some of the SVG, some of the GIF, some of the yeah, some of these icons and stuff like that are also considered static assets.
+
+47:19
+So consider two parts.
+
+47:20
+1 is the static asset, which includes the JavaScript, the CSS and some of the images and the actual HTML which is which is like I say, decorated with the with the metadata for that given locale.
+
+47:32
+And we'll include the references to the static assets into the HTML and then the browser can then load it, you know, parallely.
+
+47:41
+OK, for which are we using any design system styles?
+
+47:49
+Design systems, Yeah, seed the Bootstrap or something.
+
+47:57
+No, actually, but the fault No, no, the CDs, the CDs design system much Yeah, that I don't think no, I mean, we, we may have some references, yeah, but I don't think we we use this CDN directly.
+
+48:13
+I mean, we have some some, I think main CSS and some other CSS references in the header.
+
+48:19
+But yeah, I'll I'll have to verify that once I think you have them wish because the only yeah, maybe I think Rama, if you can add we'll get back on it.
+
+48:39
+Nagendra.
+
+48:42
+Yeah, sure.
+
+48:50
+Yeah, I'm, I'm looking at performance on this right now and looks like the main part.
+
+49:02
+Let's see what disappears when I get.
+
+49:05
+So somewhere around 750 to 800 milliseconds just to load this header because it includes everything, right?
+
+49:17
+It includes, you know, fonts.
+
+49:20
+It includes launch Alloy JS, some RUM data, some configuration, some form data dot Jason.
+
+49:41
+Is there a?
+
+49:42
+Is there a?
+
+49:43
+Is this the bare minimum, like hitting this header slash?
+
+49:48
+Note no jQuery.
+
+49:50
+Is that the bare minimum or is there another call that does less?
+
+49:57
+That is the maximum, actually.
+
+49:59
+Yeah.
+
+49:59
+I think that's when you're asking for everything.
+
+50:02
+You want to reduce something, then you can just say that dot no jQuery, then separate with dot Note W dot no search dot no card, and it will become lighter and lighter and lighter.
+
+50:16
+Oh, OK.
+
+50:21
+So I could add on here dot no launch, no trust arc.
+
+50:31
+No trust arc.
+
+50:32
+Yeah, Let me see.
+
+50:40
+Oh, that was a lot faster.
+
+50:47
+Yeah, Yeah, that.
+
+50:49
+Hey, I think this space may not access directly this access through intranet and it has a cache, so that should be OK.
+
+50:59
+If it is slow for some time, maybe it's for the next request, it's so from cache, so that should be faster, right?
+
+51:07
+Yeah.
+
+51:10
+Oh yeah, that that's why the subsequent request would be faster for yeah, being cached at the Akamai level or no, no, no.
+
+51:18
+So this is to cache you from Enginex.
+
+51:20
+So suppose if you make a fault header footer for each page, we are caching this header for one hour, OK, so the next request if anyone tries to access homepage, so that actually so from cache.
+
+51:33
+Got it.
+
+51:36
+So since you are trying to access it directly, that's why it's showing little bit slowness.
+
+51:41
+But if you access it through an A page, so it it will not be this much slowness.
+
+51:46
+Yeah, it always faster.
+
+51:49
+Well, I want even the first request to be fast because that's what Google is going to do.
+
+51:57
+But yeah, so it's a lot faster.
+
+52:00
+If you don't include launch in there, it's a lot faster, right.
+
+52:04
+You're below 500 milliseconds, OK, But this page actually, they never actually try to access it directly, right?
+
+52:15
+Wish yeah, you would normally just use the home page and home page would normally be correct.
+
+52:21
+Yeah, somebody's calling it.
+
+52:29
+Now if anybody is calling this one as something, we need to take a look at it.
+
+52:33
+OK.
+
+52:33
+So generally, so this this page is right, they should never actually call it directly from a browser.
+
+52:41
+Yeah, there is no reason for anybody to do that.
+
+52:46
+Yeah, this is this is just for the test testing of internally normally application front end applications don't even know the existence of it.
+
+53:03
+Anybody else on my team have questions Deep team Mari Yeah, I have, yeah.
+
+53:11
+I have one question, Rob, that is regarding the search that as I understand search is a different application, but the pages which we are created in am I want to understand how they are indexed in search and what we are using for search because like the pages which we'll be creating in EDS.
+
+53:31
+So our it's expectation those need to be there in the search and how it will come like is there any should you learn or anything which is expected something from EDS specifically for the search to get indexed.
+
+53:46
+That is something I want to understand.
+
+53:48
+Yeah.
+
+53:49
+So we do have a crawler which is developed in AMI think now we developed in a microservice Python that crawls AM pages on a daily basis, scheduled daily basis.
+
+54:03
+And that way the search integrates that information and we send the Jason data with all the properties like page properties and component information.
+
+54:18
+Doug and I think maybe if Nirmal is available, they should be able to provide more information on that.
+
+54:24
+How they are using, I'm not sure.
+
+54:29
+Yeah.
+
+54:29
+And I think they have that caller job in air flow.
+
+54:33
+Yeah, they are directly calling that am publish instances directly to get the data plug in the Yeah, thank you Rama and we'll be able to provide the URL.
+
+54:56
+So Nagendar, is it like the JCR crawler one which I've seen in conference?
+
+55:02
+Is it like this one?
+
+55:03
+Yeah, OK.
+
+55:04
+This one, this Jason crawler basically returns the Jason data as you see, right?
+
+55:10
+The Jason data has all the page properties and each component to define on the page.
+
+55:19
+This is the base URL.
+
+55:21
+And yeah, like they call it on the home page, but the service is actually on the Python.
+
+55:29
+All the information will be coming from yeah, the servlet and we yeah under the home page, whatever the child pages it is recursively crawls all the pages.
+
+55:52
+OK, so it it's like The Who in home page this crawler runs Jason crawler dot Jason it it makes a Jason and that is used by the search to show the AM pages in the search.
+
+56:05
+Yes OK.
+
+56:07
+And all these individual I think pages, they also will crawl one by one in a recursive manner to get the content.
+
+56:14
+OK.
+
+56:15
+So is it like this, this is a standard format like or this Jason can be changed?
+
+56:20
+This format, the format of the Jason Yeah, format.
+
+56:24
+This is the standard one now.
+
+56:27
+OK, got it.
+
+56:29
+So suppose if we take any EDS page and if we want that also to be crawled.
+
+56:35
+So the expectation is the Jason format should be in the same format like the in this in the same standard.
+
+56:43
+Yes, that's what now.
+
+56:45
+But if we cannot deliver that, yes, maybe we can have a discussion and see what is other possible way to get this information basically, yeah.
+
+56:55
+Because because in EDS like even if it's EDS, but internally this is still be on the CRXD and all the data will be in J said, I mean JCR data, right?
+
+57:11
+Yeah, yeah.
+
+57:12
+But that will be on author instance.
+
+57:14
+If we talk about publish like dot page and dot live that actually they take the content from test passes.
+
+57:22
+So their CRX plays no role.
+
+57:24
+Once we publish the content in EDS got it.
+
+57:27
+It goes to their passes.
+
+57:29
+So that is something OK.
+
+57:32
+And if we don't want any page to get crawled there, I hope there will be some properties in the page properties.
+
+57:38
+Yeah.
+
+57:38
+And we have no no index, no beta data.
+
+57:43
+So we have different the page properties even though it does Jason data, but that will not be part of the search.
+
+57:53
+OK, good.
+
+57:54
+And the search version of this JCR crawler doesn't include all the components information.
+
+58:01
+It just no basic crawler even include Doug, the other crawler, the crawler dot Jason will not include the Jason crawler will include everything.
+
+58:12
+Yeah, this part doesn't include this is what search receives.
+
+58:17
+OK, but I'm not sure the recently like they started using this one right?
+
+58:24
+I'm yeah, maybe I'm not sure, but I see maybe if Nirmal is on the call, maybe he can confirm like which crawler they're using now.
+
+58:36
+Maybe I'll get back to you on that.
+
+58:39
+Yep, yeah, which crawler they're using.
+
+58:42
+So in the existing production, we'll be using that the older version, right, which ends with just Jason.
+
+58:50
+OK, this one.
+
+58:51
+Yeah, this one, right.
+
+58:52
+So this is what been used in the current system, but we also have this unified search platform that we are building in Q1 and Q2, right.
+
+59:01
+So where we'll be using the newer version which is this Jason crawler version.
+
+59:06
+Thank you for confirming Nirmal.
+
+59:09
+And even we are not include the entire AM content in the search, right?
+
+59:14
+Only learn more and other documents and any promotional, right?
+
+59:18
+Or are we including everything related to the AM pages in the search?
+
+59:26
+So it's right from the home page, but in there are few tags to exclude certain pages based on the rule type.
+
+59:37
+I'm not sure whether those rules have been authored unless as far as I know the exclusions directory exclusions and things are defined in AEM still.
+
+59:54
+Yes, that's good.
+
+59:55
+Yeah.
+
+59:58
+So I one of the slide decks that I provided in the documentation has an overview of that at a high level of what directories basically are included.
+
+1:00:20
+One last question I had, I'm I'm seeing the offers bar in the header.
+
+1:00:25
+Is that populated server side or is that populated on the browser as you know, right, we have interact component I think, but on the header footer how it is actually offers is populated separately by offers team.
+
+1:00:50
+That is the container is provided by the header footer, but the content itself is not populated by the headers.
+
+1:00:56
+Yeah, that is the office is responsible for populating the content there.
+
+1:01:02
+OK, so something in maybe launch is actually doing that or Alloy JS.
+
+1:01:09
+No, it's a dynamic offer component and as you see, right, this is the offers related one, right?
+
+1:01:20
+But something otherwise it comes in blank is what I'm seeing.
+
+1:01:25
+Yes, but something triggers and and makes a call to get the appropriate content to be injected into that part of the Dom, right?
+
+1:01:41
+Yes, that is correct.
+
+1:01:43
+So what what is doing that is, is that part of Alloy JS is making call using web SDK or no?
+
+1:01:53
+I think it's a separate JavaScript office JS or offers SSII think it is also done through SSI from the office service.
+
+1:02:05
+Although I don't have a complete picture of how Office is configured, but I think from head of footer we provide a container.
+
+1:02:12
+We do the the inclusion of the office content and the office JavaScript.
+
+1:02:22
+Let me just quickly take a look at that code snippet here and just confirm, Yeah, I do see an offers JS that gets called.
+
+1:02:39
+Yes, is is that part of the header like offers JS is included with the header or is it loaded somewhere else?
+
+1:02:55
+Just give me one moment.
+
+1:02:57
+I'm checking that the templates.
+
+1:03:00
+No, the offers dot JS is part of the header footer.
+
+1:03:03
+Now for header footer related and for all other offers, we have a interact component which actually integrates those offers.
+
+1:03:13
+As you remember, we had a separate session with the customer marketing team how these offers are being rendered on the page.
+
+1:03:23
+So the rest of this year.
+
+1:03:26
+All right, so it's all encapsulated inside the header?
+
+1:03:31
+No, it is encapsulated offers related to the header footer like as you see the promo bar, this is encapsulated as part of the header footer.
+
+1:03:41
+But rest of the pages we do have a dedicated component, right, Right.
+
+1:03:45
+Yeah, yeah, that's correct.
+
+1:03:48
+And it's still probably using the same offers JS that is loaded in the header.
+
+1:03:54
+Yes, OK.
+
+1:03:57
+Yeah, would wish you can confirm.
+
+1:03:58
+That's what I think.
+
+1:04:00
+So office DM, Office office min JS is included by the header, but that's pretty much what the header footer does.
+
+1:04:09
+And they obviously provide the container for dynamic office.
+
+1:04:13
+And then I think office main JS executes and populates the container with the right content depending on where you are.
+
+1:04:23
+OK, is this a great help guys?
+
+1:04:26
+Sorry for going a few minutes over, but the the the last few minutes were actually very helpful as well.
+
+1:04:32
+So I appreciate your time.
+
+1:04:36
+Yeah, thank you, Rob.
+
+1:04:38
+I think Keith, yes, we do have AB to B integrations.
+
+1:04:42
+However, like for a header footer still like we're not doing any separate way for B to B from AM side.
+
+1:04:50
+However, I think we still have B to B integration with them.
+
+1:04:54
+Maybe we can have another session.
+
+1:04:59
+Sorry, I was just like answering Keith question in a separate.
+
+1:05:03
+Yeah, yeah, no worries.
+
+1:05:06
+Yeah, I just wanted to bring up B to B in general because I know that that's a a specific implementation of our site.
+
+1:05:13
+So and it has some set of requirements that that Rob and everyone should be aware of.
+
+1:05:20
+So we have it as a topic for Session 7.
+
+1:05:27
+It looks like there's AB to B representative there at least, but it might be worth doing more of a deep dive into that just so we we make sure that we capture that use case.
+
+1:05:38
+Yeah.
+
+1:05:40
+So in terms of header footer, Rob, are we good with the everything or do we still have any questions or do we need any separate session again?
+
+1:05:50
+Oh I I think I have enough to go with we're planning on this.
+
+1:05:58
+There were a couple of things that you know, if login or the B to B or the PDP or anybody or any of those other integrations impact the rest of the page, I would want to know, but it sounds like a lot of it is really incorporated into the actual header.
+
+1:06:17
+Yes, that's correct.
+
+1:06:18
+Like yeah, login and all still part of the header footer.
+
+1:06:23
+However, that will be redacted to the different application once you click the sign in.
+
+1:06:31
+And for antibody, I think, yeah, antibody and B to B and other integrations, maybe we still can have another session.
+
+1:06:41
+Yeah, yeah, yeah.
+
+1:06:44
+We still need to cover couple of other topics, Rob.
+
+1:06:48
+So depending on like if you could review offline related to header, footer and let us know if those needs to be included also.
+
+1:06:55
+Thank you.
+
+1:06:58
+All right, so just to keep track of this, it sounds like we need follow-ups for B to B and antibody integration with the header and footer, not only the header footer with the AM basically and even B to B Yeah, I think with the header footer, I think we covered most of the things.
+
+1:07:17
+Maybe if they find anything new thing and then we'll can have a further discussion on those.
+
+1:07:24
+OK, so then I 'cause I just want to put it on our sheet.
+
+1:07:27
+So it, it sounds like it would be B to BPDP and antibody integrations with AEM or OK, Yeah, not necessarily associated with the header footer, but those are each level things.
+
+1:07:44
+OK.
+
+1:07:47
+Anything else that we should add to our sheet to keep track of?
+
+1:07:55
+All right.
+
+1:07:56
+I think we, we saw one thing.
+
+1:08:00
+Sorry to cut you, Keith.
+
+1:08:01
+Go ahead.
+
+1:08:02
+Oh, yeah.
+
+1:08:03
+I I just wanted to also like our existing implementation of immersive content.
+
+1:08:09
+We should discuss that, Yes.
+
+1:08:18
+And I just put that one message in the chat box.
+
+1:08:21
+It is like more or very high level we want to understand what exactly we are looking like e-commerce platform, connection platform overview, integrated methods, site section and all.
+
+1:08:36
+So if you come up with a divide what exactly you are looking, maybe the team should prepare and come up with more details on that.
+
+1:08:51
+That's question to Rob, Right, Rob?
+
+1:08:52
+Yes, Correct, ma'am.
+
+1:08:54
+Thank you for clarifying.
+
+1:09:00
+Yeah, maybe, Yeah, you can take a look at it later, Rob, for now, I think yeah, yeah, there there's definitely some commerce things that we do need to talk about where it is, Is it a hand off or where is the hand off when we go from a content page to going into the actual commerce application?
+
+1:09:29
+I think once you add the product to the cart, right.
+
+1:09:31
+I think as soon as you click the cart button, I think, yeah, you will be redirect the cart page in the similar way, check out process as well, right.
+
+1:09:40
+And those are handled by a different system.
+
+1:09:42
+Yes, that's correct.
+
+1:09:45
+Yeah.
+
+1:09:46
+And those are out of scope for edge delivery.
+
+1:09:50
+Yes.
+
+1:09:52
+OK.
+
+1:09:54
+All right.
+
+1:09:54
+I'm good.
+
+1:09:58
+Look forward to the next meeting.
+
+1:09:59
+Yeah.
+
+1:10:00
+Thank you.
+
+1:10:01
+Keep digging.
+
+1:10:01
+Thanks so much, everyone, for your time.
+
+1:10:05
+Thank you.
+
+1:10:05
+Bye.
+
+1:10:05
+Bye.
+
+1:10:06
+Yeah.
+
+1:10:06
+Bye.
+
+1:10:07
+Thank you.
+
+1:10:08
+Bye.
+
+1:10:08
+Bye.
+
+1:10:10
+Thanks.
