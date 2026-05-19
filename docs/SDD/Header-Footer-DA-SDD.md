@@ -270,13 +270,12 @@ During the discovery session, TFS confirmed they are **actively working on separ
 
 ### 5.1 What TFS Confirmed
 
-> "We are migrating the analytic stuff to a separate repo, global analytics"
->
-> "We'll have three separate SSIs — server side includes that will allow front end applications to get the global includes, the analytics, and just the header part separately"
->
-> "Header footer will only be just the HTML"
->
-> "We have already worked on it and we are reviewing it — we'll have it in QA by probably end of the week"
+During discovery sessions, the TFS Header/Footer team confirmed the following:
+
+- Analytics (Adobe Launch) is being migrated to a separate repository and will be served independently from the header/footer
+- The target architecture will have three separate server-side includes — one for global includes (fonts, CSS), one for analytics, and one for just the header/footer HTML
+- The header/footer endpoint will ultimately return only the functional HTML — without bundled analytics, consent, or font loading
+- This work is actively in progress and was approaching QA at the time of the discovery session
 
 ### 5.2 Planned Separation
 
