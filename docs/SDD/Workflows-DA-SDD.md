@@ -168,7 +168,7 @@ The following infrastructure steps from the AEM workflow are handled natively by
 
 | AEM Workflow Step | DA/EDS Equivalent |
 |---|---|
-| Replicate to Preview | DA preview is automatic — content is always available on `.aem.page` |
+| Replicate to Preview | DA Request Publish plugin refreshes preview automatically at submission time — content available on `.aem.page` for reviewers |
 | Cache Flush Preview | Not needed — EDS CDN handles invalidation |
 | Replicate to Production | Publish action triggers EDS CDN delivery |
 | Cache Flush Production | Not needed — EDS CDN handles invalidation |
@@ -184,7 +184,7 @@ This is why a 43-step AEM workflow becomes a 3-step DA workflow — the business
 | Sequential multi-stage approval | Yes | Enhanced DA Request Publish with sequential steps |
 | Reject → rework → resubmit | Yes | DA rejection with reason + author resubmit (built-in) |
 | Email notifications at each stage | Yes | DA email notifications per step (built-in + custom provider) |
-| Preview before review | Yes | DA preview always available (`.aem.page`) |
+| Preview before review | Yes | DA refreshes preview at submission — available on `.aem.page` for reviewers |
 | Publish on final approval | Yes | DA auto-publish on approval (built-in) |
 | Cancellation | Yes | Workflow cancellation support |
 | Path-based reviewer assignment | Yes | DA path-based approval routing (built-in) |
@@ -262,3 +262,5 @@ The DA documentation provides the exact payload format specification that the em
 | 5 | Email API — confirm TFS can provide a publicly accessible email endpoint with the required JSON payload format. Confirm API key authentication is acceptable. | TFS IT | High |
 | 6 | Notification requirements beyond email — if TFS needs Slack, Teams, or other notification channels, this must be discussed separately with DA engineering. | TFS | Low |
 | 7 | Comment history — confirm if workflow comment history (carried through email notifications) is a requirement and how it should work across sequential approval steps. | TFS | Medium |
+| 8 | One pending request per page — DA currently allows only one pending workflow request per page. If an author needs to submit a new request, the previous one must be completed or withdrawn. Confirm if this is acceptable for TFS's workflow volume. | TFS | Medium |
+| 9 | Multiple approvers per step — when multiple approvers are assigned to a step, confirm whether one approval is sufficient to advance or all must approve. This will be defined during the enhanced workflow design with DA engineering. | TFS + DA Engineering | Medium |
