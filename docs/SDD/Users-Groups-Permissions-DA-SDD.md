@@ -137,11 +137,12 @@ In AEM, three role levels existed because:
 
 In DA + EDS:
 - **Everyone who can edit can also delete** — DA's `write` permission includes both edit and delete. There is no way to grant edit without delete.
-- **Everyone who can edit can also preview** — there's no way to restrict preview separately from edit access
-- **Publish is a separate EDS-level permission** — not tied to DA authoring access
+- **Preview and publish are separate from DA permissions** — DA controls only authoring access. Preview (.aem.page) and publish (.aem.live) are controlled independently via the Edge Delivery Config Service. They must be explicitly granted.
 - **No workflow gate exists** — so the distinction between "can activate via workflow" and "can activate directly" disappears
 
-This naturally collapses 3 roles into 2: Author (write + preview, no publish) and Admin (write + preview + publish). The distinction is purely about **who can push content live** — not about edit vs delete capabilities.
+This naturally collapses 3 roles into 2: Author (write in DA + preview in EDS, no publish) and Admin (write in DA + preview + publish in EDS). The distinction is purely about **who can push content live** — not about edit vs delete capabilities.
+
+**Important:** DA permissions and EDS preview/publish permissions are two completely independent systems. Granting DA write access does NOT automatically grant preview or publish access. Both must be configured separately.
 
 ---
 
@@ -223,42 +224,57 @@ Controls who can view and edit content in DA.live.
 
 **Key Characteristics:**
 - Managed via the DA permissions sheet in the organization configuration at `https://da.live/config#/<org-name>/`
-- Uses IMS group identifiers for access control (IMS Org ID / Group Name format)
-- Applied at the region folder level using path patterns with wildcards (e.g., `/content/north-america/**`)
-- At runtime, the longest matching path for a requested resource determines the permission level
+- Uses IMS Org ID / Group Name format for group references (e.g. `<IMS_ORG_ID>/tfs-na-authors`)
+- Applied at the region folder level using path patterns with wildcards
+- At runtime, paths are sorted by length and the longest matching path for each group determines the permission level
 - Users must log out and log back in after group membership changes for permissions to take effect
+- Row order in the permissions sheet does not matter — only path length determines precedence
 
-**Two access levels exist in DA:**
+**Access levels in DA:**
 
 | Level | Description |
 |---|---|
 | `read` | View content — cannot create, edit, or delete |
 | `write` | Create, edit, and delete content (write implies read and delete) |
+| (empty) | No access — explicit denial |
 
 **Important:** DA does not have a separate delete permission. Write access includes the ability to delete. It is not possible to grant edit access without also granting delete access. This is a platform constraint.
 
+**Path wildcard patterns:**
+
+| Pattern | Meaning |
+|---|---|
+| `/content/north-america/**` | All resources under the directory (excluding the directory itself) |
+| `/content/north-america/+**` | All resources under the directory, including the directory itself |
+| `/content/north-america/us/en/page` | Specific document |
+
+**Critical setup requirement:** The permissions sheet must always include a `CONFIG` row granting the administrator access to the organization configuration itself. Without this, administrators can lock themselves out of the permissions sheet.
+
 **DA Permissions Sheet Configuration:**
+
+Note: In the table below, `<ORG_ID>` represents the TFS IMS Organization ID obtained from the Adobe Admin Console. All group references must use the `<ORG_ID>/group-name` format.
 
 | Path | Groups | Actions |
 |---|---|---|
-| `/content/**` | `tfs-it-administrators` | `write` |
-| `/content/**` | `tfs-global-readonly` | `read` |
-| `/content/global/**` | `tfs-global-authors` | `write` |
-| `/content/global/**` | `tfs-global-admins` | `write` |
-| `/content/north-america/**` | `tfs-na-authors` | `write` |
-| `/content/north-america/**` | `tfs-na-admins` | `write` |
-| `/content/latin-america/**` | `tfs-latam-authors` | `write` |
-| `/content/latin-america/**` | `tfs-latam-admins` | `write` |
-| `/content/emea/**` | `tfs-emea-authors` | `write` |
-| `/content/emea/**` | `tfs-emea-admins` | `write` |
-| `/content/japan/**` | `tfs-japan-authors` | `write` |
-| `/content/japan/**` | `tfs-japan-admins` | `write` |
-| `/content/ipac/**` | `tfs-ipac-authors` | `write` |
-| `/content/ipac/**` | `tfs-ipac-admins` | `write` |
-| `/content/greater-china/**` | `tfs-china-authors` | `write` |
-| `/content/greater-china/**` | `tfs-china-admins` | `write` |
-| `/content/korea/**` | `tfs-korea-authors` | `write` |
-| `/content/korea/**` | `tfs-korea-admins` | `write` |
+| `CONFIG` | `<ORG_ID>/tfs-it-administrators` | `read, write` |
+| `/content/**` | `<ORG_ID>/tfs-it-administrators` | `write` |
+| `/content/**` | `<ORG_ID>/tfs-global-readonly` | `read` |
+| `/content/global/**` | `<ORG_ID>/tfs-global-authors` | `write` |
+| `/content/global/**` | `<ORG_ID>/tfs-global-admins` | `write` |
+| `/content/north-america/**` | `<ORG_ID>/tfs-na-authors` | `write` |
+| `/content/north-america/**` | `<ORG_ID>/tfs-na-admins` | `write` |
+| `/content/latin-america/**` | `<ORG_ID>/tfs-latam-authors` | `write` |
+| `/content/latin-america/**` | `<ORG_ID>/tfs-latam-admins` | `write` |
+| `/content/emea/**` | `<ORG_ID>/tfs-emea-authors` | `write` |
+| `/content/emea/**` | `<ORG_ID>/tfs-emea-admins` | `write` |
+| `/content/japan/**` | `<ORG_ID>/tfs-japan-authors` | `write` |
+| `/content/japan/**` | `<ORG_ID>/tfs-japan-admins` | `write` |
+| `/content/ipac/**` | `<ORG_ID>/tfs-ipac-authors` | `write` |
+| `/content/ipac/**` | `<ORG_ID>/tfs-ipac-admins` | `write` |
+| `/content/greater-china/**` | `<ORG_ID>/tfs-china-authors` | `write` |
+| `/content/greater-china/**` | `<ORG_ID>/tfs-china-admins` | `write` |
+| `/content/korea/**` | `<ORG_ID>/tfs-korea-authors` | `write` |
+| `/content/korea/**` | `<ORG_ID>/tfs-korea-admins` | `write` |
 
 **Key Rules:**
 - No cross-region access is granted unless explicitly required and approved. The absence of a path entry means no access.
@@ -271,10 +287,13 @@ Controls who can view and edit content in DA.live.
 
 Controls who can preview content on `.aem.page` and publish content to `.aem.live`.
 
+**This is a completely separate system from DA authoring permissions.** DA write access does NOT automatically grant preview or publish. Both must be explicitly configured in the Edge Delivery Config Service.
+
 **Key Characteristics:**
-- Managed via the AEM Permissions App (Config Service)
-- IMS group membership determines eligibility
-- Preview and publish are separately controlled capabilities
+- Managed via the Edge Delivery Config Service at `tools.aem.live`
+- Uses email addresses and Edge Delivery groups (not Adobe IMS groups directly)
+- Preview and publish are independently controlled capabilities
+- Must be configured separately from DA permissions
 
 **Access Rules by Role:**
 
@@ -351,16 +370,22 @@ All groups must be created in the Adobe Admin Console before any DA.live permiss
 
 ### 7.2 DA.live — Permissions Configuration
 
-DA.live permissions are managed via the `.da/permissions` file within the content repository.
+DA.live permissions are managed via the permissions sheet in the organization configuration at `https://da.live/config#/<org-name>/`.
 
 **Steps:**
 
-1. In DA.live, navigate to the root of the content repository
-2. Locate or create the `.da/permissions` configuration file
-3. For each region, add a permission entry mapping the IMS group name to the region path with the appropriate access level
-4. Follow the permission table defined in Section 5.1 exactly
-5. Validate that `tfs-it-administrators` has full access to `/content/**` before configuring region-specific entries
-6. Test access by logging in as a user in a region-specific author group and confirming they can only access their assigned region path
+1. Obtain the IMS Organization ID from the Adobe Admin Console
+2. Navigate to the DA organization configuration at `https://da.live/config#/<org-name>/`
+3. Open or create the `permissions` sheet
+4. **First row must be the CONFIG entry** — grant `tfs-it-administrators` read and write access to `CONFIG` to prevent administrator lockout
+5. Add the `/content/**` entry for `tfs-it-administrators` with `write` access
+6. Add the `/content/**` entry for `tfs-global-readonly` with `read` access
+7. For each region, add entries mapping the IMS group (using `<ORG_ID>/group-name` format) to the region path with `write` access
+8. Follow the permission table defined in Section 5.1 exactly
+9. Validate access by logging in as a user in a region-specific author group and confirming they can only access their assigned region path
+10. Confirm that users in one region's group **cannot** access another region's content
+
+**Important:** Group names in the permissions sheet must use the format `<IMS_ORG_ID>/group-name`. The group name alone without the org ID prefix will not work.
 
 ### 7.3 EDS — Preview and Publish Permissions
 
