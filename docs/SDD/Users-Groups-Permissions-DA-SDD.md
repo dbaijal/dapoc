@@ -106,8 +106,8 @@ TFS's EDS content is organised by region. Permissions are applied at the **regio
 | Aspect | AEM (current) | DA + EDS (target) |
 |---|---|---|
 | Permission model | JCR ACLs — per-node, complex inheritance | Folder-level access via IMS groups |
-| Groups | 40+ groups (Content Author, Power User, Super User × 8 regions + workflow + notification + special groups) | ~18 groups (Editor + Admin × 8 regions + 2 global) |
-| Role levels | 3 (Content Author, Power User, Super User) | 2 (Editor, Admin) |
+| Groups | 40+ groups (Content Author, Power User, Super User × 8 regions + workflow + notification + special groups) | ~18 groups (Author + Admin × 8 regions + 2 global) |
+| Role levels | 3 (Content Author, Power User, Super User) | 2 (Author, Admin) |
 | Publish control | Per-user activate/replicate permission | Separate EDS publish permission |
 | Workflow | System-enforced AEM Workflow per region (8 workflow groups) | Not system-enforced — process-based team review |
 | Notification groups | 4 AEM workflow notification groups | Eliminated — handled by platform |
@@ -124,7 +124,7 @@ TFS's EDS content is organised by region. Permissions are applied at the **regio
 | Workflow groups (lt-wf-wo-*) | No system-enforced workflow in DA |
 | Notification groups (lt-wf-*-notification) | DA platform handles notifications natively |
 | Base groups (lt-ca-base, lt-wf-base) | No group inheritance chain needed in flat DA model |
-| Friendly-authors group | All editors have same capabilities in DA |
+| Friendly-authors group | All authors have same capabilities in DA |
 | DAM-admins | Assets managed directly in DA — no separate DAM |
 | Separate Content Author vs Power User distinction | DA has no separate "activate" permission — publish is controlled at EDS level |
 
@@ -136,11 +136,12 @@ In AEM, three role levels existed because:
 - **Super User** = can create/edit/delete/activate without workflow
 
 In DA + EDS:
+- **Everyone who can edit can also delete** — DA's `write` permission includes both edit and delete. There is no way to grant edit without delete.
 - **Everyone who can edit can also preview** — there's no way to restrict preview separately from edit access
 - **Publish is a separate EDS-level permission** — not tied to DA authoring access
 - **No workflow gate exists** — so the distinction between "can activate via workflow" and "can activate directly" disappears
 
-This naturally collapses 3 roles into 2: Editor (edit + preview) and Admin (edit + preview + publish + delete).
+This naturally collapses 3 roles into 2: Author (write + preview, no publish) and Admin (write + preview + publish). The distinction is purely about **who can push content live** — not about edit vs delete capabilities.
 
 ---
 
@@ -163,10 +164,10 @@ For each region, two groups are created following a consistent naming pattern:
 
 | Role | IMS Group Name | Scope | Authoring | Preview | Publish |
 |---|---|---|---|---|---|
-| Region Editor | `<region>-editors` | Assigned region | Yes | Yes | No |
+| Region Author | `<region>-authors` | Assigned region | Yes | Yes | No |
 | Region Admin | `<region>-admins` | Assigned region | Yes | Yes | Yes |
 
-A Region Admin inherits all Editor capabilities. A separate editor group membership is not required when a user is an Admin — the Admin role includes the full authoring permission set.
+A Region Admin inherits all Author capabilities. A separate author group membership is not required when a user is an Admin — the Admin role includes the full authoring permission set.
 
 ### 4.2 IMS Group Naming Convention
 
@@ -181,20 +182,20 @@ All groups follow the pattern: `<scope>-<role>`
 
 **Region-Level Groups:**
 
-| Region | Editor Group | Admin Group |
+| Region | Author Group | Admin Group |
 |---|---|---|
-| Global | `tfs-global-editors` | `tfs-global-admins` |
-| North America | `tfs-na-editors` | `tfs-na-admins` |
-| Latin America | `tfs-latam-editors` | `tfs-latam-admins` |
-| EMEA | `tfs-emea-editors` | `tfs-emea-admins` |
-| Japan | `tfs-japan-editors` | `tfs-japan-admins` |
-| IPAC | `tfs-ipac-editors` | `tfs-ipac-admins` |
-| Greater China | `tfs-china-editors` | `tfs-china-admins` |
-| Korea | `tfs-korea-editors` | `tfs-korea-admins` |
+| Global | `tfs-global-authors` | `tfs-global-admins` |
+| North America | `tfs-na-authors` | `tfs-na-admins` |
+| Latin America | `tfs-latam-authors` | `tfs-latam-admins` |
+| EMEA | `tfs-emea-authors` | `tfs-emea-admins` |
+| Japan | `tfs-japan-authors` | `tfs-japan-admins` |
+| IPAC | `tfs-ipac-authors` | `tfs-ipac-admins` |
+| Greater China | `tfs-china-authors` | `tfs-china-admins` |
+| Korea | `tfs-korea-authors` | `tfs-korea-admins` |
 
 ### 4.3 Group Membership Rules
 
-- Authoring and publishing are **independent permissions** — membership in the editor group does not confer publish rights
+- Authoring and publishing are **independent permissions** — membership in the author group does not confer publish rights
 - Users requiring both capabilities must be assigned to the `<region>-admins` group
 - Users requiring access to multiple regions must be added to each region's groups independently
 - `tfs-it-administrators` members automatically have full access to all regions and do not need to be added to region-specific groups
@@ -204,11 +205,11 @@ All groups follow the pattern: `<scope>-<role>`
 
 | AEM Group | DA Equivalent | Notes |
 |---|---|---|
-| lt-ca-emea (Content Author EMEA) | `tfs-emea-editors` | Same scope — edit only, no publish |
+| lt-ca-emea (Content Author EMEA) | `tfs-emea-authors` | Same scope — edit only, no publish |
 | lt-pw-emea (Power User EMEA) | `tfs-emea-admins` | Power User had activate = Admin has publish |
 | lt-su-emea (Super User EMEA) | `tfs-emea-admins` | Super User collapses into Admin |
 | lt-wf-wo-emea (Workflow EMEA) | Eliminated | No system-enforced workflow in DA |
-| lt-ba-global (Basic Global Author) | `tfs-global-editors` | Global edit access |
+| lt-ba-global (Basic Global Author) | `tfs-global-authors` | Global edit access |
 
 ---
 
@@ -221,43 +222,50 @@ The permission model operates across two distinct layers.
 Controls who can view and edit content in DA.live.
 
 **Key Characteristics:**
-- Managed via the DA permissions configuration (`/.da/permissions`)
-- Uses IMS group names for access control (not individual user IDs)
-- Applied at the region folder level (e.g., `/content/north-america/**`)
-- Three access levels available:
+- Managed via the DA permissions sheet in the organization configuration at `https://da.live/config#/<org-name>/`
+- Uses IMS group identifiers for access control (IMS Org ID / Group Name format)
+- Applied at the region folder level using path patterns with wildcards (e.g., `/content/north-america/**`)
+- At runtime, the longest matching path for a requested resource determines the permission level
+- Users must log out and log back in after group membership changes for permissions to take effect
 
-| Level | Code | Description |
+**Two access levels exist in DA:**
+
+| Level | Description |
+|---|---|
+| `read` | View content — cannot create, edit, or delete |
+| `write` | Create, edit, and delete content (write implies read and delete) |
+
+**Important:** DA does not have a separate delete permission. Write access includes the ability to delete. It is not possible to grant edit access without also granting delete access. This is a platform constraint.
+
+**DA Permissions Sheet Configuration:**
+
+| Path | Groups | Actions |
 |---|---|---|
-| Read | R | View content |
-| Write | W | Create and edit content |
-| Delete | D | Remove content |
+| `/content/**` | `tfs-it-administrators` | `write` |
+| `/content/**` | `tfs-global-readonly` | `read` |
+| `/content/global/**` | `tfs-global-authors` | `write` |
+| `/content/global/**` | `tfs-global-admins` | `write` |
+| `/content/north-america/**` | `tfs-na-authors` | `write` |
+| `/content/north-america/**` | `tfs-na-admins` | `write` |
+| `/content/latin-america/**` | `tfs-latam-authors` | `write` |
+| `/content/latin-america/**` | `tfs-latam-admins` | `write` |
+| `/content/emea/**` | `tfs-emea-authors` | `write` |
+| `/content/emea/**` | `tfs-emea-admins` | `write` |
+| `/content/japan/**` | `tfs-japan-authors` | `write` |
+| `/content/japan/**` | `tfs-japan-admins` | `write` |
+| `/content/ipac/**` | `tfs-ipac-authors` | `write` |
+| `/content/ipac/**` | `tfs-ipac-admins` | `write` |
+| `/content/greater-china/**` | `tfs-china-authors` | `write` |
+| `/content/greater-china/**` | `tfs-china-admins` | `write` |
+| `/content/korea/**` | `tfs-korea-authors` | `write` |
+| `/content/korea/**` | `tfs-korea-admins` | `write` |
 
-**DA Permissions Configuration (`.da/permissions`):**
+**Key Rules:**
+- No cross-region access is granted unless explicitly required and approved. The absence of a path entry means no access.
+- The order of rows in the permissions sheet does not matter — at runtime, the longest matching path for each group is used.
+- Permissions do not hide file/folder names in browse views. If content sensitivity is a concern, use dedicated sub-folders with restricted access.
 
-| IMS Group | Path Scope | Access Level |
-|---|---|---|
-| `tfs-it-administrators` | `/content/**` | R / W / D |
-| `tfs-global-readonly` | `/content/**` | R |
-| `tfs-global-editors` | `/content/global/**` | R / W |
-| `tfs-global-admins` | `/content/global/**` | R / W / D |
-| `tfs-na-editors` | `/content/north-america/**` | R / W |
-| `tfs-na-admins` | `/content/north-america/**` | R / W / D |
-| `tfs-latam-editors` | `/content/latin-america/**` | R / W |
-| `tfs-latam-admins` | `/content/latin-america/**` | R / W / D |
-| `tfs-emea-editors` | `/content/emea/**` | R / W |
-| `tfs-emea-admins` | `/content/emea/**` | R / W / D |
-| `tfs-japan-editors` | `/content/japan/**` | R / W |
-| `tfs-japan-admins` | `/content/japan/**` | R / W / D |
-| `tfs-ipac-editors` | `/content/ipac/**` | R / W |
-| `tfs-ipac-admins` | `/content/ipac/**` | R / W / D |
-| `tfs-china-editors` | `/content/greater-china/**` | R / W |
-| `tfs-china-admins` | `/content/greater-china/**` | R / W / D |
-| `tfs-korea-editors` | `/content/korea/**` | R / W |
-| `tfs-korea-admins` | `/content/korea/**` | R / W / D |
-
-**Key Rule:** No cross-region access is granted unless explicitly required and approved. The absence of a path entry means no access.
-
-**Note:** Editors have Read + Write (no Delete). Only Admins can delete content. This provides a safety net — editors cannot accidentally delete pages.
+**Note on Author vs Admin at DA level:** Both authors and admins have `write` access in DA — meaning both can create, edit, and delete content. The distinction between the two roles is enforced at the **EDS publish layer** (Section 5.2), not at the DA authoring layer. Authors cannot publish; Admins can.
 
 ### 5.2 Preview and Publish — EDS Permissions
 
@@ -274,7 +282,7 @@ Controls who can preview content on `.aem.page` and publish content to `.aem.liv
 |---|---|---|
 | `tfs-it-administrators` | All regions | All regions |
 | `tfs-global-readonly` | All regions | No |
-| `<region>-editors` | Assigned region | No |
+| `<region>-authors` | Assigned region | No |
 | `<region>-admins` | Assigned region | Assigned region |
 
 ---
@@ -283,26 +291,28 @@ Controls who can preview content on `.aem.page` and publish content to `.aem.liv
 
 ### 6.1 Full Permission Matrix
 
-| Group | Region Scope | DA.live Edit | DA.live Delete | Preview | Publish |
-|---|---|---|---|---|---|
-| `tfs-it-administrators` | All | Yes | Yes | Yes | Yes |
-| `tfs-global-readonly` | All | Read only | No | Yes | No |
-| `tfs-global-editors` | Global | Yes | No | Yes | No |
-| `tfs-global-admins` | Global | Yes | Yes | Yes | Yes |
-| `tfs-na-editors` | North America | Yes | No | Yes | No |
-| `tfs-na-admins` | North America | Yes | Yes | Yes | Yes |
-| `tfs-latam-editors` | Latin America | Yes | No | Yes | No |
-| `tfs-latam-admins` | Latin America | Yes | Yes | Yes | Yes |
-| `tfs-emea-editors` | EMEA | Yes | No | Yes | No |
-| `tfs-emea-admins` | EMEA | Yes | Yes | Yes | Yes |
-| `tfs-japan-editors` | Japan | Yes | No | Yes | No |
-| `tfs-japan-admins` | Japan | Yes | Yes | Yes | Yes |
-| `tfs-ipac-editors` | IPAC | Yes | No | Yes | No |
-| `tfs-ipac-admins` | IPAC | Yes | Yes | Yes | Yes |
-| `tfs-china-editors` | Greater China | Yes | No | Yes | No |
-| `tfs-china-admins` | Greater China | Yes | Yes | Yes | Yes |
-| `tfs-korea-editors` | Korea | Yes | No | Yes | No |
-| `tfs-korea-admins` | Korea | Yes | Yes | Yes | Yes |
+| Group | Region Scope | DA.live (write = edit + delete) | Preview (.aem.page) | Publish (.aem.live) |
+|---|---|---|---|---|
+| `tfs-it-administrators` | All | Yes | Yes | Yes |
+| `tfs-global-readonly` | All | Read only | Yes | No |
+| `tfs-global-authors` | Global | Yes | Yes | No |
+| `tfs-global-admins` | Global | Yes | Yes | Yes |
+| `tfs-na-authors` | North America | Yes | Yes | No |
+| `tfs-na-admins` | North America | Yes | Yes | Yes |
+| `tfs-latam-authors` | Latin America | Yes | Yes | No |
+| `tfs-latam-admins` | Latin America | Yes | Yes | Yes |
+| `tfs-emea-authors` | EMEA | Yes | Yes | No |
+| `tfs-emea-admins` | EMEA | Yes | Yes | Yes |
+| `tfs-japan-authors` | Japan | Yes | Yes | No |
+| `tfs-japan-admins` | Japan | Yes | Yes | Yes |
+| `tfs-ipac-authors` | IPAC | Yes | Yes | No |
+| `tfs-ipac-admins` | IPAC | Yes | Yes | Yes |
+| `tfs-china-authors` | Greater China | Yes | Yes | No |
+| `tfs-china-admins` | Greater China | Yes | Yes | Yes |
+| `tfs-korea-authors` | Korea | Yes | Yes | No |
+| `tfs-korea-admins` | Korea | Yes | Yes | Yes |
+
+**Note:** At the DA level, authors and admins have the same write access (which includes edit + delete). The key difference is that **only admins can publish** content to the live site. This is enforced at the EDS layer, not the DA layer.
 
 ### 6.2 Cross-Region Access Matrix
 
@@ -312,14 +322,14 @@ Each group can only access its assigned region. An empty cell means no access.
 |---|---|---|---|---|---|---|---|---|
 | `tfs-it-administrators` | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
 | `tfs-global-readonly` | R | R | R | R | R | R | R | R |
-| `tfs-global-editors/admins` | Yes | | | | | | | |
-| `tfs-na-editors/admins` | | Yes | | | | | | |
-| `tfs-latam-editors/admins` | | | Yes | | | | | |
-| `tfs-emea-editors/admins` | | | | Yes | | | | |
-| `tfs-japan-editors/admins` | | | | | Yes | | | |
-| `tfs-ipac-editors/admins` | | | | | | Yes | | |
-| `tfs-china-editors/admins` | | | | | | | Yes | |
-| `tfs-korea-editors/admins` | | | | | | | | Yes |
+| `tfs-global-authors/admins` | Yes | | | | | | | |
+| `tfs-na-authors/admins` | | Yes | | | | | | |
+| `tfs-latam-authors/admins` | | | Yes | | | | | |
+| `tfs-emea-authors/admins` | | | | Yes | | | | |
+| `tfs-japan-authors/admins` | | | | | Yes | | | |
+| `tfs-ipac-authors/admins` | | | | | | Yes | | |
+| `tfs-china-authors/admins` | | | | | | | Yes | |
+| `tfs-korea-authors/admins` | | | | | | | | Yes |
 
 ---
 
@@ -350,7 +360,7 @@ DA.live permissions are managed via the `.da/permissions` file within the conten
 3. For each region, add a permission entry mapping the IMS group name to the region path with the appropriate access level
 4. Follow the permission table defined in Section 5.1 exactly
 5. Validate that `tfs-it-administrators` has full access to `/content/**` before configuring region-specific entries
-6. Test access by logging in as a user in a region-specific editor group and confirming they can only access their assigned region path
+6. Test access by logging in as a user in a region-specific author group and confirming they can only access their assigned region path
 
 ### 7.3 EDS — Preview and Publish Permissions
 
@@ -359,7 +369,7 @@ Preview and publish permissions are managed separately from DA.live authoring pe
 **Steps:**
 
 1. Open the AEM Permissions App (Config Service) for the site
-2. Grant preview access to all editor and admin groups for their respective regions
+2. Grant preview access to all author and admin groups for their respective regions
 3. Grant publish access only to `<region>-admins` and `tfs-it-administrators`
 4. Ensure `tfs-global-readonly` has preview access but no publish access
 5. Validate the configuration by testing preview and publish with representative users from each role
@@ -372,7 +382,7 @@ Preview and publish permissions are managed separately from DA.live authoring pe
 
 | Step | Action | Performed By |
 |---|---|---|
-| 1 | Add user's Adobe ID to the `<region>-editors` IMS group in Admin Console | `tfs-it-administrators` |
+| 1 | Add user's Adobe ID to the `<region>-authors` IMS group in Admin Console | `tfs-it-administrators` |
 | 2 | Optionally add user to `<region>-admins` if publish rights are required | `tfs-it-administrators` |
 | 3 | User gains DA.live authoring access automatically via IMS group membership | Automatic |
 | 4 | Confirm preview access is active via the AEM Permissions App | `tfs-it-administrators` |
@@ -383,7 +393,7 @@ Preview and publish permissions are managed separately from DA.live authoring pe
 | Step | Action | Performed By |
 |---|---|---|
 | 1 | Create the new region folder structure in DA.live under `/content/` | Developer / Admin |
-| 2 | Create `<region>-editors` and `<region>-admins` IMS groups in the Adobe Admin Console | `tfs-it-administrators` |
+| 2 | Create `<region>-authors` and `<region>-admins` IMS groups in the Adobe Admin Console | `tfs-it-administrators` |
 | 3 | Add the new groups to the `.da/permissions` configuration file with the correct region path scope | Developer / Admin |
 | 4 | Enable preview and publish access for the new region via the AEM Permissions App | `tfs-it-administrators` |
 | 5 | Assign initial users to the new region groups | `tfs-it-administrators` |
@@ -401,11 +411,11 @@ Offboarding is fully managed through IMS group membership. No direct changes to 
 
 ### 8.4 Granting Temporary Cross-Region Access
 
-If a user requires temporary access to a region outside their normal assignment (e.g., a North America editor supporting an EMEA content migration):
+If a user requires temporary access to a region outside their normal assignment (e.g., a North America author supporting an EMEA content migration):
 
 | Step | Action |
 |---|---|
-| 1 | Add the user to `tfs-emea-editors` (or the relevant region group) in Admin Console |
+| 1 | Add the user to `tfs-emea-authors` (or the relevant region group) in Admin Console |
 | 2 | Document the reason and expected duration |
 | 3 | Remove the user from the temporary group when the work is complete |
 
@@ -419,18 +429,18 @@ Cross-region access must always be explicitly approved and time-bound. It must n
 
 | Responsibility | Who |
 |---|---|
-| Content creation and editing | `<region>-editors` or `<region>-admins` |
-| Content publishing | `<region>-admins` only |
-| Content deletion | `<region>-admins` only |
+| Content creation, editing, and deletion | `<region>-authors` or `<region>-admins` (both have write access) |
+| Content publishing (push live) | `<region>-admins` only |
 | Platform and access administration | `tfs-it-administrators` |
 | Cross-region oversight | `tfs-it-administrators` and `tfs-global-readonly` |
 
 ### 9.2 Least Privilege
 
 - Users receive only the minimum access required for their role
-- Editor groups do not have publish or delete rights
+- Author groups do not have publish rights — they can author content but cannot push it live
 - Region groups do not have access to other regions
 - `tfs-global-readonly` provides a visibility-only role for senior stakeholders and auditors without any risk of accidental content modification
+- DA version history provides a safety net for accidental deletions — content can be restored from version history
 
 ### 9.3 Regional Isolation
 
@@ -455,7 +465,7 @@ Each region's content is fully isolated at the permission level. There is no con
 | 2 | Populate initial user membership for each region group | `tfs-it-administrators` |
 | 3 | Configure the `.da/permissions` file in DA.live per Section 5.1 | Developer / Admin |
 | 4 | Configure preview and publish access in the AEM Permissions App per Section 5.2 | Developer / Admin |
-| 5 | Validate end-to-end access for at least one Editor and one Admin per region | QA / Admin |
+| 5 | Validate end-to-end access for at least one Author and one Admin per region | QA / Admin |
 | 6 | Document the access request and approval process for ongoing user onboarding | `tfs-it-administrators` |
 | 7 | Schedule a periodic access review (recommended: quarterly) to remove stale memberships | `tfs-it-administrators` |
 | 8 | Communicate the new simplified permission model to all regional teams before go-live | `tfs-it-administrators` + Adobe |
