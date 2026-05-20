@@ -116,7 +116,7 @@ DA's Request Publish currently supports single-stage approval. To support TFS's 
 - Multi-step sequential approval will be supported through enhancement of the Request Publish plugin
 - The enhancement will provide the same business outcome as TFS's current workflows in fewer infrastructure steps
 - The DA engineering team will work directly with TFS to define the enhanced workflow that meets their approval governance requirements
-- TFS must provide a timeline for when this capability is needed so engineering can plan accordingly
+- A timeline discussion between TFS and DA engineering is needed to align the multi-step workflow enhancement with the project delivery schedule
 
 ---
 
@@ -243,7 +243,7 @@ The DA documentation provides the exact payload format specification that the em
 
 | # | Pre-Requisite | Details |
 |---|---|---|
-| 1 | **Timeline** | TFS must communicate when multi-step workflow capability is needed so DA engineering can plan the enhancement |
+| 1 | **Timeline alignment** | A timeline discussion between TFS and DA engineering is needed to align the multi-step workflow enhancement with the project delivery schedule |
 | 2 | **Email API** | TFS must provide a publicly accessible email API endpoint for workflow notifications. DA will call this API to send emails at each workflow step. |
 | 3 | **Reviewer groups and assignments** | TFS must define which reviewer groups (Design/UX, Editorial, Web Ops) map to which content paths — same path-based routing configuration |
 | 4 | **Allowed email domains** | TFS must provide the list of email domains that participants use (for DA onboarding configuration) |
@@ -255,7 +255,7 @@ The DA documentation provides the exact payload format specification that the em
 
 | # | Item | Owner | Priority |
 |---|---|---|---|
-| 1 | Confirm timeline for when multi-step workflow is needed in production | TFS | High |
+| 1 | Timeline discussion needed between TFS and DA engineering to align the multi-step workflow enhancement with the project delivery schedule | TFS + DA Engineering | High |
 | 2 | Scheduled/delayed release — confirm if this is still a business requirement in EDS (since EDS publishes instantly to CDN). If required, discuss implementation approach with DA engineering. | TFS + DA Engineering | High |
 | 3 | Force deploy — confirm if this is needed in DA context. In DA, if an approver approves, content publishes. There is no separate wait state unless scheduled release is implemented. | TFS | Medium |
 | 4 | Web Ops team selection by author — in DA, approvers are configured per content path. Confirm if dynamic reviewer selection at submission time is still needed or if path-based assignment is sufficient. | TFS | Medium |
