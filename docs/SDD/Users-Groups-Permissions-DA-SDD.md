@@ -354,7 +354,37 @@ Each group can only access its assigned region. An empty cell means no access.
 
 ## 7. Implementation Overview
 
-### 7.1 Adobe Admin Console — IMS Group Setup
+### 7.1 Pre-Requisite — Adobe Admin Console Identity Integration
+
+Before DA groups can be created and users assigned, the Adobe Admin Console must have:
+
+1. **Domain verified** — `@thermofisher.com` must be claimed and verified in the Admin Console
+2. **SSO/Federation configured** — TFS users must be able to log in with their corporate credentials (via Azure AD / OIDC / SAML)
+3. **Users provisioned** — TFS users must exist in the Admin Console (either via SCIM auto-sync from Azure AD, Just-in-Time provisioning on first login, or manual addition)
+
+**What needs to be confirmed with TFS IT:**
+
+Since TFS already uses other Adobe products (AEM, Adobe Analytics, Adobe Target), it is likely that domain federation and user provisioning are already in place. This must be validated before proceeding.
+
+| Question | If Yes | If No |
+|---|---|---|
+| Is `@thermofisher.com` already verified in Adobe Admin Console? | No domain setup needed — proceed to group creation | Domain claiming and DNS verification required |
+| Are TFS users already provisioned in Admin Console? | No user provisioning work needed — just assign to new DA groups | SCIM integration or manual provisioning must be set up first |
+| Is SCIM group sync available from Azure AD? | Azure AD groups can be mapped to DA groups for automated provisioning — when a user is added to a TFS Azure AD group, they automatically get DA access | Groups and user assignments managed manually in Admin Console |
+
+**If federation and user provisioning are already in place** (likely scenario), the only work needed is:
+- Create the DA-specific IMS groups in Admin Console (Section 7.2)
+- Assign existing users to those groups
+- Configure DA permissions and EDS preview/publish
+
+**If federation is NOT in place** (unlikely given existing Adobe product usage), a full SSO integration is required:
+- Phase 1: Directory setup via Azure OIDC — establish trust between Azure AD and Adobe
+- Phase 2: Domain configuration — claim and verify `@thermofisher.com`
+- Phase 3: User and group provisioning via SCIM — auto-sync users and groups from Azure AD
+
+This is a prerequisite that must be resolved before any DA permissions work can begin.
+
+### 7.2 Adobe Admin Console — IMS Group Setup
 
 All groups must be created in the Adobe Admin Console before any DA.live permissions can be configured.
 
@@ -368,7 +398,7 @@ All groups must be created in the Adobe Admin Console before any DA.live permiss
 
 **Important:** Group names in the Admin Console must match exactly the names used in the DA permissions configuration. Any mismatch will result in access being silently denied.
 
-### 7.2 DA.live — Permissions Configuration
+### 7.3 DA.live — Permissions Configuration
 
 DA.live permissions are managed via the permissions sheet in the organization configuration at `https://da.live/config#/<org-name>/`.
 
@@ -387,7 +417,7 @@ DA.live permissions are managed via the permissions sheet in the organization co
 
 **Important:** Group names in the permissions sheet must use the format `<IMS_ORG_ID>/group-name`. The group name alone without the org ID prefix will not work.
 
-### 7.3 EDS — Preview and Publish Permissions
+### 7.4 EDS — Preview and Publish Permissions
 
 Preview and publish permissions are managed separately from DA.live authoring permissions.
 
