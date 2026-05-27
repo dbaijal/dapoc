@@ -1,0 +1,1034 @@
+TFS  Walkthrough of SolutionRecommendations for MSMTranslationUse cases-20260519_083128-Meeting Recording
+May 19, 2026, 3:31PM
+1h 29m 38s
+
+Sajesh Enampurath started transcription
+
+Sajesh Enampurath   0:11
+Yeah, sounds good, Lara. I, I, I heard you, so you are here, so that that should be that should be good, and then of course we have our recordings too.
+
+Wilkinson, Lara   0:20
+Perfect. Thank you, Sajesh.
+
+Sajesh Enampurath   0:40
+Just give a few more seconds, checking on Adobe side.
+Let's see.
+Um, Adduri, are you on the call? I think he will probably be on his way.
+City.
+Let me quickly check on RD. I think he should be here in a few seconds.
+Taking a look on.
+The official side, I see, uh, yeah, Doug.
+Airbrush is here.
+
+Ramandeep Harjai   2:01
+Hey, morning, guys.
+
+Sajesh Enampurath   2:03
+Hey, Aditi, thanks for joining.
+All right, I think we have everyone on the Adobe side, and, and yeah, we also have a few team members from the leadership side to to to add some, you know, force to this Adobe side. On the TFS side, Keith, I think I'm just going through the names here. I see most of the key names.
+Now, Nagendra, are you on the call? Just looking at a few tech folks as well.
+Yeah, I see Nagyendra here, sorry, on the call, on the meetings, and Ranjit, Christina is here.
+Okay, Keith, anybody else we need to wait for?
+Looks like the.
+
+Hunter, Keith A.   2:57
+Yeah, sorry, it took me a sec to come off mute. I think Krista is only able to attend part of the meeting. I'm not sure if it's the first or the back half, though. But we're recording.
+
+Sajesh Enampurath   3:03
+Yeah.
+Yep, we are recording. Lara did call that out, so I think we are good. Okay, so I think let's kick this off. Thanks everyone for joining today. This is one of our important meetings, like I said, to go through some of the solution recommendations that that for the use case that we are discussed, so...
+What we'll be doing today is, you are already familiar with the use case, the functional use case sheet that already presented. We are aligned on all the use cases. So this use cases, you know, covers the critical landscape around the MSM, right, translation and the...
+experience fragments, right? So that's what we are going to focus on. That's the foundation, you know, on which most of the other functionalities are based off. So we'll take the same use cases that were aligned and what RD will be doing is going through each use case and the solution that we have put together, right? The approach that we have put together.
+using document authoring, right? So that's where we left off last slide. So what you are additionally looking at is a critical piece of the solution, right, which we'll go through for each use case. So without much delay, RD, I'll hand it over to you to get this started.
+
+Ramandeep Harjai   4:32
+All right, thanks, Sajesh. Hey, good morning, everyone. So, you know, before I get started, just to set the quick context, you know, how we landed up this meeting today. So we spent some good amount of time learning how Thermo Fischer does their multi-site management translations and experience fragments. So we did a very detailed.
+Working session couple of weeks back when Nagendra and the rest of the Thermo Fischer team, they walked us through each and every single use case of how you produce content for multiple websites for all of your global markets, right? So, we and and honestly, like what you guys are doing in AEM sites.
+is very neat. It's a beautiful solution you already have on the sites. And what we wanted to see was, is if there's a path for you to take all of that and take it to EDS, right? So that's what we spent last couple of weeks, you know, looking into.
+And you know, we from ACS, we work with the product team. I see Ram, you are on the call. Thanks for joining this meeting. And you know, I'll be looking at you so that you can keep me honest when I walk through these use cases, because I've worked with Ram to basically understand the product view of, you know, how the EDS product and the DA authoring is going to evolve.
+in very near future and how that enhancements to the product would meet Thermo Fischer requirements, right, and meet these use cases. So what we did was, you know, again, you know, we did that working session, we understood how you manage MSM, and then we built this use case sheet here, which I'm sharing on the screen right now.
+And we laid down into three different pillars. So there's MSM, which is purely how you organize content for multiple sites. Then you have experience fragments. So there were like very unique use cases you guys are doing with experience fragments. So we built this as a separate pillar. And then finally the translations, right? So what do you do with the translations?
+And then each use case, then we try to map it with DA authoring, right? Whether DA authoring allows that today itself out of the box. If not, this product team is going to enhance the DA product so that it's going to meet in the near future. If not.
+That means that there's a delta, there's a gap. Can that gap be filled through something custom, right? So as part of the consulting, can we build something that can, you know, meet the requirements? So, you know, that's how we looked at these things. So this sheet we have already gone through last week. We walk you through, you know, what are the use cases.
+And then we got additional input from Thermo Fischer team, and then we updated this sheet to add some more use cases after a review last week. So this is pretty consolidated sheet. It has gone through a couple of reviews with Thermo Fischer team now. And this is the best representation of how you are managing your content today. So I will not go through.
+These use cases in this call, but what I'm gonna do is we did a mapping for these use cases with EDA, sorry EDS with DA authoring as the as the authoring mechanism, and then we kind of like put together what in DS got feature wise is gonna meet that business requirement, right? And if you will see these, they are color coded, so there's green.
+and then there's yellow. So there's basically two colors here. So green means straight out of the box, it's gonna meet your requirement, right? You don't have to do anything with it, you know, just start using the product and you know, product's gonna let you do that particular use case. The yellow one here means that there is either gonna be some kind of a process change, and we need to understand that, right? AEM sites is built on a different architecture, EDS is built on a different.
+different architecture and we are moving across these two architectures now, right? So when we are going to go towards a new architecture, there would be things which are done differently in that technology stack, right? So keeping that in mind, there could be a process change, right? So how you do those things today, so that reflects the yellow color.
+Or there could be a customization that needs to be built because product will not, because that's a very specific Thermo Fischer thing. It's not general enough for product to offer that feature right now. So that's something, but there is a path to it, right? So we can build a custom customization that can meet that very specific Thermo Fischer requirement. So that's the yellow color. So you're going to just keep that in mind green.
+You know, it's green is green, so everything's out of the box for that particular use case. Yellow is either is a process change or there's a customization. Any questions before feedback before I get started?
+All right, so I'm going to take it as an agreement from all of you, and then let's get started. Okay, so the first use case for MSM is how you organize content in Thermo Fischer today, right? So you start with this global English, which is a non-public site. You don't offer that content on the internet, so that's global English, right? So that's the master copy or the gold copy of your all of your content repository.
+Or most of it, I would say, not all of it, but most of your content. That gets trickled down or inherited into regional English languages. So let's say from global English, you come down to North America English and Latin America English and Europe English, right? So that's the second level of your content hierarchy. And then again, that content is non-public.
+is not published from regional language, regional English, then you get down to the country English. So North America gets, you know, inherited into US English, Canada English, Latin America English would get inherited into, let's say, Brazil English or, you know, Peru or, you know, whatever Latin American countries are there, right? So they get.
+converted into or inherited into a country-specific English. And that's the first level of your public sites, right? So that country English is what you offer as a content for that specific country, right? And that's also the content which also gets translated into other languages you offer in that specific country, right? So for example, in Greece or Brazil,
+Global English gets down to Latin America English, Latin America English gets down to Brazil English, and that's the Brazil English site which is offered as an English site for Brazil, but that Brazil English gets translated into Brazil Portuguese, and that's the Portuguese version of the website that's also offered to only the Brazil as a country, right?
+So that's how your content is laid down today. So if you see both AEM sites, it doesn't offer multiple level, multi-level inheritance, right? So there's only one level of inheritance, but you guys have built customizations on top of MSM, which allows you to now do a multi-level inheritance from global to region, region to country and so on.
+So that naturally doesn't come out of the box for AEM sites. And it's also true for DA authoring. So today, DA authoring also does not offer multi-level inheritance out of the box, right? But that's something which product team is now planning to build. It's going to come out of the box.
+So it's gonna be like a...
+a better fit in a way that this feature is built into the product. So now, naturally, without doing any customizations or without building any custom services, which you have to do, right? So in AEM sites, you have a custom MSM rollout service just to manage multi-level inheritance because the product doesn't offer you that.
+But in DA authoring, that's the product vision now. They're going to actually build multi-level inheritance out of the box. So that's the feature which you can tap in and create this multi-level inheritance websites purely without any customizations or managing any, you know, your own custom implementations.
+So that's the first use case and that's going to be met by the product out of the box all green there.
+The next one is authoring business users should be able to create and update pages at global, regional, and country levels. So you should be able to add net new pages. So you know from global you inherited to a region English, and from region English you inherited to a country English. At any level of that multi-level inheritance, you should be able to
+create net new pages at that level itself without first creating them into the parent, you should be able to introduce new localized content at any level of that multi-level inheritance, right? So that's number one use case here. The #2 use case here is that you should be able to break inheritance at any level. And then from that point onwards, for that piece of content, you should be able to manage localized content, right? So that's
+That's the requirement #2 for this use case. And the third one is you should be able to selectively break components on a page and then manage them locally for the localized versions, right? So you don't want to break the entire page, let the entire page come from the parent, you know, whatever inheritance is put in place.
+But I just want to break, let's say, a hero banner, right? And I want to have a country-specific hero banner for all my countries, but I want the rest of the page to actually flow from global to region and region to countries, right? So I should be able to do that. So there are three things folded into this use case. Adding net new content at any level, breaking page level inheritance so you can manage the entire page locally.
+or breaking selective components on a page so that you can only manage those selective components locally and let everything else be come from inheritance, right? So that's the second use case. Now this is a mixed bag here, right? It's for the first two pieces, right? You, as a business user, you should be able to add content at any level.
+that comes out of the box. Again, you don't need any customization for it with multi-level inheritance baked into the product. Products gonna let you add net new pages anywhere in any at any level of your multi-level inheritance, right? So that's all green there. There's DA authoring also gonna let you break.
+page level inheritance exactly the way you do in AEM sites. There is a page which has been inherited from a parent. You decide you want to break the inheritance of that page and start managing that page locally from that point onwards. You'll be able to do that exactly how you can do it in AEM sites today. So that's also all green.
+Right, but the third use case, which is component level inheritance, right? You want to break a component level inheritance and manage only a component locally while the rest of the page still flows from the parent, right? So, this one there is we see as a little bit of a process change because DA authoring as of now.
+does not offer the concept of block level inheritance as such. And Ram, I've started looking at you now. So DA doesn't offer that as of now. So but there is a way to do that, right? So you can, you can do, if you want to do a component level.
+
+Ramachandra Avuthu   15:37
+Yeah.
+
+Ramandeep Harjai   15:43
+inheritance, if you want to break a component level inheritance, you can still break the page level inheritance, right, to start with. But when in DA, when you're going to break a page level inheritance, you can anytime synchronize content from the parent, and you can do selective synchronization. So you can say.
+You know, the use case was, you know, I want to break inheritance only for the hero banner. Rest of my page should come from parent. You can do the same thing here, but in a different way, that you break the entire page level inheritance, and then you can synchronize it back with the parent, leaving the hero banner.
+a side, right? So you can do a selective synchronization because when you're going to do a sync, it's going to show you a content diff and you can then decide whether you want to accept that difference or not. So for hero banner, you can say, no, I don't want to accept that difference because you know, that's the localized content. For everything else, you can synchronize it back to the parent.
+So that way you can meet that, but that's what I said, like there's a process change, how you do things in AEM sites and how you will do that in DA authoring. But these three use cases can be met. Out of these three, the two are straight away green, comes out of the box. The third one has a process change associated with it. Deepak, I see your hand up.
+So, Deepak, you are go ahead.
+
+Idnani, Deepika   17:05
+Hey, thanks for giving the detailed walkthrough. So I just have questions for the existing pages which we migrate right to the new system. So how will this new process is for the new page, like whatever the team creates, how will the existing pages work in this case?
+
+Ramandeep Harjai   17:25
+Sorry, Deepak, I didn't get the question. Like, are you asking the migration part if how the migration's gonna work or?
+
+Idnani, Deepika   17:28
+So.
+So right now, authors have the couple of pages, right? We have certain thousands pages in the author environment. So those that will be content migrated, right? So that is also part of this project. So how will that work in this component level inheritance? How will that work?
+
+Ramandeep Harjai   17:40
+Mm-hmm.
+Right.
+Yeah.
+
+Idnani, Deepika   17:53
+Work in that case, like once you might be in.
+
+Ramandeep Harjai   17:55
+Yeah, so I think that, yeah, I think I understood your question. Let me let me answer that, and you know, let's we'll see if if I got it all right, but you know, part of that question will be answered in the next use cases as well, but I can bring it up right now and we can discuss about it. So, if you will see, there is a...
+There's A fundamental difference between how MSM works with AEM sites versus DA authoring, right? So in my opinion, DA authoring does things a little bit more in a smarter way than AEM sites, but they have like two different approaches to look at how multi-level, or sorry, how multi-site management works, right?
+So in AEM sites, when you roll out one site from another, right, the entire content gets duplicated and it now sits in two different places, right? So let's say there's a global English and from global English now you inherited North America English now. So let's say global English have 500 pages. You rolled out the entire global English as a North America English. Now you have 500 pages for global English and 500 pages for
+North America English, they're sitting in AEM author, right? And from that point onwards, you can start managing your content, you know, whatever you need to do, break inheritance, localize content, publish content, whatever you need to do. So this is my understanding and Ram, you know, correct me there as well. So with DA authoring, what's going to happen is when you roll out.
+Global English to North America English, none of the pages in the on the offering side gets duplicated, right? So you not so that North America English folder you will essentially see is empty, right? Unless and until you break an inheritance, then you will start seeing that specific page show up in the North America folder.
+But to just to start with, right, you just rolled out entire global English as North America English. At that point, North America English folder would be completely empty. And the rollout in DA world means that it's going to put those pages, global English pages as North America English pages onto the edge. So those pages gets published.
+but the folder itself, the authoring folder itself remains empty. And then at some point you say, okay, this About Us page, I want to break inheritance, I want to manage a different About Us page in North America English. When you break that inheritance, then you will see that About Us page would then show up in the North America English folder.
+As a as a content piece, which you can then go and make changes to it, and then you know, publish publish those changes, so, so that's the fundamental difference between, you know, how content is seen between these two systems, and Ram, do you want to add anything or did I?
+
+Ramachandra Avuthu   20:31
+Ohh, no, I think we we are good, we are good, Adduri. Yeah, you explained it.
+
+Ramandeep Harjai   20:33
+Speak correctly or no?
+Alright, and again, so your hand is up, but before that, Deepak, does that answer your question, or?
+
+Idnani, Deepika   20:43
+So yeah, just I want to add one more thing. Let's say if there are 10 pages, let's take a small subset, right? We are getting migrated to the DA system of authoring. So basically when the authors see those pages, right, so those pages will be available from global to the all the live pages.
+Copies connect as we have today.
+
+Ramandeep Harjai   21:03
+Authors see authors in MSM authors will see only pages which are they might not see the all of the pages right in for the inherited side. For the parent side like global English is where is the genesis of your all of your content right? Authors would see all the pages in global English all the time.
+But when you are using Global English to roll out North America English and Latin America English, authors will not see pages in those folders unless you have broken a page, you know, and then like you have broken the inheritance of a page and only that page, right? So let's say there's Global English, there are 500 pages, authors will see all 500 pages.
+But when that site has been rolled out to North America English, and only one of the pages inheritance has been broken, so authors will only see that specific page for North America English, because that's the page which you can then author, right? Because the rest of the pages, there's no point to show, put them again in the folder if they are already flowing from the parent, right? So let them flow from the parent as.
+behind the scene, like they go directly to the edge, only the page which you have actively broken the inheritance for, now that page is only going to show up to the authors as a piece of content they can manage. Does it make sense? Yeah.
+
+Idnani, Deepika   22:18
+So, so, yeah, so, so that that that is good for the new pages, right? For the existing migrated pages, so let's say authors have certain live copies which where only components are broken, not the page, and then certain pages on the same page authors might have.
+
+Ramandeep Harjai   22:26
+Yeah.
+Right.
+
+Idnani, Deepika   22:38
+So is that respected when the migration is done in real life?
+
+Ramandeep Harjai   22:41
+Yes, so that's a really good question. Actually, we have, you know, spent the last couple of days discussing that internally within our team as well. Like, how would that translate into the content migration from AEM sites into DA and Rob, again, you know, feel free to...
+pitch in there, but our view was that you know that will be done in steps, multiple steps, right? The content migration. The first step would be take your entire global English, migrate it to the DA authoring, right? The entire global English site, right? That's the first point of it. From that point onward, when we have to then.
+As a next step, then we have to migrate North America English and Latin America English. To do that, DA does not require you to do lift every, all of the pages of North America English and all of the pages of Latin America English from sites and put it into DA or three, right? At that point of time, what we need to do is we need to run a.
+script that would identify the pages where either a page level inheritance or a block level inheritance has been broken. And only those pages should be moved to these following folders down the line, right? Not the entire stuff. So that, that, so after global English, all of the sites which have to be migrated, they'll be selectively migrated based on.
+Either do they have a net new content which is not a live copy of a parent, right? So that page would be moved. Or if any live copy page where the inheritance has been broken, those pages will be moved. But any live copy page where the inheritance has not been broken, those pages are not required to be migrated.
+
+Idnani, Deepika   24:22
+Okay, so my question will be, do we, can we have maybe whenever you have that details in line by step-by-step process, let's say the page level inherit an existing content page, how it will look and page level inheritance broken and how will it look for the block level inheritance broken?
+How does like solution for that maybe not now, but just that will be a very important topic for the authors as well.
+
+Ramandeep Harjai   24:42
+See, yeah.
+Yeah, but yeah, but but just to be just to be clear, right, based on what we discussed for this use case in DA, there are there's no block level inheritance or page level inheritance. There's only one page level inheritance, right? So that's what you will break, right? So even so in sites where you have done a block level inheritance, you know, if you have broken a block level inheritance, that.
+
+Idnani, Deepika   25:02
+Correct, Greg.
+
+Ramandeep Harjai   25:08
+also has to be seen as a page level inheritance when we're going to move that page into DA, right? So just want to make that clear like this. Right now, there's no concept of these two separate things in DA, right? So it's all inheritance and it's broken or not broken. Nagendra, you want to go ahead?
+
+Idnani, Deepika   25:24
+Okay.
+
+Pothula, Nagendra   25:27
+Yeah, like in order to break this inheritance at the page level, let's say you're saying only the like inheritance broken pages will be available in both places, let's say global and North America, right? If the page is same. In order to break that, the page should be available on the North America one, right? How do you break the inheritance if the page is not available on authoring environment?
+
+Ramachandra Avuthu   25:51
+Yeah, Adduri, you want to answer?
+
+Ramandeep Harjai   25:54
+Ram, you, that's your question.
+
+Ramachandra Avuthu   25:56
+Yeah, yeah, sure. So yeah, there are a couple of ways to do it. One is, you know, if you open the page on the global site, you will see an option to cancel the inheritance to respective satellites or, you know, the local copy. There is an option there.
+
+Pothula, Nagendra   26:08
+Okay, there it's like, okay, so the page should not be like need not to be available on the target region. We can actually break the inheritance from the source itself.
+
+Ramachandra Avuthu   26:15
+Yeah, exactly.
+Yeah, that is one way. And other way is because now DA is the inheritance is not mapped anywhere. It just based on the file existence, right? Or not. So if you create a page on the same path as in global in a region, that also means you're breaking the inheritance.
+
+Pothula, Nagendra   26:19
+That.
+
+Ramachandra Avuthu   26:36
+So there are two ways. You can do it from the DA content authoring on the source side, or you can break it from the source.
+
+Ramandeep Harjai   26:40
+Still.
+Yeah, so you know, so Nagendra, just by the fact that a same page which is there in the parent also exists in the child satellite site folder, that you know, implicitly implies that you know that inheritance is broken, so you can, you know what Ram is saying, there are two ways to do it.
+
+Pothula, Nagendra   26:45
+Dutt.
+
+Ramandeep Harjai   27:02
+You can go to that view of your multi-site management view there on the source. You can break that inheritance from there. And Ram, if I'm not correct, if you do that action, it's going to copy and put the page in the folder, right? But you can also, but as an author, you can also just put the page yourself in the folder, and that would also automatically treat it as a broken inheritance.
+
+Ramachandra Avuthu   27:13
+Yeah.
+Exactly, yeah.
+
+Pothula, Nagendra   27:24
+Got it, OK.
+
+Hayworth, Douglas A.   27:25
+Does it warn you if you do that?
+
+Ramachandra Avuthu   27:29
+Sorry, could you repeat?
+
+Ramandeep Harjai   27:29
+Run, that's huge. Does it does it bond you if you if you as an author?
+
+Hayworth, Douglas A.   27:32
+Does it warn you if you try to create a page in a region?
+
+Ramachandra Avuthu   27:37
+No, it's basically, okay, it's basically a creation of a new document. So we don't check for the inheritance at that point because we believe that's intentionally done. However, we do want when you're breaking from the source.
+
+Hayworth, Douglas A.   27:37
+That already existing.
+Well, okay.
+Yeah, we definitely will need a warning.
+
+Ramachandra Avuthu   27:57
+Yeah.
+
+Hayworth, Douglas A.   28:01
+In the other direction, so...
+
+Ramachandra Avuthu   28:02
+Okay.
+Okay, I'll take the feedback. We'll see if we can keep that into the product here.
+
+Hayworth, Douglas A.   28:08
+Yeah.
+
+Ramandeep Harjai   28:11
+Okay, let me also take some notes here as well. Yeah.
+
+Hayworth, Douglas A.   28:13
+N.
+And I had a, my question that I raised my hand for was, you described the migration starting with global, but global isn't live and I thought the migration starts, has to start with a live accessible page.
+Because you're building, you're building from a live page.
+And then we're back.
+Filling author.
+Right, so how would that work? How would that logic that you described before work?
+
+Ramandeep Harjai   28:53
+So, sorry, Douglas, I, I was sorry, I was typing, I did not get your full question. So, so you are saying, like, when you roll out a site, it, it, yeah, it does backfill the author, right? It first puts the rolled outside on the edge, making it available, and then you know the the authoring part is backfilled as and when it is required. So, what's what's the question there?
+
+Hayworth, Douglas A.   29:18
+You described working down from the top initially.
+
+Ramandeep Harjai   29:23
+Yeah, yeah.
+
+Hayworth, Douglas A.   29:25
+But the top doesn't exist. You have to start with...
+A live, you have this.
+
+Ramandeep Harjai   29:30
+Which, what does it exist? So, you start with you start with Global English from Global English, you roll out North America English, right? So, that's that's the sequence of your rolling out.
+
+Hayworth, Douglas A.   29:39
+For the migration though, right, you have to work. You're converting a live page in Global Isn't Live.
+
+Ramandeep Harjai   29:43
+Even for...
+Yeah.
+
+Hayworth, Douglas A.   29:49
+Maybe I'm just not understanding that part.
+
+Ramandeep Harjai   29:50
+Yeah, so.
+Yeah, so we cannot, yeah, so Ram, I'll let you answer that. So the question here is the global site, right, in AEM is not published. So there's no way you can access the global site. But when you roll out North America English site, right, so that's going to put it on the edge.
+
+Hayworth, Douglas A.   29:53
+Yeah.
+
+Ramandeep Harjai   30:11
+Making it available, so I'm thinking like that would be some, you know, a CDN rule that's gonna block your non-public sites, so that's done through CDN rules.
+
+Ramachandra Avuthu   30:17
+Yeah.
+Yeah, basically.
+Yeah, yeah, so with the DA inheritance, because those pages has to exist on the edge, so they can preview the pages, but you don't expose them to public. They will behave as an internal site, which are not exposed to public.
+
+Ramandeep Harjai   30:37
+Yeah.
+Doug, does that answer your question?
+So they will still remain.
+
+Hayworth, Douglas A.   30:45
+No, but I just must be misunderstanding something. So I thought...
+My understanding was, you're going to convert the site to EDS.
+Based on the live, live accessible website.
+
+Ramandeep Harjai   30:59
+Mmh.
+
+Hayworth, Douglas A.   31:04
+So you're going to start with USEN probably.
+
+Ramachandra Avuthu   31:05
+Right.
+
+Ramandeep Harjai   31:10
+No, no, we're gonna start with Ian.
+
+Hayworth, Douglas A.   31:11
+And...
+
+Ramachandra Avuthu   31:11
+No.
+Sunit.
+
+Ramandeep Harjai   31:15
+Globally, yeah.
+
+Hayworth, Douglas A.   31:15
+Well, EN does not exist. You cannot see it, right? So...
+
+Ramandeep Harjai   31:19
+No, no, what do you mean it doesn't exist? Like, just from a content perspective, we are talking about. No, we are not talking about like a published site accessible on the internet for the users. We are not talking about that. We are talking about the site as a as a content, right?
+That exists today in AEM sites as well. There's a global English site. You can go to the global English site. You can manage content for global English site, and then you can also roll it out.
+
+Hayworth, Douglas A.   31:46
+But you're creating the blocks based on, you know, your AI looking at a published page. And then from the published page, which is a terminal node, you're needing to recreate the author environment.
+
+Ramandeep Harjai   31:49
+Yeah.
+Yep.
+Yeah, the migration part of it, yeah.
+Oh, okay, okay.
+I...
+
+Hayworth, Douglas A.   32:06
+And so you're actually working backwards from a terminal to get to the top level. So that's where I didn't understand how that actually works. You can't go top down because you're actually going bottom up.
+
+Ramandeep Harjai   32:06
+I get it, yeah.
+I...
+Yeah.
+I, I, I get your point.
+Yeah, I get your point now, right? So you're talking about, so Rob, I think if you can answer that, the question is, right, so we look at the public sites, you don't do that scraping and all that kind of stuff, and we do migration to EDS. The global English to start with is not published, so you cannot go to thermofisher.com slash global slash en to.
+view global English site, right? So how would that work?
+
+Rob Rusher   32:47
+Yeah, we're probably going to have to use some scripts out of AEM to get access to those pages and then run those through our migration.
+
+Ramandeep Harjai   33:04
+Yeah, so Doug, to answer that question right, so there are like, there are multiple ways to do that migration. One is, of course, if it's a publicly available site on the internet, we can always go there, scrape it out, and you know, that way we can build that site. The other would be to read it off from AEM itself, right? So I think for these non-public sites, that's what...
+would be required, right, to basically read it from the AEM rather than visiting a site and doing that scraping.
+
+Rob Rusher   33:31
+Yeah, one of the first things we have to do is actually see using scripts is find out which pages are root pages and which ones are inherited pages and what they're inherited from. So we need that entire tree so that we can identify which pages we can actually migrate.
+from a URL versus which ones are just never shown anywhere.
+We're doing a similar thing with experience fragments.
+
+Ramandeep Harjai   34:14
+All right, so yeah, so Douglas, there's definitely, you know, there's different ways we can do that, you know, scraping from a public side and also, you know, doing it at the AM level, so you know, that that should not be an issue. Deepak, I see your hand up, but in the interest of time, we need to like quickly go through the rest of the use cases as well. Yeah, Deepak, go ahead.
+
+Hayworth, Douglas A.   34:26
+Okay.
+
+Idnani, Deepika   34:29
+Hey.
+Yeah, just, yeah, just I wanted to add a note there for component level inheritance. So basically our major part of interest, I think team's interest is also on the content migration test cases, right? Or the use cases. So new one, I understand how it works. And if it is a new process, author team can decide.
+
+Ramandeep Harjai   34:34
+Thank you.
+
+Idnani, Deepika   34:55
+you know, to follow and then stuff like that. But for the existing, how it will be handled and what will be the output. So if that is drafted somewhere, it will be very helpful. Like how will be this component level inheritance broken pages will be handled while the migration step by step process.
+
+Ramandeep Harjai   35:12
+Yeah.
+
+Idnani, Deepika   35:16
+It'll give some clarity and transparency that, okay, while receiving this pages, this will be looking like this if some more extra activity needs to be done from the authoring team. So, yeah.
+
+Ramandeep Harjai   35:27
+Yeah, absolutely.
+So, yeah, we can we can document that, right? So, let me say, Deepti, you're on the call, right? So, so we discussed this, Deepti, we discussed about how we need to, you know, kind of like run a script on AEM to basically identify the pages where the page level or component level inheritance is broken for the, you know, satellite.
+sites migration. So can we like, you know, document that in our solution doc, like how we are planning to do that? We can we can discuss about it, but if you can just take a note of it, yeah. Yeah.
+
+Deepti Baijal   35:59
+Yeah, yeah, sure, sure. Yeah, and I think what Deepika, what I understood is Deepika especially wants is how it will look like on the live side, like after the migration. So I think more, yeah, but yeah, we got an idea. We'll update our SDD accordingly with the details in our migration strategy section.
+
+Idnani, Deepika   36:07
+Yeah.
+I just to make sure that everyone are with consensus, right? It should not be surprised while receiving. So that will be a good approach, I believe, just for these kind of scenarios, because there are a lot of pages where component level inheritance are broken. And without looking into that, what it's just assumed we roll out from the global rate.
+So it should not mess up the live copies after doing that, after migrating, just to understand what needs to be pre-checks needs to be done. Yeah.
+
+Deepti Baijal   36:44
+Black.
+
+Ramachandra Avuthu   36:48
+Yeah.
+Yeah, Deepika, so as RD explained, right, so there will be, I mean, you will have to break the page level inheritance even for a component in DA. So how it looks like is as you work on the migration, first global will be implemented, let's say migrated, and then let's say in US EN, the about us pages.
+Like some of one of the component in about us pages broken inheritance, right? So, basically, that page has to be migrated from current USCN to the latest DA, so that whole page exists in DA now. So, when so, because now we are migrating it from the live side, you will have the latest content, so the component level inheritance is broken.
+you will have the latest content in that file in the new DA.live site. So when, I mean, now DA understands the page inheritance or for DA, it's just the page inheritance broken. So it understands it is broken. When you try to sync, because everything else is same from the global, you don't see the diff you for.
+the remaining content. You will see that if you only for the component where the inheritance is broken. So that way author will know like remaining content is still the same. This is what like different from global.
+
+Idnani, Deepika   38:03
+Okay, okay. Thank you.
+
+Ramachandra Avuthu   38:04
+Hope that makes sense.
+
+Ramandeep Harjai   38:04
+So, it's a it's a bit different process, as I said, right? So, because you know these two systems manage authoring in two different ways, so you know, again, there is no, so in AEM you have two different things, block level or component level inheritance, page level inheritance. In DA, there's only page level inheritance, right? Pretty much that's it.
+
+Idnani, Deepika   38:22
+Thank you.
+
+Ramandeep Harjai   38:24
+So you can achieve your component level inheritance also through page level inheritance. So, but there's a process change to it, Deepika. So that's what Ram was explaining here. All right, so let's move on quickly, right? There's like, you know, good amount of use cases we want to go through. So I'm going to discuss the use case #3.
+So, this use case talks about virtual sites, right? So, today you have, let's say, you know, from Global English you have Europe, Europe English, and from Europe English you have UK English, right? And then UK English is used to serve content for the UK, but in the same region, Belgium.
+doesn't have its own site and Belgium basically is delegated to the UK site. So, you know, the entire UK site is served as a Belgium site today without even doing the rollout, right? So you have this custom service built in AEM where you can manage this custom configuration and you can say.
+you know, what are my primary sites and what other sites should basically point to my other primary sites, right? So in this configuration view, Belgium points to UK. You don't have a separate UK site to start with, with this configuration and I'm believing behind the scene this configuration gets translated into rewrite rules. So that's how it's done.
+But yeah, so Belgium, you don't have a Belgium site today, but you have a service where you can specify the configuration and say, you know, serve UK site as a Belgium site, right? So that's what you are doing today. Again, you know, this can be done with DA authoring, but this is, if you will see, is.
+color-coded yellow, that means there's a process change to it. And the process changes in DA, you will roll out all the sites as you would roll out any regular site, right? So as you would roll out UK from Europe, English.
+You would also roll out Belgium from Europe English, or you know, not not ideally, but if you you can also roll it out from UK English, but you know, I'll get to that point, like how how do how we don't see, you know, driving countryside from other countryside, but like technically that's possible, you can do that as well, right?
+But the main point here is that you would actually do a rollout for Belgium site as well. You don't do that today in AEM sites, but you would do that in DA authoring. And the benefit is, like, you know, DA authoring, as we discussed, by default, it does not duplicate content. It's not that if you're rolling out Belgium from...
+Europe English, you're going to see 500 pages now under Belgium folder, which you don't need because you are not making any content changes to it anyways. So what you are doing with your custom implementation in AEM sites, pretty much that now comes out of the box for you, but there's a difference of how you do it.
+Today you do that through a custom configuration and you manage that customization yourself. With the DA, you would just do a regular rollout of a site, right? As you would do for other sites, you would also do for your virtual sites as well, which is Belgium is one of your virtual sites. And that's going to take care of.
+the Belgium site, right? So there's a process change how you exactly do that thing. But in my opinion, you know, you can move away from your custom implementation and actually use product natively to achieve the same results. So that's the solution for this specific use case of how you would have.
+Virtual sites with no with no content in them.
+Any questions on this one before I move on?
+So then we have a custom MSM rollout service which we talked about. So you guys have built a custom MSM rollout service which does the recursive live copy activation, right? So it basically, it identifies all the children, direct and indirect children of your.
+parent site and then it does, you know, roll out recursively everything down the line. And again, this is a custom service which you have built because AEM sites does not offer multi-level inheritance. It's only one level inheritance and to build a multi-level inheritance on top of that framework, you have built a custom service which you...
+Then, manage right yourself. Now, this in DA, this is green because in DA multi-level inherited is gonna come out of the box for you guys, so you know this recursive, you know, rollout and identifying direct and indirect children of an inherited page.
+That all is gonna work through that, you know, multi-level inheritance model in the authoring. So, again, you know, you can move away from your customization and then use the product natively to achieve the same results. Ram any imports there or we good?
+
+Ramachandra Avuthu   43:26
+Sorry, I was just answering Nagendra about creating a node. Yeah, I missed like the question.
+
+Ramandeep Harjai   43:30
+Okay.
+
+Ramachandra Avuthu   43:35
+Okay.
+Okay.
+
+Pothula, Nagendra   43:49
+Sorry, you.
+
+Ramandeep Harjai   43:50
+link rewrite. Sorry, is there a question?
+
+Pothula, Nagendra   43:52
+Yes, I will get from you. Yeah, so is this feature already available or like when are we going to expect this feature will be able multi-level in hard hands?
+
+Ramandeep Harjai   44:01
+So, I'm gonna part that question, you know, yeah, we'll, yeah, you know, as part of like Sajesh, I think we'll come back and talk about timelines, right? Not today, but yeah, that's something we are tracking, yeah.
+
+Pothula, Nagendra   44:04
+Sure.
+
+Sajesh Enampurath   44:13
+Correct.
+Correct, yeah, yeah, I think now that we want to present these these approaches, right? Take take your feedback first. I think, yeah, the timelines when some of these are probably in progress, but we can definitely get back on those timelines when this will be available.
+
+Ramandeep Harjai   44:17
+So again.
+Yeah.
+Yeah. And again, this one, the next one is linked exactly to the previous one we talked about. This is also one of the features which you have built as part of your custom MSM rollout service is to rewrite these links. Again, you do this because product doesn't offer that feature. You build that feature over time and you know, that's how it's done. But again, this is green because product's going to offer you
+this out of the box because this whole concept of multi-level inheritance is going to exist in the product, right? So again, this is not something you have to worry about. That's the product's going to take care of it with the multi-level inheritance model built into it. Then we have other other nodes, right? So this is also similar to the Belgium discussion I was just having. So you have two ways of managing virtual sites. One is, you know, named.
+named delegation. So you say Belgium is delegated to UK, like that's the named delegation. And then you have like a catch-all delegation as well. Like, you know, you create others. And then pretty much like that falls into unnamed category, like any site, you know, could be pointed here.
+But again, with the concept of, you know, this DA authoring, where you basically roll out and not duplicate content, like pretty much, you know, these sites are virtual in that sense, like, you know, how you see them virtual in AEM. You're not, you don't are managing a separate copy of content for these sites. So any site.
+And every and each side would be rolled out in DA, right? So this, this, you will not do fancy stuff with configurations or fancy stuff with, you know, catch-all rules and stuff like that. You will pretty much, you will create a Belgium site, roll out a Belgium site, you will roll out, you know, if like, let's say Europe, others.
+caters to Ukraine, let's say, so you will roll out a Ukraine site, so you will roll out each and every site you would need, and that would actually not duplicate content in authoring, only you will see content in authoring when you break inheritance, right? So we discussed that, it's gonna be similar, it's a process change, it's a different way of...
+looking at content, but the same results can be achieved, right? So, you know, what are you guys doing today?
+Activation workflow from global node cascades to region and countries, yeah, that's green, it comes out of the box. Again, you know, I don't want to be too much about it, but that multi-site, multi-level inheritance model, gonna take care of this because it's all part of that, how, you know, content is rolled out in multi-level inheritance.
+Custom relocation moves, so these two now, okay, so these two are yellow and they say customization, so it's not a process change, so you know products not gonna give you these two features because these two features are very specific for Thermo Fischer as a as a business requirement, they are not they are not general enough to be.
+put into product. So one of them is relocation function. So it's like a move plus plus function, right? It's content move, but it does a lot of other things as well, which is very custom to Thermo Fischer. So when you want to move a page, you don't move a page, you relocate a page.
+in a way that that source page still continues to live where it is. It is also copied into the new move location. So now the new page is going to be available under the new location, but the old page is kept as is. It is unpublished.
+And then it's basically used to manage any bookmarked sources, right? So if that old page has been bookmarked, you want to make sure that bookmark still works. And that's the reason why you keep that page there. And you put a property on that page, which points to the new page, so that when the traffic comes to this page, it redirects internally to the.
+to the new page, right? So that's the business requirement. Yeah, so it's not gonna come out of product. So that's the customization we have to do. So in DA, there's things called plugins and apps. So we can use plugins and apps framework to build any custom feature. And we see this as a custom feature which can be built through.
+Apps and plugins, so, so this is this is gonna met through a customization, not gonna come through product custom interface to visualize full MS relish.
+
+Cajucom, Albrecht   48:49
+Sorry, real quick, I have a comment there for the relocation.
+
+Ramandeep Harjai   48:53
+Yeah.
+
+Cajucom, Albrecht   48:54
+Uh...
+I know that Rob mentioned that redirects are handled differently.
+
+Ramandeep Harjai   49:02
+Yes.
+
+Cajucom, Albrecht   49:03
+For EDS and through, I think, a spreadsheet, so.
+
+Ramandeep Harjai   49:04
+S.
+Yes.
+
+Cajucom, Albrecht   49:09
+You mentioned that these redirects are going to be handled through a...
+
+Ramandeep Harjai   49:17
+A plugin or an app, so essentially.
+
+Cajucom, Albrecht   49:18
+A new plugin or an app, so does that change the behavior now? Do we do we now set redirects through on a page level, or are they now, or do we do the spreadsheet?
+
+Ramandeep Harjai   49:27
+No.
+So, yeah, yeah, no, so it's gonna handle bit through spreadsheet, right? So all configurations, including your redirect configurations in EDS, are managed through sheets, right? What we call the spreadsheets or sheets, right? So there's a sheet which manages all the redirects, right? So you can go in there, put a new entry, and then you have a...
+
+Cajucom, Albrecht   49:40
+Sheets, yeah.
+
+Ramandeep Harjai   49:47
+have a redirect configuration for your system, right? So when I'm talking about apps and plugins, so we are talking about a way to put that entry into that sheet.
+
+Cajucom, Albrecht   49:58
+Ohh, okay, so we would it would be an automatic.
+
+Ramandeep Harjai   49:58
+So, yeah.
+Yeah, yeah, so you are not, yeah, if you don't build that customization, yeah, if you don't build that customization, it's a manual authoring effort, right? So if you, when you move a page, you also make an entry to that sheet like that, that's something you can do from day zero without building any customization, or we can look into building a customization with that, that part of the...
+
+Cajucom, Albrecht   50:03
+behavior and we wouldn't have to do it ourselves.
+Mmh.
+
+Ramandeep Harjai   50:21
+activity can be automated.
+
+Cajucom, Albrecht   50:22
+Okay, I understand now. Yeah, thank you.
+
+Ramandeep Harjai   50:25
+Yep, all right. The last one here is the visualization of your MSM relationships. Again, because in AM sites that, you know, multi-level internet does not exist, there is no view to see that relationship, and you have built an interface to see that relationship. Ram, we talked about it. There is a...
+There is a there is a basic version of that view which will come out of the box, so we can see if that's gonna suit Thermo Fischer, because it's still gonna show you the relationships, but if any, if you want to build a custom view, like you know, you, you know, you want to be you want to show that in a very specific way just for Thermo Fischer.
+Then again, this is something which we can be built through plugin and apps. So we can build a view which can show the relationship in a very specific way we want to see it. But there's one variant of that relationship that would also be available through the product. Ram, is that correct?
+
+Ramachandra Avuthu   51:21
+Yeah, that's right. It's very basic, but as you mentioned, you can customize it because we have the SDK and APS that are available, right?
+
+Ramandeep Harjai   51:24
+Yeah.
+All right, perfect. Yeah, thanks, Ravi. All right, any questions? So with this, we have covered all your MSM use cases. Any questions so far? Like, I personally don't see any major blocker or a showstopper use case in this list. There are definitely...
+
+Ramachandra Avuthu   51:30
+It's basically.
+
+Ramandeep Harjai   51:48
+couple of them which requires customization because they're very specific to Thermo Fischer. A couple of them are process change because of course we are moving to a new architecture, new way of managing content. So you know we have we have to move away from how we do things in sites and you know learn to do things in in EDS. So there is a process change associated with it and then a couple of them are just outright.
+out of the box, right? You're going to get the similar feature out of the box. And the benefit is you're not managing any customization for, you know, you're not maintaining any customization, product customization yourself. You're delegating it to the native product capability. So that's how I see it. So I don't see any major roadblock here. But any questions on MSN before I move on to the next pillar, which is experience fragments?
+The next two are gonna be very fast, right? So, Sajesh, how are we doing on time? Like, are we good?
+
+Sajesh Enampurath   52:41
+Yeah, I think we're good. So the next two tabs, yeah, not as elaborate as MSM, so I think you should be good.
+
+Ramandeep Harjai   52:42
+We are going, yeah, the next two are, yeah.
+Yeah, next to our, you know, gonna, they're gonna go very fast. We're gonna be, we're okay. Christa, yeah.
+
+Sajesh Enampurath   52:50
+Ohh.
+
+McCartney, Christa L.   52:53
+Before you, yeah, before you move on to the next two tabs, I just, so for the things that are going to require customization, I know you mentioned plugins and apps, which will be kind of like extra work. Will you help us understand kind of what the level of effort is going to be?
+
+Sajesh Enampurath   52:53
+Um, Adduri, I think, yeah.
+
+Ramandeep Harjai   52:59
+But.
+
+McCartney, Christa L.   53:14
+behind each of these line items at some point.
+So we can understand, I guess, like how this is going to impact our timeline and.
+
+Ramandeep Harjai   53:19
+Uhh, thank you.
+So...
+OK, so yeah, so Christa, let me tell you, let me put it in two different ways, right? One, even without these customizations, you have a path to EDS, right? It's not that, you know, this use case cannot absolutely cannot be met without customization. That's not true.
+You don't build this customization, you use what product is offering you. Of course, you know, with customization, it becomes, you know, a little bit fancier, a little bit, you know, more seamless. But let's say the relocation one, we just talked about it, right? So if you don't build this customization, then whenever you are moving a page, authors should add an entry into the redirect sheet.
+If you do that, you have the same feature parity, but in a little bit manual way. But with customization, you automate that process as well, so you know it becomes fancier. So, you know, I just want to make sure you understand that part. It's not that it's going to be a showstopper for you guys. You can still achieve the same results.
+but with a manual intervention rather than a fully automatic solution. So that's one. And same thing for the view, right? The second one, the report view of your multi-level inheritance. So as Ram said, there's going to be a basic view, which is going to come out of the box, which is going to show you that relationship. But this customization is if you are absolutely want to have the way.
+you have it in insights today, you know, you just want to maintain that same report view. So then yeah, you need to build that. So, but again, the point is, you don't build it, you still have a way to the product, you know, with the same objectives. Now, coming to the efforts for these customers, if you do decide to build this customization, what's the effort on it?
+Sajesh, I'll let you answer that. We are not doing any estimations at this point. We are more concerned on the solution part of it, whether this is doable or not, but not the absolute hours on, you know, how much hours is going to need to build this, right, Sajesh?
+
+Sajesh Enampurath   55:28
+Yeah, because, and we are planning to track it via Jira, right? So, if it is Ram's product team who's working on this, I think that will be a separate effort, but my goal will be to provide you with timelines, and as soon as we get into those discussions, Christa, but yeah, the objective of this call is to essentially...
+See, hey, if you see any blockers in this, just walk you through what we are thinking will be a good solution, recommended solution for DFS.
+
+McCartney, Christa L.   55:58
+Yeah, I guess what I was trying to get after is like, I understand we have a path to EDS, but when processes, I guess, require manual effort, we need to ensure that our teams are appropriately resourced to support and sustain our work efficiently. So I want to make sure that we're calling out any extra level effort that would need to be done manually that isn't
+current, like if it's not going to, I guess, mock current state and we're going to need to do things manually, but we have the team effectively resourced to support that work, whatever extra workload that might come with if we don't, you know.
+have the customization set up on day one.
+
+Ramandeep Harjai   56:40
+Yeah.
+
+Sajesh Enampurath   56:44
+Yeah.
+Christa, just, I think, I think probably when you say that you're talking about efforts and readiness of TFS team, is that correct?
+
+McCartney, Christa L.   56:55
+Yes, yes, correct.
+
+Sajesh Enampurath   56:56
+Okay, okay, so I think the next level of iteration that we'll do here, you know, personally for me to understand, when you say customization, I believe most of this would be on the product side, the DA product side. If not, you know, I'll be sitting with the team and trying to understand if there is anything that forms into implementation.
+The objective here is to get the DA product, right, and the authoring interface ready by the time we are ready to start implementation, right? So, so that's a desire. So, so I think most of this changes that we're talking about, the customization.
+we are talking about will be on the product side. However, to your point, I would like to understand, you know, with this customization, once it's ready, what is the kind of process change, right, that kind of falls on TFS team. So that's a second level of filtration. I think those estimations, I think that that.
+that comes out as a second iteration. But I'll definitely keep in mind, I understand your ask here, so we'll definitely keep an eye on that. But the objective would be to give you a product that you can start using, right? So that we can, you know, as part of implementation, we can configure and give it to you, and then give you a documentation on, hey, what does the process changes that?
+
+McCartney, Christa L.   58:06
+Yeah, okay.
+
+Sajesh Enampurath   58:19
+you need to be aware of to use this product at the end of the day.
+
+McCartney, Christa L.   58:23
+Yeah, so for example, let me just, for let's say like line item 11, if we don't have enhanced visibility into the MSM structure and like we can't see multi-level inheritance tracking, we're going to run into problems with our translation and like maybe having pages that are mismatched in different regions, stuff like that. And we would just want to make sure that we're resourced to support that until we can get that.
+customization in place. So just little things like that that I think downstream are going to impact our content authoring workflows and processes. So we just want to make sure that we're staying ahead of that and we understand what the impact's going to be so that we can support it the best way for all of our global content authors.
+
+Sajesh Enampurath   59:10
+Understood and noted that, Christa, yeah.
+
+McCartney, Christa L.   59:12
+Thank you.
+
+Ramandeep Harjai   59:13
+Alright, yeah, Douglas, you are.
+Your hand is off.
+
+Hayworth, Douglas A.   59:19
+Yeah, thanks. I guess it's probably for a deeper dive later, but later, but the redirects thing trips me up a little bit because if we're...
+You know, current state is we have a lot of content, a lot of redirects, because we've never really rationalized anything, so...
+
+Ramandeep Harjai   59:46
+This.
+
+Hayworth, Douglas A.   59:46
+I was looking forward to having redirects out in a spreadsheet and being able to...
+Rationalize, get rid of redirect chains and things in that spreadsheet, if we're writing, if we're writing to it from...
+from the content.
+System as a, you know, a...
+Kind of the way we do now.
+How do we sync those? Like, it seems like it's driven solely from...
+DA in the authoring environment, rather than being able to take advantage of what can be done in the spreadsheet. So, yeah, it's...
+Anyway, I, it's something that I'm eager to.
+take advantage of the newer ways of doing things. I don't want to be strapped to something else, but obviously it's conversation for later, but that's one of the concerns I have.
+
+Ramandeep Harjai   1:00:49
+Yeah.
+Absolutely right. So right now you have so for this customization, you know, we are not recommending you any specific solution, right? So it's at a principal level, like if this is what you need to do, this is how you can do that, but the nitty gritty is of it, right? So yeah, Douglas, that those, like this is like painted with a broad brush right now. So you know, once we get into the actual implementation level solutioning.
+
+Hayworth, Douglas A.   1:01:05
+Yeah.
+Sure.
+
+Ramandeep Harjai   1:01:14
+Then we see, you know, how we want to do it, how we want to control it, you know, things like that.
+
+Hayworth, Douglas A.   1:01:19
+Yeah, thanks.
+
+Ramandeep Harjai   1:01:20
+Yeah, all right. So let me move to the quickly to the experience fragment. As I said, like these two tabs next, you know, translation is, you know, even smaller, just two use cases. There's nothing to talk about. It's pretty much similar to sites and I'll come and talk about that. And experience fragments also is going to be a very quick discussion. So let's talk about experience fragment, right? So insights.
+You have conceptually two different things. You have pages and you have experience fragments. And then there is a feature.
+You know, non-parity between these two content pieces, even though they, you know, they behave similarly, like they're all pieces of, you know, they are, you know, chunks of pages. Page is like a full chunk in itself, and you know, experience fragment is just, you know, just a partial chunk which can go into this bigger, bigger piece. Conceptually, from a...
+purely from a technical point of view, they are pretty similar, but then they don't have a feature parity between them, right? So for example, pages have this multi-level MSM capability, you know, experience fragments in sites don't have MSM. And because experience fragments don't have MSM in sites.
+Whatever you have done with experience fragment is basically to build a MSM concept on top of experience fragments insights today, right? So that's what all of this customization that you have done. The first one is the best match experience fragment resolution. That pretty much is overlaying a MSM structure on top of experience fragment because product does not offer you that.
+Going to the DA world, there is no different concept of experience fragments and your regular pages, right? So they are one and the same thing. So you are not creating, like if you want to create an experience fragment, you're not creating a unique piece of or a different kind of content altogether. It's just going to be.
+any other content which you are creating. So that naturally follows the multi-level site inheritance model that's available for your regular pages as well. That's also going to be available for your experience fragments. So now you can have an experience fragment and then let's say a global.
+experience fragment, maybe like you want to start it at a global level, you can then do the same thing with it, roll it out to a North America English fragment, and then from North America English fragment, you can then roll it out to the US English fragment, right? So you can pretty much do the same rollout, which you can do for your other.
+site pages as well. With that view, now you don't have to have this customization of, you know, building variants, managing the MSN through variants, and then to resolve the variant or to pick the right variant, then you need to have this best match experience fragment resolution custom logic with it. So, you know, this whole thing, in my opinion, will go away.
+You would just naturally create fragments. You will naturally roll them out into these different multiple level inheritances, and then you will use the right level of, you know, whatever you want to pick. Like, you know, US English should go and pick the US English fragment. If that fragment is not there.
+In the DA world, it naturally cascades up to the parent, right? So you are requesting for a fragment from US English. It's not there. It's going to go and check it in North American English because that's the parent. If it's not there, it's going to go and check it from a global English. And it's going to find, if it finds there, it's going to use that particular.
+Version of the fragment; otherwise, you know, it's just gonna be a bad request, so, so that's natively, you know, built into the into the product. Any any questions on this one? Like, this is how we see it, right? So, this best best match experience fragment resolution.
+In my opinion, that goes away and it is replaced by multi-level site inheritance from the DA.
+
+Pothula, Nagendra   1:05:23
+So when you say that natively, it is looking for the available experience fragment, right? Let's say, page itself, let's say the experience fragment is not available in US, it will still try to get the master variation, right? It's like.
+
+Ramandeep Harjai   1:05:23
+So.
+From the payment.
+It will cascade up, cascade up the chain up till the up till the global, yeah.
+
+Pothula, Nagendra   1:05:44
+It's out of the box, it is available.
+
+Ramachandra Avuthu   1:05:44
+It.
+
+Ramandeep Harjai   1:05:46
+Yeah, I think Ram, you are saying something, your screen was.
+
+Pothula, Nagendra   1:05:47
+Okay, good.
+
+Ramachandra Avuthu   1:05:49
+Yeah, yeah, yeah, I just want to make it clear. It's not during the runtime, but when you roll out it to preview or live environments. So it happens, it's already available on the edge. By the time a user try to load the page, the experience fragment is available, it's on USCN, but when you are previewing the content or when you are rolling it out to live.
+That's when the fallback mechanism happens.
+
+Pothula, Nagendra   1:06:12
+Okay, fallback mechanism, like is the URL also going to be changed or no, like still maybe.
+
+Ramachandra Avuthu   1:06:16
+Yeah, they're all relative URLs, so yeah, you don't need to worry about. I mean, it's not absolute path, yeah.
+
+Pothula, Nagendra   1:06:20
+Tent.
+Exactly.
+Okay, now like maybe like in the migration, maybe we can discuss this point. Like since we are not, we haven't followed this structure for experience fragment, how we can actually move all this existing experience fragment into like the structured way of how you are recommending, right? Maybe we can discuss in the migration part.
+
+Ramandeep Harjai   1:06:44
+Yep, yeah, sure and again. All right, so those are the two from experience fragment. The next two are the custom requirements, right? So one, you have a regional container. So the regional container, essentially what it allows you to do is on a US English side, you want to place.
+A Canada French fragment, right? So, that's pretty much that's a use case. You want to like put a a specific regional fragment onto a onto a specific site. Again, you know, you're free to free to link it with any experience fragment, so there's no...
+you know, specialty about this use case with this new model in place. I know with the variants and everything, that's a custom logic you guys have to build, but this would again be naturally because this whole MSM structure is sitting out there, you're free to choose, you know, fragments from other places as well. So.
+that should be taken care by just the at the block level, right? So the experience fragment block level, like the fragment block level, that should allow you to just, you know, select the fragment you want to show there in the container. Same thing with the experience fragment content syndication component. So this one is basically.
+You know, authors should be able to explicitly set a country language and XF ID rather than relying on the automatic best match resolver. Again, as I said, the best match resolver goes away. Authors should be able to pinpoint to a specific fragment if they choose to load that one. And that should be also available at the block level.
+the fragment block level, right? So again, there's no specialty which is required for these two things. This is just a block level capability. And even today, this is a component level capability that would be replaced by a block level capability. But it's going to be much more simpler implementation because that whole logic of finding a best match resolution that.
+that goes away, right? It's just pretty much, you know, authors want to pick and choose a content and show it at a specific location. It boils down to that simple process. So again, you know, the whole idea with experience fragment is, you know, a mind shift.
+that, you know, experience fragments are no special, are not a special content pieces in DA. They are just as regular content fragments, right? So, and I don't want to call it content fragment because it means another thing inside, but they are fragments, right? So they are just fragments which follow the same MSM structure.
+and that way you can manage them, you know, how you're managing your rest of the sites. So there's no special treatment that would be required for experienced fragments. So any questions before I move on to the last one, translations? And this is also, you know, you can see it's green, it's pretty much out of the box, but we can quickly talk about it.
+All right, so in the interest of time, I'm just going to quickly jump to translations now. So with translations, there are essentially 2 use cases, right? One is your, and you know, the two use cases we captured was translations for your pages and translations for experience fragments, because today they are not managed through a unified process, like you know.
+You, you submit pages separately and experience fragments separately again, you know, because there's no concept of experience fragments in in DA, so you know this, you don't need like 2 separate things to be happening, it's gonna be part of the same translation process the way and Ram again, you know, feel free to pitch in, but what I understood from you.
+was in DA, you would first of all create a translation service configuration. So that would be your Word B or Wordly configuration that you would set up as a translation provider for your translations. And then similar to how AEM works, you create a translation project and within that project you handle.
+one or more pieces of content for translation. Same thing is going to be available for NDA. So there's a NDA is called apps. So there's a translation app. You go to translation app, you create a project, you add what content pieces you want to translate, you add them by URLs.
+and then you basically package them and submit it for your translation service. So it's pretty much a similar process, similar concept, but it's called app in DA. Christa, Christa.
+
+McCartney, Christa L.   1:11:21
+So we don't currently have like an API connection to Word B, which is our translation management system. And so.
+
+Ramandeep Harjai   1:11:25
+Yeah.
+
+McCartney, Christa L.   1:11:31
+In future state, you're kind of saying that we need to have that for this to effectively work, correct?
+
+Ramandeep Harjai   1:11:38
+I don't, no, I don't think so, but Rambia, if you can confirm that, right? So, you know, so they don't have like a automated translation service connected to the translation service provider, is that, you know, they start the translation, then take out the export, you know, export the XML.
+
+Ramachandra Avuthu   1:11:43
+If.
+Mhm.
+Okay.
+
+Ramandeep Harjai   1:12:07
+Today.
+
+Ramachandra Avuthu   1:12:09
+Okay, yeah, so we do support out of the box, we do support two or three translation providers like Google. I forgot the other two. But if it is a, I mean, you have a custom provider, I mean, if they open or expose the APIs, you can definitely use it in their translation app.
+I mean, you can configure it to use that, right? So if that is not the case, yeah, then you will have to create the document and then maybe paste the translated content.
+
+Rob Rusher   1:12:41
+Instead of having to export that, we would just have the translation connector created by the DA team for Word B, and you would be able to submit it electronically without having to.
+you know, export it and send it to them and then wait for them to get it back.
+
+McCartney, Christa L.   1:13:10
+Okay.
+
+Ramandeep Harjai   1:13:11
+Yep.
+
+Rob Rusher   1:13:13
+And then you just handpick which pages you actually want them to translate versus you doing your own internal translation.
+
+Ramandeep Harjai   1:13:13
+Original.
+Yeah, thanks, Rob.
+With that, let me check on time. We are almost, yeah, we are almost there. So we're good on time. We have a few minutes to wrap things up. So yeah, so these were the three buckets of use cases. We understood, as I said, right, so these use cases have gone through a couple of revisions with the Thermo Fischer team. So these are the best reflection of.
+your content processes as of today. So we covered MSM, experience fragments and translations. And in my opinion, there's no major roadblocker. There are different ways of doing things in DA for sure, because they are like different systems now, different architecture, different way of managing content. But there's no.
+Single showstopper or a roadblock that would say, you know, you cannot go to DA because this thing you cannot do it in DA, right? So, but all of this is again, you know, contingent to product coming out with multi-level inheritance RAM, so you know, we we had a we had a very...
+detailed discussion with the product team, they are also very eager to take that on. Like, you know, this is going to actually add value to the product itself. So, you know, Ram is fully invested into shaping the product for multi-level inheritance, right? With that being built into the product, like that's the score.
+core of your solution, that being built into the product, which is not even today in AEM sites, by the way, that's why you have all these customizations, but that being built into the product, like that's going to be a huge win for both product and for thermal future. But again, as I said, just to close, right, I don't see any major roadblock.
+For you guys.
+With that, any questions, any feedback, Sajesh, if you want to take it back and we can conclude the session.
+
+Sajesh Enampurath   1:15:16
+Yep. No, I think we have 14 minutes more, right? So I just want to make sure PFS team has heard this. Any major questions, you know, we can, we still have a few minutes to go, please bring it up. As the plan is to
+As usual, I'll share this Excel out for your reference, but really appreciate if there's any major feedback, any major concerns, more importantly, right, to surface it to us so that we can look at it. But just to make it clear, the solutions recommendation that you provided here,
+is from the best of best, right? It's from the product engineering team themselves. So I think we have gone out to provide you the best solution that we can provide in this for this use case that you have. So I'm very positive this is going to help.
+A lot.
+I just want to point out as next steps, you know, we, so these are functional use cases. I know forms is another major piece, like Deepti covered the session for offers, because this is more technical, we want to keep it separate, right? So from the use cases discussion, the use case,
+solutions that we have here. We want to keep the technical pieces separate. So offers is another piece we would like to cover this week if possible. You know, hopefully Thursday, if you can set up some time, that's the desire. But I'll work with Keith and team as usual to see, hey, if you have time on Thursday.
+you know, offers, sorry, the forms piece deserves a separate time, right? So that's why we'd like to do a similar solution walkthrough for forms as well this week if TFS team is ready. So just wanted to call that out, but I'll have those discussions, schedule that out this Thursday if possible.
+And then, and then just for this call itself, yeah, like I said, you know, take this time this week, let us know, and I'll send out the Excel and the meeting minutes out today. So take a look at it. If there's any major concerns, please let us know.
+
+Hunter, Keith A.   1:17:44
+Yeah, suggestion for those additional meetings you need for forums and offers. It is pretty much, there's a, you know, a large amount of stakeholders that are in different time zones. You know, we've covered this type of topic before, but we need to get something on the calendar ASAP.
+
+Sajesh Enampurath   1:17:57
+Yeah.
+
+Hunter, Keith A.   1:18:03
+in order to make sure that we can retain those resources on the short turnaround time here.
+
+Sajesh Enampurath   1:18:07
+Yep.
+No, absolutely. I think the objective is to send out that invite today, Keith. So I, you know, I didn't bring it up yesterday because, you know, Deepti was still working on it, but this morning we have confirmation and she is, you know, turning out this in a very short time frame. So thanks to Deepti.
+But yeah, I'll send out that invite out today. So I just need the specific list of critical participants for forms like we had for offers, right? I just want to make sure the critical participants for forms are available in this call. So I'll reach out to you today.
+
+Hunter, Keith A.   1:18:45
+OK, you should.
+
+Wilkinson, Lara   1:18:45
+And we can talk more about this Sajesh, but I just wanted to point out that it is going to be, it's a holiday weekend. So we do have a lot of PTO coming up for some folks later this week and early next week. So just flagging that.
+
+Sajesh Enampurath   1:18:53
+All right.
+Okay.
+
+Hunter, Keith A.   1:18:58
+Yeah, and for forms and offers, I think you should both have, or for both of those topics, you should have a list of pretty much defined people that need to be in those at this point.
+
+Sajesh Enampurath   1:19:09
+Offers is completed, Keith. So it's not offers we completed already. I think it was what last Thursday. I don't, I'm mixing up my days, but Friday, yeah. So thank you. So the upcoming call will be for forms and probably a little bit of search as well. So please, the two topics are forms and search. So that's what we're going to focus on.
+
+Cajucom, Albrecht   1:19:18
+Friday.
+
+Hunter, Keith A.   1:19:35
+Okay.
+All right, well, yeah, just work with Mike and myself to find those resources.
+If you need him.
+
+Sajesh Enampurath   1:19:45
+S.
+Sounds good. Yeah, I'll add it to the discovery sheet as usual to add the participants, but yeah, we can work through the teams as well.
+All right.
+
+Pothula, Nagendra   1:20:01
+Hi, Sajesh, I have two questions related to migration. I'm not sure my understanding is that maybe, since we have time, I just want to bring up regarding the pages. We're going to migrate the similar way how we migrate live pages. However, we're going to connect with the AM and then maybe migrate the similar way.
+
+Sajesh Enampurath   1:20:07
+Yeah.
+Absolutely.
+
+Pothula, Nagendra   1:20:21
+like how we migrate live pages, right, Rob?
+Like a global node and all non-live pages I'm talking about.
+
+Rob Rusher   1:20:31
+Yeah, we'll have to be able to pull that content out of the JCR.
+
+Pothula, Nagendra   1:20:36
+Yeah, and the second one is how are we going to retaining the MSM inheritance, the live relationship since like when we migrate live pages through the live URLs, so how are we going to maintain this live relationship on DAR?
+
+Ramandeep Harjai   1:20:52
+Yeah, so yeah, I think for that we have to like, you know, so let's say we are ready to now we have moved global. Global, you know, again, you know, we can move without any concerns about live copies because that's the starting point. We move global. Let's say now we are moving North America, English, right, from global.
+So that's what I said, right? So we had that discussion internally as well. So we do have to run that script on AEM first to identify the pages that needs to be moved, right? Because we don't want to move everything. We only want to selectively move where the block level or component level or page level in that it is broken. So we need to first of all find that.
+
+Pothula, Nagendra   1:21:27
+See.
+
+Ramandeep Harjai   1:21:34
+That delta pages, and then only those delta pages will move. If it's live, we can take it for those pages from live. If it's not, we can, you know, read everything, continue to read everything from JCR.
+
+Pothula, Nagendra   1:21:45
+Got it. Okay. Thank you, both of you.
+
+Sajesh Enampurath   1:21:53
+Um...
+So just want to practically, I think, strategically for us to move forward. One of the questions I want to put here is now the SDD updates and everything is dependent on how TFS feels about its recommendations, right? So in general, you know, what's the...
+What's the feeling around what we presented today, and anything anybody wants to call out, because we want to, as a next step, you know, we want to take this and update it and reflect it in our STD and other related documents, right? So...
+We can take this week to kind of digest this information, but Keith, Mike, I think at some point, you know, we need a final thumbs up, right, to do these recommendations. So any thoughts around how we would like to do that?
+
+Hunter, Keith A.   1:22:51
+Well, so just kind of looking at your action plan here, it looks like when is the STD going to be ready for our review or is this kind of pre-STD updates?
+
+Sajesh Enampurath   1:23:04
+Yeah, this is pre-SDT, right? Because conceptually, we want to address some of the concerns around the main concepts, MSMs, translation, XF that already provided today. But your question 26, if you remember, 26 is the date we are looking at.
+
+Hunter, Keith A.   1:23:17
+Eight.
+Okay.
+
+Sajesh Enampurath   1:23:22
+to present the STD, right? Because Deepti is parallelly making updates. She will take this week to kind of make the remaining updates and ready to be presented on May 26th.
+I know May 25th is a holiday, right? So it's a Memorial Day holiday, so 26th is when we'll be ready.
+
+Hunter, Keith A.   1:23:36
+Okay.
+Yeah.
+
+Caputo, Michael   1:23:42
+Will that time will that timeline impact the SOW timeline?
+
+Hunter, Keith A.   1:23:42
+Yep, so.
+
+Sajesh Enampurath   1:23:49
+Um...
+It doesn't have an effect on SOW, but I know Sendhil is here. So he's, so all the updates to SOW that out of the proposal itself, right? We would like to submit or present you with the updated proposal as we discussed last time. So Sendhil is plugged in into all this. So he's making those updates. He's taking the information from these recommendations and updates.
+updating parallelly. So if you specifically ask me, hey, when will be the updated proposal? I think the plan that we discussed with Keith, my Keith will be out next week. So I think we are discussing around June 4th to be a tentative date for the proposal presentation and the SOW and so on and so forth. So
+So that's the plan as of today.
+It does have impact, right? So if you're asking me, hey, the proposal, will it have an impact? I think Sendhil will be the right person to do it. But you know, in terms of budget, timeline, the approaches, the roadmap, more importantly, that was presented, I think that will undergo a few changes, which is what we want to present it back and get a sign off on.
+
+Caputo, Michael   1:24:43
+Okay.
+
+Hunter, Keith A.   1:25:07
+Yeah, so for, I mean, the week of 64, one of the things that is currently a risk as far as, I mean, there's a lot of risk, but one thing is, is the SOW and proposal going to have a migration strategy baked into it? Because we haven't really kind of discussed that.
+like how we're going to organize the translation and, you know, if it's by folder or by business unit, you know, things like that. So I'm hoping that we will cover that in the proposal phase.
+
+Sajesh Enampurath   1:25:44
+I think migration strategy will have focus call. I think as part of SDD, we will see. I don't know how much of time is needed, but migration strategy is definitely a topic we will cover as a focus topic, Keith. I don't think there is a pending decision on business unit or folders approach. I think that the decision is already in place.
+
+Caputo, Michael   1:25:55
+Yeah.
+
+Sajesh Enampurath   1:26:06
+If you look at our previous minutes, we are going with the folder approach. Rob, keep me honest, I hope that has not changed. What we are going plan to present to you is with folder, with the folder structure approach, hey, what is the detailed steps that we will be taking as part of migration strategy?
+I don't think there's any pending decisions for between BU versus for the structure Keith.
+But we'd like to present it. We'd like to double click into how we'll do migration strategy with folder structure approach in mind.
+
+Hunter, Keith A.   1:26:34
+Okay, well is.
+Okay, you know, I guess from our side, we've tentatively discussed folder strategy, like as opposed to business unit, but I don't think that we're, you know, completely 100%. The assumption is that we're going to go with folders. So if that's what APS is going to be.
+Be presenting, then we'll, you know, just need to understand that that that that's the way we're gonna go.
+
+Sajesh Enampurath   1:27:11
+Yeah, absolutely.
+
+Hunter, Keith A.   1:27:12
+Okay.
+
+Sajesh Enampurath   1:27:16
+Yeah, migration strategy is definitely like will be one of their discussion points as well as part of the whole SDD presentation.
+
+Caputo, Michael   1:27:25
+Okay. I know we were meeting later today as our weekly. Can you update your action plan?
+Because it sounds like the timing has changed a little bit.
+
+Hunter, Keith A.   1:27:37
+I think, Sajesh, actually you did update the action plan and posted it in the Adobe Teams channel. That's the one I'm looking at that says 6-4 now for the proposal document.
+
+Sajesh Enampurath   1:27:37
+Yeah.
+But.
+
+Caputo, Michael   1:27:48
+Ohh, okay, I didn't see it.
+
+Sajesh Enampurath   1:27:48
+Got it. Yeah, it's on the Thermo Fischer SharePoint, Mike. So, while you were away, I kind of uploaded it so that you get a runtime updates on that, yeah.
+
+Caputo, Michael   1:27:59
+OK, thanks.
+
+Sajesh Enampurath   1:28:04
+Yeah.
+
+Caputo, Michael   1:28:05
+I mean, I guess your question was how do we achieve sign-off on?
+These.
+
+Hunter, Keith A.   1:28:11
+MSN.
+
+Sajesh Enampurath   1:28:13
+Yeah, the recommendations.
+
+Caputo, Michael   1:28:13
+Yeah, the MSN and others.
+Oh.
+
+Hunter, Keith A.   1:28:17
+Yeah, well, Mike, it might be good just for us to do it, you know, kind of post-call huddle at some point today to, with all the, you know, appropriate stakeholders to make sure that we are comfortable with the presentation from today.
+
+Caputo, Michael   1:28:24
+Ohh.
+Sure, so you'll be distributing that in the notes of this meeting, correct? So, Geoff.
+
+Hunter, Keith A.   1:28:35
+Is that, yeah?
+
+Sajesh Enampurath   1:28:40
+That's correct, yeah.
+
+Caputo, Michael   1:28:41
+Okay.
+
+Hunter, Keith A.   1:28:46
+Yeah, so Mike, let's put something on the calendar at some point soon, hopefully in the next couple hours, maybe we can review and discuss.
+
+Sajesh Enampurath   1:28:47
+Bye.
+
+Caputo, Michael   1:28:55
+Okay.
+
+Hunter, Keith A.   1:28:57
+All right. Well, thanks.
+
+Sajesh Enampurath   1:28:58
+Perfect. Yeah, appreciate that, Keith, Mike. All right, I think we are on time. So thank you everyone for coming together today to give us an opportunity to go through this critical recommendations. Thank you, RD and team for putting this together. So I'll follow this up with meeting minutes and then
+Set it out as soon as possible.
+Thank you, everyone. Have a great day.
+
+Ramandeep Harjai   1:29:24
+All right, thanks everyone. Thank you.
+
+Wilkinson, Lara   1:29:26
+Thank you.
+
+Caputo, Michael   1:29:26
+Thanks.
+
+Hunter, Keith A.   1:29:26
+Thank you.
+
+Caputo, Michael   1:29:27
+What?
+
+Pawar, Nandini M.   1:29:29
+Thank you.
+
+Idnani, Deepika   1:29:30
+Thute.
+
+Sajesh Enampurath stopped transcription

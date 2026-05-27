@@ -1,0 +1,16 @@
+S.No,Category,Details,Description,Key Points/Business Needs,,Solution
+1,Translation,"Translation & MSM- 
+Country English as Translation Source","Regional English nodes (e.g., Latin America EN, Europe EN)  does not serve as the source language for translation workflows into local language nodes. Country-specific English (e.g., EN-BR for Brazil) is used as the immediate translation source for that country's local language variant (e.g., PT-BR).","1.	Translation is selective — not every page is translated.
+2.	The translation source is the country-level English node, not the Regional English.
+3.	Translation is processed via a manual export/import cycle using the AEM OOTB translation project workflow + a third-party (Wordly/WordBe) platform. XML is exported, translated, and re-imported.
+4. When a page is translated, two key properties are updated: ""translation status"" and ""translation date."" These properties help the system decide whether to display a translated experience fragment or default to the English version if a translation is not available.","Flow Example
+•	Global EN ? Latin America EN ? EN-BR (Brazilian English; live copy)
+?	EN-BR is the translation source for PT-BR (Brazilian Portuguese)
+•	This is a one-to-one translation at country level (EN-BR ? PT-BR), not region-to-many.","- In DA Authoring, Translations are configured by setting up a Translation Service and running a translation project (similar to Translations in AEM Sites).
+
+"
+2,Translation,"
+XF Translation Handling","Experience fragments are translated by creating language-specific variants. Additionally, XFs can be sent to a translation service, but this is done separately from page translation (not bundled with page XML export/import).","1. Supports manual variant creation for localized XF content.
+2. XF translation workflow is independent from page translation, requiring separate handling.",,"- In DA Authoring, XFs are similar to site pages and therefore the same translation process is available to XF content as it is available to other page content.
+
+"

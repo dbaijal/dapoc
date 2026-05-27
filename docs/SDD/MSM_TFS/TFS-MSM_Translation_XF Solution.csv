@@ -1,0 +1,86 @@
+S.No,Category,Details,Description,Key Points/Business Needs,,Solution,Comments from Meeting
+,,,,,,,
+1,MSM,"MSM Hierarchy - 
+Global ? Region ? Country ? Language Cascade","Content is authored at a Global English level and cascaded through. 
+Global english is non public.
+Regional English- Region specific pages are added here- non public
+Country English- Country specific changes if needed- Public
+Local Language- Rolled out from Country specific english and translated- public
+
+
+","1.Rollout is ordered.
+2.MSM  discovers all direct and indirect live copies, not just immediate children.
+3. 6 internal legs of the MSM tree are not used/not customer-facing.27 English and 13 Language alternates which are public facing.
+","
+content/lifetech/global/en
+ ?? latin-america/en
+    ??  latin-america/en-br
+    ??  latin-america/en-br ? latin-america/pt-br
+
+/content/lifetech/global/en
+ ?? europe/en
+    ??  europe/en-uk
+    ??  europe/en-fr ? europe/fr-fr
+    ?? europe/en-de ? europe/de-de","- Today, 1-level inheritance is supported (like AEM Sites). 
+- DA product enhancement will allow multiple-level inheritance OOTB.
+- Inherited content is only replicated to the Edge.
+- Unlike AEM Sites, DA does not duplicate inherited content, unless inheritence is broken.
+
+",
+2,MSM,"Authoring- Business users should be able to create and update pages at Global, Regional, and Country levels.","Some pages are created and maintained exclusively at the regional level and do not exist within the Global hierarchy.
+
+Business users at regional and country levels should be able to selectively break MSM inheritance either at the full-page level or at an individual component/content block level within a page.
+
+This enables localized customization of specific sections (for example, promotional banners or market-specific content) while continuing to inherit the remaining page content from the parent source.
+
+The solution should also provide visibility into inheritance status, distinguishing between page-level inheritance breaks and component-level disinheritance, similar to the Live Copy overview reporting available in AEM MSM.","Ensures globally consistent content cascades to all markets while allowing market-level overrides at each tier as Not all content is universal. Market-specific promotions, regulatory content, or region-specific product lines require localized authoring without disrupting the global content baseline.",,"OOTB
+- Create multi-level inhertience with MSM
+- Add/ remove exclusive local content
+- Break page-level inhertience
+
+Process change:
+- Breaking block level inheritence (similar to breaking component level inheritence in AEM Sites) is not supported in DA authoring. This can still be achieved by breaking page level inheritence and then sync-ing selective content from parent.
+","Warning when authors introduce a page in a satellite site that will break the inheritance.
+
+"
+3,MSM,Country Fallback- Some countries do not have their own site nodes.,Many countries do not have their own dedicated nodes in the MSM tree (secondary countries). A custom configuration maps these secondary countries to a primary country whose content they serve.,Not feasible to maintain dedicated content nodes for every country in the world. This allows TFS to serve relevant content to many countries without the operational overhead of maintaining individual live copies for each.This also ensure consistent experience across similar markets,"Example
+•	Belgium (EN-BE) is not in the MSM tree.
+•	Configuration: EN-BE, Europe region, primary = EN-UK, duplicate = UK.
+•	A Belgian customer visiting thermofisher.com sees the UK version of all pages.","Supported with process change:
+- All country sites should be inherited from their respective regions
+- Country-to-Country inheritence should be avoided for better content organization
+- In the case of UK/Belgium site, Belgium site should be inherited from Europe region website. This will not result in any content duplication or authoring overhead. But will allow for better content organization.
+",
+4,Rollout,"
+Custom MSM Rollout- Recursive Live Copy ","TFS has a custom MSM service that overrides out-of-the-box live copy resolution. When a rollout is initiated, this service recursively walks the entire content tree to identify all live copies — including indirect descendants — and builds a dependency-ordered rollout queue.","1.	Discovers downstream descendants, not just direct children.
+2.	Honors live copy sync cancellation flags (i.e., pages where inheritance has been manually broken are excluded).
+3.	Pages created only at the regional level (not inherited from global) are excluded from rollout processing.
+4.	Dependent rollout: a country language (e.g., ES-ES) is marked as dependent on its parent country English (e.g., EU-EN) and will not roll out until the parent is complete.",,"- Today, TF maintains this feature as a customization, which is owned and maintained by TF.
+- Going forward, with DA Authoring product enhancements, this feature will be supported by DA Authoring OOTB - No customization needed.",
+5,Rollout,Custom MSM Rollout -Automatic Path/Link Rewriting During Rollout,"When content is rolled out from Global English to a regional or country node, all internal links and path references within the page content are automatically rewritten to reflect the target region's path structure.","1.Inbound and outbound rewrite rules are maintained.
+2.The 'content' node segment in paths is trimmed and replaced with region/language/country conventions.
+3.Applies to both internal page links and asset references.
+
+
+Without this all regional pages would contain links pointing back to the global English path, breaking navigation for regional audiences","•	A page authored at /content/tfs/global/en/products/x with a link to /content/tfs/global/en/contact
+?	After rollout to Europe FR: link becomes /content/tfs/europe/fr-fr/contact","- Today, TF maintains this feature as a customization, which is owned and maintained by TF.
+- Going forward, with DA Authoring product enhancements, this feature will be supported by DA Authoring OOTB - No customization needed.",
+6,MSM,"Support for ""Other"" nodes in MSM hierarchy (e.g., Latin America Other, Europe Other).","Countries without dedicated site nodes are mapped to a primary or ""Other"" node, serving as a catch-all for stray countries.","Flexible mapping for countries without unique sites.
+Default content delivery for unmapped countries.
+Consistent rollout and inheritance behavior for ""Other"" nodes",,"Supported with process change:
+- All country sites should be inherited from their respective regions
+- Country-to-Country inheritence should be avoided for better content organization
+- In the case of UK/Belgium site, Belgium site should be inherited from Europe region website. This will not result in any content duplication or authoring overhead. But will allow for better content organization.
+",
+7,Activation,Activation workflow from global node cascades to regions and countries.,"When a page is activated at the global level, it triggers activation for all corresponding regional and country nodes sequentially. Activation is done one-by-one.","Streamlined publishing across all levels.
+Ensures content is live everywhere after global activation.
+Reduces manual activation steps for authors",,"This is provided in DA Authoring OOTB. In DA Authoring MSM, instead of copying content, the content is published to the web.",
+8,Relocation,"Custom relocation function moves all live copies, not just the top-level page. It should have option to select child pages as well.","Unlike out-of-the-box move (which only moves the top-level page), this customization relocates every live copy, preserving localization and translation. Only available at global/blueprint level.
+ Relocate operation for a page and all its children, with redirect from source to target.Relocate creates a target page (and optionally children), leaves the source page intact, and sets a redirect from source to target. Source page remains active for redirect purposes.","Maintains MSM structure and relationships during move.
+Preserves all localizations/translations.
+Reduces manual effort for complex moves.",,"Customization:
+This feature will not be provided in DA Authoring OOTB. However, this feature can be achieved via building a custom App/ Plugin. ",efforts?
+9,MSM View,Custom interface to visualize full MSM relationships across all levels.,"Provides a view showing direct and indirect live copy relationships, inheritance status, and sync flags, beyond AEM's default first-level display.","Enhanced visibility into MSM structure.
+Supports multi-level inheritance tracking.
+Helps authors manage complex dependencies and inheritance breaks",,"Customization:
+This feature will not be provided in DA Authoring OOTB. However, this feature can be achieved via building a custom App/ Plugin. ",efforts?

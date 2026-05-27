@@ -1,0 +1,54 @@
+S.No,Category,Details,Description,Key Points/Business Needs,Solution
+1,"
+Experience Fragment (XF) ","
+Best-Match XF Resolution(Standard)
+A page includes an XF without specifying exact variant.
+
+
+When a page is translated, two key properties are updated: ""translation status"" and ""translation date."" ","A custom 'best match variation' resolver selects the most appropriate XF variation at render time based on the page's path (country, language, region).
+Resolution Priority
+
+Country + Language (e.g., en-US)
+Language-only
+Regeion
+Master XF
+Fallback Rule
+If no match found ? Master XF is rendered.
+
+•	The component accepts only the XF parent folder path; it resolves the variation automatically based on context.
+•	All available variations are listed under the parent XF folder and named per region/language/country conventions.
+•	These are manually created variations, not MSM live copies.
+•	Default fallback is always the master variation.
+•	These Translation  properties help the system decide whether to display a translated experience fragment or default to the English version if a translation is not available.","
+Two XF Authoring Models
+1.  Standard XF Model
+
+Flat structure
+Variants by region / country
+Used for marketing content
+2. Division-Based XF Model (Forms only)
+
+Additional division/ folder in XF path
+Division selected via form properties
+Used to support: Different backend endpoints (Eloqua, GCMS)","- This is a customization that TF has built to allow for MSM kind of structure for XFs (as MSM in XF is not supported in AEM Sites).
+- In DA Authoring, XFs are similar to site pages and therefore same multiple-level inheritence MSM strcuture can be applied to XF content. Therefore, this feature will not be required in DA Authoring.
+
+"
+2,"
+Experience Fragment (XF) ",Best-Match XF Resolution(Division-forms),"Form Experience Fragments use an additional dimension called 'division' (e.g., CMD, GCMS, Eloqua-based divisions). When a form is placed on a page, its division property selects from a sub-folder of division-specific XF variations, in addition to the country/language matching.","1.	Division is set in the Form Properties dialog via a dropdown.
+2.	Different divisions map to different back-end form endpoints and field mappings (Eloqua vs. GCMS).","- This is a customization that TF has built to allow for MSM kind of structure for XFs (as MSM in XF is not supported in AEM Sites).
+- In DA Authoring, XFs are similar to site pages and therefore same multiple-level inheritence MSM strcuture can be applied to XF content. Therefore, this feature will not be required in DA Authoring.
+
+"
+3,Block ,"Regional Container 
+
+(This is not Specific to XF)","The Regional Container component allows authors to explicitly target a block of content at one or more specific countries, including countries that do not exist in the MSM hierarchy. This allows Belgium, for example, to receive a custom XF block even though it inherits the UK page.","1.	Supports comma-separated country targeting — allows combining countries from multiple regions in one configuration.
+2. Allows page-level inheritance (UK page) to remain intact while providing block-level country customization.","Customization:
+This feature will can be provided with a custom block (similar to how its built in AEM Sites, today.)"
+4,"
+Experience Fragment (XF) ",XF Content Syndication Component ,"This allows authors to explicitly specify a country, language, and XF ID rather than relying on the automatic best-match resolver. This provides a direct override capability at the component level.","1.	Authors manually specify country + language + XF path.
+2.	Bypasses the automatic best-match variation resolution logic.
+3.	Used for specific cases where the automatic resolution would not select the correct variant.
+4.	Limited to a single country/language per component instance ","Customization:
+This feature will can be provided with a custom block (similar to how its built in AEM Sites, today.)"
+,,,,,
