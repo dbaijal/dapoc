@@ -46,6 +46,33 @@ How content is authored, edited, and managed by authors on a day-to-day basis. T
 
 ---
 
+## Complex Dialog Authoring — Traditional AEM vs UE vs DA
+
+Traditional AEM (6.4/6.5) component dialogs support unlimited complexity — multi-tab layouts, conditional field visibility, custom widgets, drag-drop ordering, nested fieldsets, custom validation, and any bespoke authoring UI built with Coral/Granite. TFS has complex component dialogs today (e.g. forms with rules, multi-field configurations, conditional visibility).
+
+**Neither UE (xWalk) nor DA provides the same traditional AEM dialog model.** Both require different approaches for complex authoring:
+
+| Aspect | Traditional AEM Dialogs (current TFS) | xWalk — UE Properties Panel | DA — Plugins |
+|---|---|---|---|
+| Standard fields (text, select, boolean, number) | Supported | Supported via component-definition.json | Supported — table cells or plugin dialogs |
+| Multi-tab dialogs | Supported | Not available — single flat properties panel | Not applicable — plugin UI can have tabs if needed |
+| Conditional field visibility | Supported (show/hide based on selections) | Not available in component-definition.json | Supported — plugin JS controls field visibility dynamically |
+| Multi-step wizards | Supported via custom widgets | Not available in standard UE — requires UI Extension (App Builder) | Supported — plugin can have multi-screen flows (e.g. Forms plugin) |
+| Custom validation | Supported via dialog validation | Not available in standard component-definition.json | Supported — plugin JS validates before writing |
+| Drag-drop reordering within a component | Supported | Not available | Not applicable (table rows reordered via DA editor) |
+| Complex custom UI (rule editors, visual builders) | Supported via custom Coral widgets | Requires UI Extension built with React + App Builder | Supported — plugin built with standard HTML/CSS/JS |
+| Development technology | Coral UI / Granite / JSP / Sling | React + App Builder framework | Vanilla HTML/CSS/JS + DA SDK |
+| Development effort for complex dialogs | Moderate (known AEM patterns) | Higher (React + App Builder + UE API integration) | Moderate (standard web development) |
+
+**Key takeaway:** Existing complex TFS component dialogs cannot be directly replicated in either approach using only the standard mechanisms (component-definition.json for xWalk, table authoring for DA). Both approaches handle this through an extension model:
+
+- **xWalk:** UI Extensions via App Builder (React-based, runs as modal/panel inside UE)
+- **DA:** Plugins (vanilla HTML/CSS/JS, runs in DA Library panel)
+
+Both can achieve the same complex authoring outcomes. The technology stack and development effort differ.
+
+---
+
 ---
 
 ## Use Case 2: Approval & Publishing Workflows
