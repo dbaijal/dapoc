@@ -6,9 +6,9 @@
 
 Edge Delivery Services produces semantic and accessible HTML markup by default. EDS's architecture — semantic HTML first, CSS for presentation, JavaScript for behavior — inherently supports accessibility best practices.
 
-However, accessible markup by default does not guarantee full WCAG compliance. Custom blocks, interactive patterns, authored content, and complex integrations require deliberate accessibility implementation during design and development.
+However, accessible markup by default does not guarantee full WCAG compliance. Custom blocks, interactive patterns, authored content, and complex integrations benefit from deliberate accessibility consideration during design and development.
 
-This section defines the accessibility approach for the TFS EDS implementation — how accessibility is embedded into page structure, blocks, styling, authoring, and testing.
+This section outlines the recommended accessibility approach for the TFS EDS implementation — how accessibility can be embedded into page structure, blocks, styling, authoring, and testing.
 
 Reference: [EDS Semantic Markup — Sections & Blocks](https://www.aem.live/developer/markup-sections-blocks)
 
@@ -16,22 +16,24 @@ Reference: [EDS Semantic Markup — Sections & Blocks](https://www.aem.live/deve
 
 ## 2. Objectives
 
-The TFS EDS implementation must:
+The recommended accessibility approach for the TFS EDS implementation aims to:
 
-- Build accessibility directly into EDS page templates, default content, and custom blocks
+- Build accessibility into EDS page templates, default content, and custom blocks where feasible
 - Favor semantic HTML first
 - Use ARIA only when native HTML semantics are insufficient
-- Follow established interaction patterns for accordions, tabs, carousels, dialogs, and other advanced controls
-- Support keyboard-only, screen reader, low-vision, and zoom/reflow use cases
+- Follow established interaction patterns for accordions, tabs, carousels, dialogs, and other advanced controls where applicable
+- Consider keyboard-only, screen reader, low-vision, and zoom/reflow use cases
 - Preserve EDS principles of simplicity, performance, and maintainability
+
+The specific scope and depth of accessibility implementation will be determined during sprint planning based on project priorities and timelines.
 
 ---
 
 ## 3. Design Principles
 
-### 3.1 Accessibility is a build-time requirement
+### 3.1 Accessibility is best addressed at build time
 
-Accessibility must be implemented during design, development, and QA — not deferred to a final audit or post-launch phase.
+Accessibility is most effectively addressed during design, development, and QA rather than deferred to a final audit or post-launch phase.
 
 ### 3.2 Semantic HTML first
 
@@ -41,13 +43,13 @@ EDS implementations should use native HTML elements wherever possible: `button`,
 
 ARIA should be used to express role, state, and relationship only where native HTML does not already provide the needed behavior.
 
-### 3.4 Accessibility must survive authoring freedom
+### 3.4 Accessibility should survive authoring freedom
 
-DA emphasizes lightweight authoring and reusable blocks. Accessibility cannot depend on authors "remembering everything correctly." The implementation should make the accessible outcome the default outcome through sensible markup, constrained block behavior, semantic defaults, and design-system patterns.
+DA emphasizes lightweight authoring and reusable blocks. The recommended approach is to make the accessible outcome the default outcome through sensible markup, constrained block behavior, semantic defaults, and design-system patterns — reducing reliance on authors to manually ensure accessibility.
 
 ### 3.5 EDS blocks are not automatically WCAG compliant
 
-EDS blocks can be used to build accessible experiences, but accessibility compliance is not guaranteed by default. Custom blocks require deliberate implementation and testing.
+EDS blocks can be used to build accessible experiences, but accessibility compliance is not guaranteed by default. Custom blocks benefit from deliberate implementation consideration and testing.
 
 ---
 
@@ -59,11 +61,11 @@ EDS blocks can be used to build accessible experiences, but accessibility compli
 - Avoid creating a custom block when semantic default content already solves the use case
 - Minimize variant explosion — more variants increase accessibility risk and testing burden
 
-### 4.2 Blocks must generate semantic output
+### 4.2 Blocks should generate semantic output
 
-Each block must produce HTML that is meaningful before CSS and JavaScript are applied.
+Each block should aim to produce HTML that is meaningful before CSS and JavaScript are applied.
 
-| Block Type | Preferred Semantic Structure |
+| Block Type | Recommended Semantic Structure |
 |---|---|
 | Hero | heading, paragraph, link/button, image |
 | Cards | `ul` / `li` or `article` list |
@@ -73,19 +75,21 @@ Each block must produce HTML that is meaningful before CSS and JavaScript are ap
 | Columns | semantic sections with appropriate heading hierarchy |
 | Testimonial | `blockquote` or `article` with attribution |
 
-### 4.3 Styling must not break accessibility
+### 4.3 Styling should not break accessibility
 
-- Never remove focus indicators without a visible replacement
+Recommended styling practices:
+
+- Avoid removing focus indicators without a visible replacement
 - Preserve contrast for text, controls, icons, and focus rings
-- Do not rely on color alone to convey meaning
+- Avoid relying on color alone to convey meaning
 - Ensure text reflows and remains usable under zoom
 - Avoid styling that visually reorders content while leaving DOM order incorrect
 
 ---
 
-## 5. How Accessibility Is Implemented in EDS Blocks
+## 5. How Accessibility Can Be Implemented in EDS Blocks
 
-Accessibility in EDS blocks is implemented at five layers:
+Accessibility in EDS blocks can be addressed at five layers. The depth of implementation per block will depend on project scope and priorities.
 
 ### Layer 1: Semantic HTML structure
 
@@ -128,7 +132,7 @@ Accessibility in EDS blocks is implemented at five layers:
 
 ## 6. Pattern Guidance for TFS Blocks
 
-For non-native interaction patterns, the implementation should follow the WAI-ARIA APG pattern that matches the control behavior.
+The following patterns represent recommended implementation approaches based on WAI-ARIA APG. The scope and depth of accessibility implementation per block will be determined during sprint planning based on project priorities.
 
 ### Accordion
 
@@ -162,53 +166,59 @@ For non-native interaction patterns, the implementation should follow the WAI-AR
 
 ## 7. Authoring Considerations in DA
 
-Authors influence accessibility. The implementation should reduce the chance of inaccessible output.
+Authors influence accessibility. The implementation approach should reduce the chance of inaccessible output where possible.
 
 ### 7.1 Make the accessible choice the default
 
+Recommended patterns:
+
 - Heading hierarchy built into templates and authoring patterns
-- Image blocks encourage or require meaningful alt text
+- Image blocks encourage meaningful alt text
 - Decorative images can be marked decorative
-- CTA blocks require meaningful link text (no "Click here")
+- CTA blocks encourage meaningful link text (not "Click here")
 - Form blocks include labels and error mappings by default
 
 ### 7.2 Content guidance for authors
 
-Even with strong block engineering, authors need guidance on:
+Even with strong block engineering, authors benefit from guidance on:
 
-- Heading order (H2 → H3, never skip levels)
+- Heading order (H2 → H3, avoid skipping levels)
 - Descriptive link text (not "Read more" or "Click here")
 - Alt text quality (describe the content, not "image of...")
 - Table usage (only for tabular data, not for layout)
 - Avoiding images of text
 - Captioning/transcripts for video content (Brightcove)
 
-### 7.3 Preflight validation for accessibility
+### 7.3 Potential Preflight validation for accessibility
 
-Preflight rules can be extended to catch common accessibility issues before publish:
+Preflight rules could potentially be extended to catch common accessibility issues before publish. Examples of what could be validated:
 
 - Missing alt text on images
 - Empty link text
 - Heading level violations
 - Required metadata missing
 
+Note: The scope of Preflight accessibility rules would be determined based on project priorities and feasibility.
+
 ---
 
 ## 8. Testing Strategy
 
-Accessibility validation must include both automated and manual checks.
+Accessibility validation benefits from both automated and manual checks. The specific testing scope and depth will be agreed during sprint planning.
 
 ### 8.1 Automated testing
+
+Recommended automated checks:
 
 - axe-based scans in local development
 - Lighthouse accessibility audits
 - Regression testing for known accessibility rules
 
-Automated testing catches: missing labels, some ARIA misuse, contrast problems, landmark issues, duplicate IDs.
+Automated testing can catch: missing labels, some ARIA misuse, contrast problems, landmark issues, duplicate IDs.
 
 ### 8.2 Manual testing
 
-Required manual validation:
+Recommended manual validation areas:
 
 - Keyboard-only navigation
 - Screen reader testing (NVDA/JAWS on Windows, VoiceOver on Mac)
@@ -218,9 +228,9 @@ Required manual validation:
 - Modal/dialog escape and restore behavior
 - Error handling and announcement behavior
 
-### 8.3 Block release gate
+### 8.3 Recommended block quality checks
 
-No custom block should be promoted to production status unless it passes:
+It is recommended that custom blocks pass the following checks before production promotion. The specific testing scope per block will be agreed during sprint planning:
 
 - Semantic structure review
 - Keyboard navigation review
