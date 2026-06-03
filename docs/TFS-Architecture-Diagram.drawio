@@ -1,0 +1,237 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Claude" version="22.1.2">
+  <diagram name="TFS Runtime Architecture" id="tfs-arch-1">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- EDS Hub - Center -->
+        <mxCell id="eds" value="&lt;b&gt;Adobe Edge Delivery Services&lt;/b&gt;&lt;br&gt;(Content Delivery &amp; Runtime)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1473E6;fontColor=#ffffff;strokeColor=#0D66D0;fontSize=14;verticalAlign=middle;spacingTop=5;spacingBottom=5;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="600" y="370" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Top Cluster: Authoring & Code -->
+        <!-- Group background -->
+        <mxCell id="group-authoring" value="Authoring &amp; Code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;strokeWidth=1;dashed=1;fontSize=11;fontColor=#666666;verticalAlign=top;spacingTop=5;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="420" y="80" width="640" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="da" value="&lt;b&gt;DA.live&lt;/b&gt;&lt;br&gt;(Document Authoring)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=12;verticalAlign=middle;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="assets" value="&lt;b&gt;AEM Assets&lt;/b&gt;&lt;br&gt;as a Cloud Service (DAM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=12;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="660" y="120" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="github" value="&lt;b&gt;GitHub&lt;/b&gt;&lt;br&gt;(Code &amp; Config)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=12;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="870" y="120" width="160" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Left Cluster: Edge Compute -->
+        <!-- Group background -->
+        <mxCell id="group-edge" value="Edge Compute" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;strokeWidth=1;dashed=1;fontSize=11;fontColor=#666666;verticalAlign=top;spacingTop=5;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="290" width="380" height="240" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge" value="&lt;b&gt;Edge Compute Layer&lt;/b&gt;&lt;br&gt;(Akamai EdgeWorkers / Adobe&lt;br&gt;Edge Compute — pending)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7C7C7C;fontColor=#ffffff;strokeColor=#5C5C5C;fontSize=12;verticalAlign=middle;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="100" y="330" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="header" value="&lt;b&gt;TFS Header/Footer&lt;/b&gt;&lt;br&gt;Microservice" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#7C7C7C;fontSize=11;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="440" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="product" value="&lt;b&gt;TFS Product&lt;/b&gt;&lt;br&gt;Microservice" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#7C7C7C;fontSize=11;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="240" y="440" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Right Cluster: Personalization & Measurement -->
+        <!-- Group background -->
+        <mxCell id="group-personalization" value="Personalization &amp; Measurement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;strokeWidth=1;dashed=1;fontSize=11;fontColor=#666666;verticalAlign=top;spacingTop=5;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="290" width="420" height="240" as="geometry" />
+        </mxCell>
+
+        <mxCell id="target" value="&lt;b&gt;Adobe Target&lt;/b&gt;&lt;br&gt;(Personalization)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=12;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="340" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aep" value="&lt;b&gt;Adobe Experience&lt;/b&gt;&lt;br&gt;&lt;b&gt;Platform&lt;/b&gt; (Audiences)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=11;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="340" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="websdk" value="&lt;b&gt;Web SDK&lt;/b&gt;&lt;br&gt;(Analytics)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=12;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="440" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Bottom Cluster: Media & Identity -->
+        <!-- Group background -->
+        <mxCell id="group-media" value="Media &amp; Identity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;strokeWidth=1;dashed=1;fontSize=11;fontColor=#666666;verticalAlign=top;spacingTop=5;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="560" width="560" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="brightcove" value="&lt;b&gt;Brightcove&lt;/b&gt;&lt;br&gt;(Video)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#7C7C7C;fontSize=12;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="500" y="610" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="identity" value="&lt;b&gt;Thermo Fisher ID&lt;/b&gt;&lt;br&gt;+ Adobe IMS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#7C7C7C;fontSize=12;verticalAlign=middle;arcSize=12;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="820" y="610" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- End User -->
+        <mxCell id="user" value="&lt;b&gt;End User&lt;/b&gt;&lt;br&gt;(Browser)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2D9D78;fontColor=#ffffff;strokeColor=#268E6C;fontSize=13;verticalAlign=middle;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="580" width="160" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ARROWS: Top cluster to EDS -->
+        <mxCell id="arrow-da-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="da" target="eds" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-da-eds" value="Publish Content" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" connectable="0" parent="arrow-da-eds">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-assets-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="assets" target="eds" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-assets-eds" value="Asset References" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" connectable="0" parent="arrow-assets-eds">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-github-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="github" target="eds" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-github-eds" value="Code Sync" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" connectable="0" parent="arrow-github-eds">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ARROWS: Edge cluster to EDS -->
+        <mxCell id="arrow-edge-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;startArrow=classic;startFill=1;" edge="1" source="edge" target="eds" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-edge-eds" value="Intercepts &amp;&lt;br&gt;Augments Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" connectable="0" parent="arrow-edge-eds">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-header-edge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;strokeColor=#7C7C7C;strokeWidth=1.5;" edge="1" source="header" target="edge" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-header-edge" value="HTML Injection" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#666666;" vertex="1" connectable="0" parent="arrow-header-edge">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-product-edge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;strokeColor=#7C7C7C;strokeWidth=1.5;" edge="1" source="product" target="edge" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-product-edge" value="Product Data (SEO)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#666666;" vertex="1" connectable="0" parent="arrow-product-edge">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ARROWS: Personalization cluster to EDS -->
+        <mxCell id="arrow-target-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="target" target="eds" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-target-eds" value="Personalization&lt;br&gt;(Client-side)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" connectable="0" parent="arrow-target-eds">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-aep-target" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#7C7C7C;strokeWidth=1.5;" edge="1" source="aep" target="target" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-aep-target" value="Audiences" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#666666;" vertex="1" connectable="0" parent="arrow-aep-target">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-websdk-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="websdk" target="eds" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-websdk-eds" value="Analytics Events" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" connectable="0" parent="arrow-websdk-eds">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ARROWS: Bottom cluster -->
+        <mxCell id="arrow-brightcove-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="brightcove" target="eds" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label-brightcove-eds" value="Video Embed" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" connectable="0" parent="arrow-brightcove-eds">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow-identity-da" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#999999;strokeWidth=1.5;dashed=1;" edge="1" source="identity" target="da" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="905" y="550" />
+              <mxPoint x="540" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-identity-da" value="Author SSO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#666666;" vertex="1" connectable="0" parent="arrow-identity-da">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ARROW: EDS to End User -->
+        <mxCell id="arrow-eds-user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#2D9D78;strokeWidth=3;" edge="1" source="eds" target="user" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="450" />
+              <mxPoint x="900" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-eds-user" value="&lt;b&gt;Optimized HTML&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#2D9D78;" vertex="1" connectable="0" parent="arrow-eds-user">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;TFS Runtime / Physical Architecture&lt;/b&gt;&lt;br&gt;DA.live + Edge Delivery Services" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=16;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="380" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CCCCCC;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="80" width="220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="&lt;b&gt;Legend&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="85" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-1" value="EDS Hub (Delivery)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1473E6;fontColor=#ffffff;strokeColor=#0D66D0;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="110" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-2" value="Authoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="135" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-3" value="Edge (pending)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7C7C7C;fontColor=#ffffff;strokeColor=#5C5C5C;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="160" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-4" value="End User" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2D9D78;fontColor=#ffffff;strokeColor=#268E6C;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="185" width="120" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
