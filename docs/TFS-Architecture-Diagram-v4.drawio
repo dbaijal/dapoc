@@ -1,0 +1,427 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Claude" version="22.1.2">
+  <diagram name="TFS Runtime Architecture - DA + EDS" id="tfs-arch-v4">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ============================================ -->
+        <!-- TITLE -->
+        <!-- ============================================ -->
+        <mxCell id="title" value="&lt;b style='font-size:16px'&gt;TFS Runtime / Physical Architecture&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:12px;color:#666'&gt;DA.live + Edge Delivery Services&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="400" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- SITE VISITOR + BROWSER (Top Center) -->
+        <!-- ============================================ -->
+        <mxCell id="visitor" value="Site Visitor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="665" y="30" width="30" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="browser" value="&lt;b&gt;Browser&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Client-side JS execution)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#333333;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="600" y="95" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- AKAMAI CDN LAYER -->
+        <!-- ============================================ -->
+        <mxCell id="akamai-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;strokeWidth=2;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="320" y="180" width="720" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="akamai-label" value="&lt;b&gt;Akamai&lt;/b&gt;&lt;br&gt;Content Delivery Network" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="570" y="182" width="220" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-compute" value="&lt;b&gt;Edge Compute&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Akamai EdgeWorkers /&lt;br&gt;Adobe Edge Compute&lt;br&gt;— pending)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="380" y="225" width="210" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="akamai-cache" value="&lt;b&gt;CDN Cache&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#999999;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="640" y="240" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="akamai-routing" value="&lt;b&gt;Request Routing&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#999999;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="820" y="240" width="140" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- ADOBE EDGE DELIVERY SERVICES -->
+        <!-- ============================================ -->
+        <mxCell id="eds-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E68619;strokeWidth=2;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="320" y="360" width="720" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-label" value="&lt;b style='font-size:14px'&gt;Adobe Edge Delivery Services&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=14;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="520" y="365" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-preview" value="&lt;b&gt;Preview&lt;/b&gt;&lt;br&gt;(.page)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="405" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-live" value="&lt;b&gt;Live&lt;/b&gt;&lt;br&gt;(.live)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="480" y="405" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-media" value="&lt;b&gt;Media Bus&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="620" y="405" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-content" value="&lt;b&gt;Content Bus&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="760" y="405" width="110" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-admin" value="&lt;b&gt;Admin Service&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="900" y="405" width="120" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-config" value="&lt;b&gt;Config Service&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="470" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eds-blocks" value="&lt;b&gt;Blocks &amp; Scripts&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="510" y="470" width="140" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- DA.LIVE (Authoring) - Bottom Left-Center -->
+        <!-- ============================================ -->
+        <mxCell id="da-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#E68619;strokeWidth=2;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="280" y="610" width="460" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="da-label" value="&lt;b style='font-size:14px'&gt;Adobe DA.live&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:11px'&gt;(Document Authoring)&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=14;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="410" y="612" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="da-docauth" value="&lt;b&gt;Doc-based&lt;/b&gt;&lt;br&gt;&lt;b&gt;Authoring&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="305" y="660" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="da-plugins" value="&lt;b&gt;DA Plugins&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Forms, CTA, Brightcove)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="445" y="660" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="da-permissions" value="&lt;b&gt;Permissions&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(DA Sheet)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="615" y="660" width="105" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="da-preflight" value="&lt;b&gt;Preflight&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Governance)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="305" y="725" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="da-content-mgmt" value="&lt;b&gt;Content&lt;/b&gt;&lt;br&gt;&lt;b&gt;Management&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="445" y="725" width="150" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- AEM ASSETS - Bottom Right-Center -->
+        <!-- ============================================ -->
+        <mxCell id="assets-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#E68619;strokeWidth=2;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="790" y="610" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="assets-label" value="&lt;b style='font-size:13px'&gt;AEM Assets&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:10px'&gt;as a Cloud Service&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="845" y="612" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="assets-dam" value="&lt;b&gt;DAM&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=11;verticalAlign=middle;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="815" y="665" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="assets-metadata" value="&lt;b&gt;Metadata&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="920" y="665" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="assets-cf" value="&lt;b&gt;Content&lt;/b&gt;&lt;br&gt;&lt;b&gt;Fragments&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="815" y="720" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="assets-selector" value="&lt;b&gt;Asset Selector&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#E68619;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="920" y="720" width="100" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- LEFT SIDE: TFS MICROSERVICES -->
+        <!-- ============================================ -->
+        <mxCell id="ms-group-label" value="&lt;b&gt;TFS Microservices&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="215" width="160" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ms-header" value="&lt;b&gt;MS Header / Footer&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#666666;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="250" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ms-product" value="&lt;b&gt;MS Product&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Catalog / Pricing)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#666666;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="320" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ms-pdp" value="&lt;b&gt;MS PDP&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Product Detail Page)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#666666;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="390" width="170" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- RIGHT SIDE: SYSTEM INTEGRATIONS (Browser-Level) -->
+        <!-- ============================================ -->
+        <mxCell id="int-group-label" value="&lt;b&gt;System Integrations&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="30" width="180" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="int-note" value="&lt;span style='font-size:9px;color:#999'&gt;Client-side JS in Browser&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" parent="1">
+          <mxGeometry x="1150" y="50" width="180" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="int-brightcove" value="&lt;b&gt;Brightcove&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Video &amp; Playlists)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#666666;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="80" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="int-target" value="&lt;b&gt;Adobe Target&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Personalization &amp; Offers)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="150" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="int-aep" value="&lt;b&gt;Adobe Experience&lt;/b&gt;&lt;br&gt;&lt;b&gt;Platform (AEP)&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Audiences)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="220" width="160" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="int-websdk" value="&lt;b&gt;Web SDK&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Analytics &amp; Events)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="295" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="int-forms" value="&lt;b&gt;Forms Service&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(tfs2-form block)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#666666;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="365" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- BOTTOM CENTER: IDENTITY & ACCESS -->
+        <!-- ============================================ -->
+        <mxCell id="ims-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F4FD;strokeColor=#1473E6;strokeWidth=2;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="860" width="460" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ims-label" value="&lt;b&gt;Identity &amp; Access&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="600" y="863" width="150" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="tfs-id" value="&lt;b&gt;Thermo Fisher ID&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Corporate SSO)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="480" y="895" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="adobe-ims" value="&lt;b&gt;Adobe IMS&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:9px'&gt;(Admin Console)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=11;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="690" y="895" width="170" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- BOTTOM LEFT: GITHUB + DEVELOPER -->
+        <!-- ============================================ -->
+        <mxCell id="github" value="&lt;b&gt;GitHub&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4EDDA;fontColor=#333333;strokeColor=#28A745;fontSize=13;verticalAlign=middle;arcSize=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="560" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="developer" value="Developer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="115" y="660" width="25" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- CONTENT AUTHOR (bottom left of DA) -->
+        <!-- ============================================ -->
+        <mxCell id="author" value="Content&lt;br&gt;Author" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="310" y="860" width="25" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- ARROWS -->
+        <!-- ============================================ -->
+
+        <!-- Visitor to Browser -->
+        <mxCell id="a-visitor-browser" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="visitor" target="browser" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Browser to Akamai -->
+        <mxCell id="a-browser-akamai" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="browser" target="akamai-container" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Akamai to EDS -->
+        <mxCell id="a-akamai-eds" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=2;" edge="1" source="akamai-container" target="eds-container" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DA to EDS (Preview/Publish) -->
+        <mxCell id="a-da-eds" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.35;entryY=1;entryDx=0;entryDy=0;strokeColor=#E68619;strokeWidth=2;" edge="1" source="da-container" target="eds-container" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-da-eds" value="&lt;b&gt;Preview / Publish&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#E68619;" vertex="1" connectable="0" parent="a-da-eds">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint x="-55" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Assets to EDS -->
+        <mxCell id="a-assets-eds" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;strokeColor=#E68619;strokeWidth=1.5;" edge="1" source="assets-container" target="eds-container" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-assets-eds" value="Assets" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#E68619;" vertex="1" connectable="0" parent="a-assets-eds">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Microservices to Edge Compute (HTTP Calls) -->
+        <mxCell id="a-header-edge" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#666666;strokeWidth=1.5;" edge="1" source="ms-header" target="edge-compute" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-header-edge" value="HTTP Calls" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#666666;" vertex="1" connectable="0" parent="a-header-edge">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a-product-edge" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;strokeColor=#666666;strokeWidth=1.5;" edge="1" source="ms-product" target="edge-compute" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-product-edge" value="HTTP Calls" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#666666;" vertex="1" connectable="0" parent="a-product-edge">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a-pdp-eds" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#666666;strokeWidth=1.5;" edge="1" source="ms-pdp" target="eds-container" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- SYSTEM INTEGRATIONS → BROWSER (Fixed!) -->
+        <!-- These are client-side JS integrations that -->
+        <!-- run in the browser, NOT at CDN/EDS level   -->
+        <!-- ============================================ -->
+
+        <!-- Brightcove to Browser -->
+        <mxCell id="a-brightcove-browser" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#666666;strokeWidth=1.5;" edge="1" source="int-brightcove" target="browser" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-brightcove-browser" value="JS Player" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#666666;" vertex="1" connectable="0" parent="a-brightcove-browser">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Target to Browser -->
+        <mxCell id="a-target-browser" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1473E6;strokeWidth=1.5;" edge="1" source="int-target" target="browser" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="175" />
+              <mxPoint x="1100" y="115" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l-target-browser" value="JS SDK" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#1473E6;" vertex="1" connectable="0" parent="a-target-browser">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- AEP to Target (Audiences) -->
+        <mxCell id="a-aep-target" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#1473E6;strokeWidth=1;dashed=1;" edge="1" source="int-aep" target="int-target" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-aep-target" value="Audiences" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#1473E6;" vertex="1" connectable="0" parent="a-aep-target">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Web SDK to Browser -->
+        <mxCell id="a-websdk-browser" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1473E6;strokeWidth=1.5;" edge="1" source="int-websdk" target="browser" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="320" />
+              <mxPoint x="1100" y="115" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l-websdk-browser" value="JS SDK" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#1473E6;" vertex="1" connectable="0" parent="a-websdk-browser">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Forms to EDS (this one stays - forms service is server-side) -->
+        <mxCell id="a-forms-eds" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.85;entryDx=0;entryDy=0;strokeColor=#666666;strokeWidth=1.5;" edge="1" source="int-forms" target="eds-container" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-forms-eds" value="Form Submit" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#666666;" vertex="1" connectable="0" parent="a-forms-eds">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- GitHub to EDS (Code Sync) -->
+        <mxCell id="a-github-eds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.85;entryDx=0;entryDy=0;strokeColor=#28A745;strokeWidth=2;" edge="1" source="github" target="eds-container" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="560" />
+              <mxPoint x="240" y="505" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l-github-eds" value="&lt;b&gt;Code Sync&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#28A745;" vertex="1" connectable="0" parent="a-github-eds">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Developer to GitHub -->
+        <mxCell id="a-dev-github" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#28A745;strokeWidth=1.5;" edge="1" source="developer" target="github" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l-dev-github" value="Code Push" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#28A745;" vertex="1" connectable="0" parent="a-dev-github">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-25" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Author to DA -->
+        <mxCell id="a-author-da" style="rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.15;entryY=1;entryDx=0;entryDy=0;strokeColor=#E68619;strokeWidth=1.5;" edge="1" source="author" target="da-container" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Identity to DA (Authorization) -->
+        <mxCell id="a-ims-da" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#1473E6;strokeWidth=1.5;dashed=1;" edge="1" source="ims-container" target="da-container" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="565" y="840" />
+              <mxPoint x="510" y="840" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l-ims-da" value="Authorization" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#1473E6;" vertex="1" connectable="0" parent="a-ims-da">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Identity to AEM Assets (Authorization) -->
+        <mxCell id="a-ims-assets" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#1473E6;strokeWidth=1.5;dashed=1;" edge="1" source="ims-container" target="assets-container" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="795" y="840" />
+              <mxPoint x="920" y="840" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l-ims-assets" value="Authorization" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#1473E6;" vertex="1" connectable="0" parent="a-ims-assets">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- LEGEND -->
+        <!-- ============================================ -->
+        <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CCCCCC;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1010" width="600" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="&lt;b&gt;Legend:&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="55" y="1015" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-adobe" value="Adobe Platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E68619;fontColor=#ffffff;strokeColor=#CB7518;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="55" y="1040" width="95" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-tfs" value="TFS Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#666666;fontSize=9;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1040" width="90" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-integration" value="Adobe Integration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#1473E6;fontSize=9;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1040" width="100" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-code" value="Code / Dev" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4EDDA;fontColor=#333333;strokeColor=#28A745;fontSize=9;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1040" width="80" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-identity" value="Identity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F4FD;fontColor=#333333;strokeColor=#1473E6;fontSize=9;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1040" width="70" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-browser" value="Browser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#333333;strokeColor=#333333;fontSize=9;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="540" y="1040" width="70" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-pending" value="⚠ Edge Compute runtime pending finalization" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="55" y="1065" width="280" height="15" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
