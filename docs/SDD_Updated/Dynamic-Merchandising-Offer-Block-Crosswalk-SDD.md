@@ -62,15 +62,16 @@ Offer styling and fallback behavior are provided by `dm-offer-style.css` and `pr
 |---|---|
 | 1 | Offers are authored on the Marketing Cloud instance and pushed to Target / AEP from the Marketing environment. |
 | 2 | The Marketing Cloud instance and the TFS AEM instance maintain separate code repositories — no shared codebase. |
-| 3 | Offer styling and fallback assets (`dm-offer-style.css`, `preload.min.js`) are loaded via the EDS global header/footer or `delayed.js`. |
-| 4 | The Adobe cloud pipeline (Marketing AEM → Target → AEP Edge → Alloy SDK → DOM injection) remains unchanged. Only the page-side implementation changes for EDS. |
-| 5 | Placement codes are a known, finite set managed centrally (for example `mk_fp_01`, `mk_fp_02`, `hb`, `lb`, `pc`, `fad_s_1`). |
-| 6 | Default offers are not region or language specific — they are stored under a common centralized path. |
-| 7 | PDP, Commerce (cart), Search, and other systems consume offers directly from AEP / Target. No offers are created for them in the TFS AEM instance, and they are not affected by this design. |
-| 8 | No offers are authored directly in the TFS AEM instance — only default offer HTML is stored there. |
-| 9 | Images in offers are served from Dynamic Media (`dmimages.thermofisher.com`). |
-| 10 | Offer placement in the header and footer comes from the header/footer HTML — the Dynamic Merchandising Offer block is not used for header/footer offers. |
-| 11 | AEP / Target requires country, language, and user type information for decisioning. This data is derived from the EDS page URL structure and browser cookies. |
+| 3 | Offer HTML is delivered as Experience Fragment HTML. Styling is applied through CSS and JS loaded from the global header (`dm-offers/dm-offer-style.css` and `dm-offers/preload.min.js`). |
+| 4 | `dm-offer-style.css` and `preload.min.js` will be loaded via the EDS global header/footer or via `delayed.js`. These are responsible for offer styling and fallback behaviour. |
+| 5 | The Adobe cloud pipeline (Marketing AEM → Target → AEP Edge → Alloy SDK → DOM injection) remains unchanged. Only the page-side implementation changes for EDS. |
+| 6 | Placement codes are a known, finite set managed centrally (for example `mk_fp_01`, `mk_fp_02`, `hb`, `lb`, `pc`, `fad_s_1`). |
+| 7 | Default offers are not region or language specific — stored under a common path. In EDS, default offer fragments will follow a centralized structure at `/fragments/default-offers/`. |
+| 8 | PDP, Commerce (cart), Search, and other systems consume offers directly from AEP / Target. No offers are created for them in the TFS AEM instance. No impact on these systems. |
+| 9 | No offers are authored directly in the TFS AEM instance — only default XF-based offer HTML is stored there. |
+| 10 | Images in offers are served from Dynamic Media (`dmimages.thermofisher.com`). |
+| 11 | Offer placement in the header and footer comes from the header/footer HTML — the Dynamic Merchandising Offer block is not used for header/footer offers. |
+| 12 | AEP / Target requires country, language, and user type information for decisioning. This data is derived from the EDS page URL structure and browser cookies. |
 
 ---
 
@@ -89,7 +90,7 @@ For each default offer, a fragment page is created containing a **Default Offer*
 
 The default offer HTML contains inline styles, specific CSS classes, nested divs, hidden inputs, and data attributes. This raw HTML cannot be authored as standard structured content — it must be stored and rendered exactly as supplied. The Default Offer component serves this purpose by embedding the HTML without transformation.
 
-**Fragment storage structure:** default offer fragments are organized under a single centralized path, one fragment per placement code (for example, a fragment for Feature Panel Left, one for Feature Panel Right, one for Header Banner, and so on).
+**Fragment storage structure:** default offer fragments are organized under a single centralized path (`/fragments/default-offers/`), one fragment per placement code (for example, a fragment for Feature Panel Left, one for Feature Panel Right, one for Header Banner, and so on).
 
 **Authoring workflow:**
 
@@ -183,7 +184,8 @@ The block renders a placement container whose ID is derived from the placement c
 
 Only the default offer content from TFS AEM On-Prem is migrated to EDS fragment pages:
 
-- Each existing default offer Experience Fragment becomes a Default Offer fragment page in EDS, with the raw HTML embedded in the Default Offer component.
+- Source path: `/content/experience-fragments/tfsite/us/en/site/dm-offers/`
+- Each existing default offer Experience Fragment becomes a Default Offer fragment page in EDS (under `/fragments/default-offers/`), with the raw HTML embedded in the Default Offer component.
 - Fragments are organized under a single centralized path, one fragment per placement code.
 
 ---
@@ -218,9 +220,5 @@ The author opens a default offer fragment page in Universal Editor and embeds th
 
 | # | Question | Owner |
 |---|---|---|
-| 1 | What page-level data is required on EDS pages for Target decisioning beyond country, language, and user type? | TFS to confirm |
-| 2 | Is Interact Client Context still needed on EDS pages, or is it legacy? | TFS to confirm |
-| 3 | Is `offers.min.js` still required in EDS? | TFS to confirm |
-| 4 | Should the default offer fallback be managed by the global offer preload script or by the EDS offer block? | TFS to confirm |
-| 5 | Confirm how the default offer is shown today — is it managed by the preload script? | TFS to confirm |
-| 6 | Confirm with the PDP team whether dynamic offers shown on PDP pages come from AEM or from AEP / Target. | TFS / PDP team to confirm |
+| 1 | Is Interact Client Context still needed on EDS pages, or is it part of legacy? | TFS to confirm |
+| 2 | What page-level data is required on EDS pages for Target decisioning beyond country, language, and user type? | TFS to confirm |
