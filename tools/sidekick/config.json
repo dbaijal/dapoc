@@ -4,6 +4,13 @@
   "editUrlPattern": "https://da.live/edit#/{{org}}/{{site}}{{pathname}}",
   "plugins": [
     {
+      "id": "tags",
+      "title": "AEM Tags",
+      "environments": ["edit"],
+      "daLibrary": true,
+      "url": "https://main--dapoc--dbaijal.aem.live/tools/tags.html"
+    },
+    {
       "id": "tfs2-forms",
       "title": "TFS2 Forms",
       "environments": ["edit"],
